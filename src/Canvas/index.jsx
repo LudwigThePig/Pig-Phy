@@ -1,21 +1,42 @@
 import React, { useRef, useEffect } from 'react';
 import styled from 'styled-components';
+import theme from '../StyledComponents/theme';
+
+const Wrapper = styled.div`
+  position: relative;
+  overflow-x: auto;
+  overflow-y: hidden;
+`;
 
 const Canvas = styled.canvas`
-  width: 100%;
-  height: 100%;
+  overflow-x: auto;
+  border: 1px solid green;
 `;
 
 const Index = () => {
-  const ref = useRef(null);
+  const canvasRef = useRef(null);
+
+  // 16 x 9 aspect ratio
+  const height = window.innerHeight * 0.98;
+  const width = (height / 9) * 16;
 
   useEffect(() => {
-    // const canvas = this.refs.canvas;
-    // const ctx = canvas.getContext('2d');
-  });
+    const canvas = canvasRef.current;
+    const ctx = canvas.getContext('2d');
+
+    const pt = val => val * (height / 1000);
+
+    ctx.beginPath();
+    ctx.strokeStyle = theme.secondaryColor;
+    ctx.moveTo(0, 0);
+    ctx.lineTo(pt(300), pt(150));
+    ctx.stroke();
+  }, [canvasRef, height, width]);
 
   return (
-    <Canvas ref={ref} height={window.innerHeight} width={window.innerWidth} />
+    <Wrapper>
+      <Canvas ref={canvasRef} height={height} width={width} />
+    </Wrapper>
   );
 };
 

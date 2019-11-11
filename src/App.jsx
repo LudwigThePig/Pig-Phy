@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React from 'react';
 import styled, { ThemeProvider } from 'styled-components';
 
 import Canvas from './Canvas';
@@ -12,6 +12,8 @@ const Layout = styled.div`
   height: 100vh;
   width: 100vw;
   overflow: hidden;
+  display: flex;
+  justify-content: center;
 `;
 
 const App = () => {
