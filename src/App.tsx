@@ -1,9 +1,10 @@
-import React from 'react';
-import Index from './PageIndex';
+import React, { useRef } from 'react';
 import styled, { ThemeProvider } from 'styled-components';
-import ThemeContext from './utils/context';
 
+import Canvas from './Canvas';
+import ThemeContext from './utils/context';
 import theme from './StyledComponents/theme';
+import GlobalStyles from './StyledComponents/globalStyles';
 
 const Layout = styled.div`
   background: ${({ theme }) => theme.primaryColor};
@@ -17,12 +18,13 @@ const App: React.FC = () => {
   return (
     <ThemeContext.Provider value={'dark'}>
       <ThemeProvider theme={theme}>
+        <GlobalStyles />
         <Layout>
-          <Index />
+          <Canvas />
         </Layout>
       </ThemeProvider>
     </ThemeContext.Provider>
   );
-}
+};
 
 export default App;

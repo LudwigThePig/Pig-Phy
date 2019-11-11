@@ -17,3 +17,5 @@ const GlobalStyles = createGlobalStyle`
     body { font-size: 10px; }
   }
 `;
+
+export default GlobalStyles;
