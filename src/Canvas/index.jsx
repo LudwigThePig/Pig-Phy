@@ -6,12 +6,12 @@ const Canvas = styled.canvas`
   height: 100%;
 `;
 
-const Index: React.FC = () => {
+const Index = () => {
   const ref = useRef(null);
 
   useEffect(() => {
-    const canvas = this.refs.canvas;
-    const ctx = canvas.getContext('2d');
+    // const canvas = this.refs.canvas;
+    // const ctx = canvas.getContext('2d');
   });
 
   return (

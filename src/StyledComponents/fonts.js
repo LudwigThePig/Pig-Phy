@@ -1,15 +1,6 @@
 import styled from 'styled-components';
 
-interface FontSizes {
-  heading1: string;
-  heading2: string;
-  heading3: string;
-  paragraph: string;
-  footnote: string;
-};
-
-
-export const fontSizes: FontSizes = {
+export const fontSizes = {
   heading1: '3.4em',
   heading2: '2.8em',
   heading3: '2.0em',
@@ -48,7 +39,7 @@ export const Paragraph = styled.p`
 export const Footnote = styled.p`
   font-size: ${fontSizes.footnote};
   line-height: 1.4em;
-  font-weight: 900; 
+  font-weight: 900;
   margin: 0;
   color: ${({ color }) => color || 'inherit'};
 `;
@@ -68,7 +59,7 @@ export const Anchor = styled.a`
   font-weight: inherit;
   text-decoration: none;
   cursor: pointer;
-  :hover{
-    color: ${({ theme }) => theme.darkBrown}
+  :hover {
+    color: ${({ theme }) => theme.darkBrown};
   }
 `;

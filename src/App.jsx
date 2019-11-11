@@ -14,7 +14,7 @@ const Layout = styled.div`
   overflow: hidden;
 `;
 
-const App: React.FC = () => {
+const App = () => {
   return (
     <ThemeContext.Provider value={'dark'}>
       <ThemeProvider theme={theme}>

@@ -19,8 +19,7 @@
     "noEmit": true,
     "jsx": "react"
   },
-  "isolatedModules": false,
   "include": [
-    "src", "tests"
+    "src"
   ]
 }
