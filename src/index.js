@@ -1,3 +1,6 @@
+import 'normalize.css'
+import './style.scss';
+
 class GameController {
   constructor(context, height) {
     this.height = height;

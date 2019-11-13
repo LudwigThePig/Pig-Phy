@@ -1,0 +1,14 @@
+$primary: #001011;
+$secondary: #F2F2E6;
+$active-color: #ED6767;
+$alt-color: #793F5C;
+
+body {
+  background: $primary;
+  color: $secondary;
+  font-family: Lato, sans-serif;
+}
+
+canvas {
+  border: 2px solid $secondary;
+}
