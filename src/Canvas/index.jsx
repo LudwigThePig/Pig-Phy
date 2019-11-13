@@ -22,15 +22,10 @@ const Index = () => {
 
   useEffect(() => {
     const canvas = canvasRef.current;
-    const ctx = canvas.getContext('2d');
+    const gl = canvas.getContext('webgl2');
 
     const pt = val => val * (height / 1000);
-
-    ctx.beginPath();
-    ctx.strokeStyle = theme.secondaryColor;
-    ctx.moveTo(0, 0);
-    ctx.lineTo(pt(300), pt(150));
-    ctx.stroke();
+    gl.getParameter(gl.LINE_WIDTH);
   }, [canvasRef, height, width]);
 
   return (
