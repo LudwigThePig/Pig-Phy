@@ -1,9 +1,11 @@
+require('dotenv');
 const path = require('path');
+const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
 
 module.exports = {
   entry: './src/index.js',
   resolve: {
-    extensions: ['.js']
+    extensions: ['.js'],
   },
   output: {
     filename: 'bundle.js',
@@ -25,4 +27,7 @@ module.exports = {
       },
     ],
   },
+  plugins: [
+    new BundleAnalyzerPlugin(),
+  ],
 };
