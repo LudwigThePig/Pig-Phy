@@ -1,5 +1,4 @@
 import { mat4 } from 'gl-matrix';
-import './style.scss';
 
 class GameController {
   constructor(canvas, height) {
