@@ -2,43 +2,35 @@ import * as THREE from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import { height, width, sceneDimensions } from './utils/dimensions';
 import color, { lightColors } from './utils/colors';
-import { getNewPosition } from './controllers/keyboarInput';
-import { forwardVelocity, rotationVelocity } from './utils/velocities';
+import updatePlayerPosition from './controllers/keyboarInput';
 
 const OrbitControls = require('three-orbit-controls')(THREE);
 
 /* ******
-* Input Controllers *
+* Input State *
 ******* */
 
 const keyboard = {};
-
-const key = {
-  forward: 87, // W
-  backwards: 83, // S
-  left: 65, // A
-  right: 68, // D
-};
 const getKeyCode = event => event.which;
 export const keydown = event => { keyboard[getKeyCode(event)] = true; };
 export const keyup = event => { keyboard[getKeyCode(event)] = false; };
 
 
 /* ********
-* RENDERER *
+* Renderer *
 ********** */
 const renderer = new THREE.WebGLRenderer();
 renderer.setSize(width, height);
 
 /* ******
-* SCENE *
+* Scene *
 ******* */
 const scene = new THREE.Scene();
 scene.background = new THREE.Color(color.black);
 
 
 /* *******
-* CAMERA *
+* Camera *
 ******** */
 // const camera = new THREE.PerspectiveCamera(70, width / height, 0.1, 1000);
 const camera = new THREE.PerspectiveCamera(50, width / height, 1, 1000);
@@ -53,7 +45,7 @@ camera.lookAt(new THREE.Vector3(0, 1, 0));
 
 
 /* *******
-* LIGHTS *
+* Lights *
 ******** */
 const ambientLight = new THREE.AmbientLight(lightColors.softWhite, 3); // soft white light
 scene.add(ambientLight);
@@ -64,14 +56,14 @@ scene.add(topLight);
 
 
 /* ********
-* GROUND *
+* Ground *
 ********** */
 const groundGeometry = new THREE.PlaneGeometry(sceneDimensions.X, sceneDimensions.Z, 1, 1);
 const groundMaterial = new THREE.MeshBasicMaterial({ color: color.white, side: THREE.DoubleSide });
 const ground = new THREE.Mesh(groundGeometry, groundMaterial);
 ground.rotation.x = -90 * (Math.PI / 180);
 ground.position.y = 0;
-// scene.add(ground);
+scene.add(ground);
 
 
 const gridHelper = new THREE.GridHelper(100, 4);
@@ -105,30 +97,13 @@ loader.load( // pig
   err => console.error(err),
 );
 
-
-const updateMovement = () => {
-  // MOVEMENT
-  if (keyboard[key.forward]) {
-    pig.position.x += Math.sin(pig.rotation.y) * forwardVelocity;
-    pig.position.z += Math.cos(pig.rotation.y) * forwardVelocity;
-  }
-  if (keyboard[key.backwards]) {
-    pig.position.x -= Math.sin(pig.rotation.y) * forwardVelocity;
-    pig.position.z -= Math.cos(pig.rotation.y) * forwardVelocity;
-  }
-  if (keyboard[key.right]) pig.rotation.y -= rotationVelocity;
-  if (keyboard[key.left]) pig.rotation.y += rotationVelocity;
-};
-
 // MAIN FUNC
 const draw = () => {
   controls.update();
-  // getNewPosition(pig);
   requestAnimationFrame(draw);
+
+  updatePlayerPosition(pig, keyboard);
   camera.lookAt(pig.position);
-
-
-  updateMovement();
 
 
   renderer.render(scene, camera);

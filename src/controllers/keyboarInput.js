@@ -1,6 +1,5 @@
 import { forwardVelocity, rotationVelocity } from '../utils/velocities';
 
-const keyboard = {};
 
 const key = {
   forward: 87, // W
@@ -9,15 +8,16 @@ const key = {
   right: 68, // A
 };
 
-const getKeyCode = event => event.which;
 
-
-export const keydown = event => { keyboard[getKeyCode(event)] = true; };
-export const keyup = event => { keyboard[getKeyCode(event)] = false; };
-
-export const getNewPosition = obj => {
-  if (keyboard[key.forward]) obj.position.z += forwardVelocity;
-  if (keyboard[key.backward]) obj.position.z -= forwardVelocity;
-  if (keyboard[key.left]) obj.rotation.y -= rotationVelocity;
-  if (keyboard[key.right]) obj.rotation.y += rotationVelocity;
+export default (player, keyboard) => {
+  if (keyboard[key.forward]) {
+    player.position.x += Math.sin(player.rotation.y) * forwardVelocity;
+    player.position.z += Math.cos(player.rotation.y) * forwardVelocity;
+  }
+  if (keyboard[key.backwards]) {
+    player.position.x -= Math.sin(player.rotation.y) * forwardVelocity;
+    player.position.z -= Math.cos(player.rotation.y) * forwardVelocity;
+  }
+  if (keyboard[key.right]) player.rotation.y -= rotationVelocity;
+  if (keyboard[key.left]) player.rotation.y += rotationVelocity;
 };
