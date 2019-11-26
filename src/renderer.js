@@ -3,11 +3,15 @@ import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import { height, width, sceneDimensions } from './utils/dimensions';
 import color, { lightColors } from './utils/colors';
 
+const OrbitControls = require('three-orbit-controls')(THREE);
+
 /* ********
 * RENDERER *
 ********** */
 const renderer = new THREE.WebGLRenderer();
 renderer.setSize(width, height);
+let time = 0;
+const newPosition = new THREE.Vector3(0, 1, 0);
 
 
 /* ******
@@ -20,8 +24,15 @@ scene.background = new THREE.Color(color.black);
 /* *******
 * CAMERA *
 ******** */
-const camera = new THREE.PerspectiveCamera(70, width / height, 0.1, 1000);
+// const camera = new THREE.PerspectiveCamera(70, width / height, 0.1, 1000);
+const camera = new THREE.PerspectiveCamera(50, width / height, 1, 1000);
+camera.position.set(0, 1, -3);
+camera.lookAt(new THREE.Vector3());
+
+const controls = new OrbitControls(camera);
+
 camera.position.z = 5;
+camera.position.y = 5;
 camera.lookAt(scene.position);
 
 
@@ -31,8 +42,8 @@ camera.lookAt(scene.position);
 const ambientLight = new THREE.AmbientLight(lightColors.softWhite, 3); // soft white light
 scene.add(ambientLight);
 
-const topLight = new THREE.PointLight(lightColors.white, 2, 100);
-topLight.position.set(1, 1, 1);
+const topLight = new THREE.PointLight(lightColors.white, 2, 50);
+topLight.position.set(1.5, 3, 1.5);
 scene.add(topLight);
 
 
@@ -43,8 +54,13 @@ const groundGeometry = new THREE.PlaneGeometry(sceneDimensions.X, sceneDimension
 const groundMaterial = new THREE.MeshBasicMaterial({ color: color.white, side: THREE.DoubleSide });
 const ground = new THREE.Mesh(groundGeometry, groundMaterial);
 ground.rotation.x = -90 * (Math.PI / 180);
-ground.position.y = -100;
-scene.add(ground);
+ground.position.y = 0;
+// scene.add(ground);
+
+
+const gridHelper = new THREE.GridHelper(100, 4);
+scene.add(gridHelper);
+scene.add(new THREE.AxesHelper(6));
 
 
 /* 🐷🐷🐷🐷🐷
@@ -54,8 +70,9 @@ const loader = new GLTFLoader();
 let pig;
 const pigLoadCallback = gltf => {
   pig = gltf.scene;
-  pig.position.set(0, 0, 0);
+  pig.position.set(0, 1, 0);
   scene.add(pig);
+  pig.add(camera);
   draw();
 };
 
@@ -72,15 +89,13 @@ loader.load( // pig
 
 // MAIN FUNC
 const draw = () => {
-  const relativeCameraOffset = new THREE.Vector3(0, 2, 3);
+  controls.update();
+  time += 0.01;
+  newPosition.x = Math.cos(time);
+  newPosition.z = Math.sin(time);
+  pig.lookAt(newPosition);
 
-  const cameraOffset = relativeCameraOffset.applyMatrix4(pig.matrixWorld);
-
-  camera.position.x = cameraOffset.x;
-  camera.position.y = cameraOffset.y;
-  camera.position.z = cameraOffset.z;
-  camera.rotation.y = 180;
-  camera.lookAt(pig.position);
+  pig.position.copy(newPosition);
 
   pig.rotation.y += 0.01;
   requestAnimationFrame(draw);
