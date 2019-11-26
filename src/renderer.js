@@ -2,6 +2,7 @@ import * as THREE from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import { height, width, sceneDimensions } from './utils/dimensions';
 import color, { lightColors } from './utils/colors';
+import keyboarInput from './controllers/keyboarInput';
 
 const OrbitControls = require('three-orbit-controls')(THREE);
 
@@ -10,7 +11,7 @@ const OrbitControls = require('three-orbit-controls')(THREE);
 ********** */
 const renderer = new THREE.WebGLRenderer();
 renderer.setSize(width, height);
-let time = 0;
+const time = 0;
 const newPosition = new THREE.Vector3(0, 1, 0);
 
 
@@ -42,7 +43,7 @@ camera.lookAt(scene.position);
 const ambientLight = new THREE.AmbientLight(lightColors.softWhite, 3); // soft white light
 scene.add(ambientLight);
 
-const topLight = new THREE.PointLight(lightColors.white, 2, 50);
+const topLight = new THREE.PointLight(lightColors.white, 2, 500);
 topLight.position.set(1.5, 3, 1.5);
 scene.add(topLight);
 
@@ -73,6 +74,7 @@ const pigLoadCallback = gltf => {
   pig.position.set(0, 1, 0);
   scene.add(pig);
   pig.add(camera);
+  document.addEventListener('keydown', event => keyboarInput(event, pig));
   draw();
 };
 
@@ -90,14 +92,6 @@ loader.load( // pig
 // MAIN FUNC
 const draw = () => {
   controls.update();
-  time += 0.01;
-  newPosition.x = Math.cos(time);
-  newPosition.z = Math.sin(time);
-  pig.lookAt(newPosition);
-
-  pig.position.copy(newPosition);
-
-  pig.rotation.y += 0.01;
   requestAnimationFrame(draw);
   renderer.render(scene, camera);
 };
