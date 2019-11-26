@@ -1,22 +1,12 @@
 const colors = {
-  light: {
-    primaryColor: '#f9f3ed',
-    secondaryColor: '#342e37',
-    activeColor: '#A43A4B',
-    altColor: '#e57853',
-  },
-  dark: {
-    primaryColor: '#001011',
-    secondaryColor: '#F2F2E6',
-    activeColor: '#ED6767',
-    altColor: '#793F5C',
-  },
-  blue: {
-    primaryColor: '#323846',
-    secondaryColor: '#fbf9f3',
-    activeColor: '#c3f7eb',
-    altColor: '#78dbf4',
-  },
+  black: 0x01011,
+  white: 0xF2F2E6,
+  pink: 0xED6767,
+  purple: 0x793F5C,
+};
+export const lightColors = {
+  white: 0xFFFFFF, // Pure White for Lighting
+  softWhite: 0x404040,
 };
 
 export default colors;
