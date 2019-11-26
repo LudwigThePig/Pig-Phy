@@ -1,2 +1,2 @@
-export const forwardVelocity = 0.005;
-export const rotationVelocity = 0.002;
+export const forwardVelocity = 0.05;
+export const rotationVelocity = 0.02;

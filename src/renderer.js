@@ -2,18 +2,33 @@ import * as THREE from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import { height, width, sceneDimensions } from './utils/dimensions';
 import color, { lightColors } from './utils/colors';
-import keyboarInput from './controllers/keyboarInput';
+import { getNewPosition } from './controllers/keyboarInput';
+import { forwardVelocity, rotationVelocity } from './utils/velocities';
 
 const OrbitControls = require('three-orbit-controls')(THREE);
+
+/* ******
+* Input Controllers *
+******* */
+
+const keyboard = {};
+
+const key = {
+  forward: 87, // W
+  backwards: 83, // S
+  left: 65, // A
+  right: 68, // D
+};
+const getKeyCode = event => event.which;
+export const keydown = event => { keyboard[getKeyCode(event)] = true; };
+export const keyup = event => { keyboard[getKeyCode(event)] = false; };
+
 
 /* ********
 * RENDERER *
 ********** */
 const renderer = new THREE.WebGLRenderer();
 renderer.setSize(width, height);
-const time = 0;
-const newPosition = new THREE.Vector3(0, 1, 0);
-
 
 /* ******
 * SCENE *
@@ -28,13 +43,13 @@ scene.background = new THREE.Color(color.black);
 // const camera = new THREE.PerspectiveCamera(70, width / height, 0.1, 1000);
 const camera = new THREE.PerspectiveCamera(50, width / height, 1, 1000);
 camera.position.set(0, 1, -3);
-camera.lookAt(new THREE.Vector3());
+camera.lookAt(scene.position);
 
 const controls = new OrbitControls(camera);
 
 camera.position.z = 5;
 camera.position.y = 5;
-camera.lookAt(scene.position);
+camera.lookAt(new THREE.Vector3(0, 1, 0));
 
 
 /* *******
@@ -74,7 +89,8 @@ const pigLoadCallback = gltf => {
   pig.position.set(0, 1, 0);
   scene.add(pig);
   pig.add(camera);
-  document.addEventListener('keydown', event => keyboarInput(event, pig));
+  document.addEventListener('keydown', keydown);
+  document.addEventListener('keyup', keyup);
   draw();
 };
 
@@ -89,10 +105,32 @@ loader.load( // pig
   err => console.error(err),
 );
 
+
+const updateMovement = () => {
+  // MOVEMENT
+  if (keyboard[key.forward]) {
+    pig.position.x += Math.sin(pig.rotation.y) * forwardVelocity;
+    pig.position.z += Math.cos(pig.rotation.y) * forwardVelocity;
+  }
+  if (keyboard[key.backwards]) {
+    pig.position.x -= Math.sin(pig.rotation.y) * forwardVelocity;
+    pig.position.z -= Math.cos(pig.rotation.y) * forwardVelocity;
+  }
+  if (keyboard[key.right]) pig.rotation.y -= rotationVelocity;
+  if (keyboard[key.left]) pig.rotation.y += rotationVelocity;
+};
+
 // MAIN FUNC
 const draw = () => {
   controls.update();
+  // getNewPosition(pig);
   requestAnimationFrame(draw);
+  camera.lookAt(pig.position);
+
+
+  updateMovement();
+
+
   renderer.render(scene, camera);
 };
 

@@ -1,16 +1,23 @@
-import { forwardVelocity } from '../utils/velocities';
+import { forwardVelocity, rotationVelocity } from '../utils/velocities';
 
-export default (event, obj) => {
-  const keyCode = event.which;
-  if (keyCode == 87) {
-    obj.position.y += forwardVelocity;
-  } else if (keyCode === 83) {
-    obj.position.y -= forwardVelocity;
-  } else if (keyCode === 65) {
-    obj.position.x -= xSpeed;
-  } else if (keyCode === 68) {
-    obj.position.x += xSpeed;
-  } else if (keyCode === 32) {
-    obj.position.set(0, 0, 0);
-  }
+const keyboard = {};
+
+const key = {
+  forward: 87, // W
+  backwards: 83, // S
+  left: 65, // A
+  right: 68, // A
+};
+
+const getKeyCode = event => event.which;
+
+
+export const keydown = event => { keyboard[getKeyCode(event)] = true; };
+export const keyup = event => { keyboard[getKeyCode(event)] = false; };
+
+export const getNewPosition = obj => {
+  if (keyboard[key.forward]) obj.position.z += forwardVelocity;
+  if (keyboard[key.backward]) obj.position.z -= forwardVelocity;
+  if (keyboard[key.left]) obj.rotation.y -= rotationVelocity;
+  if (keyboard[key.right]) obj.rotation.y += rotationVelocity;
 };
