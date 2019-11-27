@@ -3,6 +3,7 @@ import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import { height, width, sceneDimensions } from './utils/dimensions';
 import color, { lightColors } from './utils/colors';
 import updatePlayerPosition from './controllers/keyboarInput';
+import { createCube } from './loaders/testAssets';
 
 const OrbitControls = require('three-orbit-controls')(THREE);
 
@@ -96,6 +97,9 @@ const pigLoadCallback = gltf => {
   document.addEventListener('keyup', keyup);
   draw();
 };
+
+const cube = createCube();
+scene.add(cube);
 
 
 /* ********
