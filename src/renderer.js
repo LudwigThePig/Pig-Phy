@@ -3,7 +3,7 @@ import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import { height, width, sceneDimensions } from './utils/dimensions';
 import color, { lightColors } from './utils/colors';
 import updatePlayerPosition from './controllers/keyboarInput';
-import { createCube } from './loaders/testAssets';
+import { Cube, Sphere } from './loaders/testAssets';
 
 const OrbitControls = require('three-orbit-controls')(THREE);
 
@@ -25,6 +25,7 @@ renderer.setPixelRatio(window.devicePixelRatio); // super retina / high pixel de
 renderer.shadowMap.enabled = true;
 renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 renderer.setSize(width, height);
+
 
 /* ******
 * Scene *
@@ -98,8 +99,19 @@ const pigLoadCallback = gltf => {
   draw();
 };
 
-const cube = createCube();
-scene.add(cube);
+const cubes = Array(20)
+  .fill(0)
+  .map(() => {
+    const { cube } = new Cube();
+    scene.add(cube);
+    return cube;
+  });
+
+const spheres = Array(20).fill(0).map(() => {
+  const { sphere } = new Sphere();
+  scene.add(sphere);
+  return sphere;
+});
 
 
 /* ********

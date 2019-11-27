@@ -7,12 +7,20 @@ export const randomBoundedInt = (givenMin, givenMax) => {
 };
 
 
-export const randomPosition = () => {
-  const xMin = -(sceneDimensions.X / 2);
-  const xMax = sceneDimensions.X / 2;
+/**
+ *
+ * @param {str} axis one of 'x', 'z' (case insenstive)
+ *  if none is given, random z pos is returned
+ * @returns number
+ */
+export const randomPosition = (axis) => {
+  const ax = axis.toLowerCase();
+  if (ax === 'x') {
+    const xMin = -(sceneDimensions.X / 2);
+    const xMax = sceneDimensions.X / 2;
+    return randomBoundedInt(xMin, xMax);
+  }
   const zMin = -(sceneDimensions.Z / 2);
   const zMax = sceneDimensions.Z / 2;
-  const x = randomBoundedInt(xMin, xMax);
-  const z = randomBoundedInt(zMin, zMax);
-  return { x, y: 0, z };
+  return randomBoundedInt(zMin, zMax);
 };

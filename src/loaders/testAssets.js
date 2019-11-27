@@ -1,15 +1,27 @@
+/* eslint-disable max-classes-per-file */
 import * as THREE from 'three';
 import { randomPosition } from '../utils/randoms';
+import colors from '../utils/colors';
 
-export const createCube = (x = randomPosition().x, y = 0.5, z = randomPosition().z) => {
-  console.log(x, y, z);
-  const geometry = new THREE.BoxGeometry(1, 1, 1);
-  const material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
-  const cube = new THREE.Mesh(geometry, material);
-  cube.position.set(x, y, z);
-  return cube;
-};
 
-export const createSphere = (x = 5, y = 0.5, z = 5) => {
+const defaultPos = () => ({
+  x: randomPosition('x'),
+  z: randomPosition('z'),
+});
+export class Cube {
+  constructor(height = 1, width = 1, depth = 1, pos = defaultPos()) {
+    this.geometry = new THREE.BoxGeometry(height, width, depth);
+    this.material = new THREE.MeshBasicMaterial({ color: colors.pink });
+    this.cube = new THREE.Mesh(this.geometry, this.material);
+    this.cube.position.set(pos.x, height / 2, pos.z);
+  }
+}
 
-};
+export class Sphere {
+  constructor(radius = 1, pos = defaultPos()) {
+    this.geometry = new THREE.SphereGeometry(radius, 32, 32);
+    this.material = new THREE.MeshBasicMaterial({ color: colors.purple });
+    this.sphere = new THREE.Mesh(this.geometry, this.material);
+    this.sphere.position.set(pos.x, radius, pos.z);
+  }
+}
