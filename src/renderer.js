@@ -20,6 +20,9 @@ export const keyup = event => { keyboard[getKeyCode(event)] = false; };
 * Renderer *
 ********** */
 const renderer = new THREE.WebGLRenderer();
+renderer.setPixelRatio(window.devicePixelRatio); // super retina / high pixel density
+renderer.shadowMap.enabled = true;
+renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 renderer.setSize(width, height);
 
 /* ******
@@ -47,11 +50,15 @@ camera.lookAt(new THREE.Vector3(0, 1, 0));
 /* *******
 * Lights *
 ******** */
-const ambientLight = new THREE.AmbientLight(lightColors.softWhite, 3); // soft white light
+const ambientLight = new THREE.AmbientLight(lightColors.softWhite, 0.3); // soft white light
 scene.add(ambientLight);
 
-const topLight = new THREE.PointLight(lightColors.white, 2, 500);
-topLight.position.set(1.5, 3, 1.5);
+const topLight = new THREE.PointLight(lightColors.white, 3.8, 18);
+topLight.position.set(0, 6, 0);
+topLight.castShadow = true;
+topLight.shadowDarkness = 0.5;
+
+topLight.shadowCameraVisible = true; // for debugging
 scene.add(topLight);
 
 
@@ -59,10 +66,11 @@ scene.add(topLight);
 * Ground *
 ********** */
 const groundGeometry = new THREE.PlaneGeometry(sceneDimensions.X, sceneDimensions.Z, 1, 1);
-const groundMaterial = new THREE.MeshBasicMaterial({ color: color.white, side: THREE.DoubleSide });
+const groundMaterial = new THREE.MeshPhongMaterial({ color: color.white, side: THREE.DoubleSide });
 const ground = new THREE.Mesh(groundGeometry, groundMaterial);
 ground.rotation.x = -90 * (Math.PI / 180);
 ground.position.y = 0;
+ground.receiveShadow = true;
 scene.add(ground);
 
 
@@ -78,7 +86,10 @@ const loader = new GLTFLoader();
 let pig;
 const pigLoadCallback = gltf => {
   pig = gltf.scene;
-  pig.position.set(0, 1, 0);
+  pig.position.set(0, 1.2, 0);
+  pig.castShadow = true;
+  pig.receiveShadow = true;
+  pig.children.forEach(child => { child.castShadow = true; });
   scene.add(pig);
   pig.add(camera);
   document.addEventListener('keydown', keydown);
