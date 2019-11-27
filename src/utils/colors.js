@@ -6,7 +6,7 @@ const colors = {
 };
 export const lightColors = {
   white: 0xFFFFFF, // Pure White for Lighting
-  softWhite: 0x404040,
+  softWhite: 0xF5E6BA,
 };
 
 export default colors;

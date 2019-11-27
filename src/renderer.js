@@ -50,13 +50,13 @@ camera.lookAt(new THREE.Vector3(0, 1, 0));
 /* *******
 * Lights *
 ******** */
-const ambientLight = new THREE.AmbientLight(lightColors.softWhite, 0.3); // soft white light
+const ambientLight = new THREE.AmbientLight(lightColors.softWhite, 0.7); // soft white light
 scene.add(ambientLight);
 
-const topLight = new THREE.PointLight(lightColors.white, 3.8, 18);
-topLight.position.set(0, 6, 0);
+const topLight = new THREE.PointLight(lightColors.white, 1.8, 100);
+topLight.position.set(0, 20, 22);
 topLight.castShadow = true;
-topLight.shadowDarkness = 0.5;
+topLight.shadowDarkness = 2;
 
 topLight.shadowCameraVisible = true; // for debugging
 scene.add(topLight);
@@ -86,7 +86,7 @@ const loader = new GLTFLoader();
 let pig;
 const pigLoadCallback = gltf => {
   pig = gltf.scene;
-  pig.position.set(0, 1.2, 0);
+  pig.position.set(0, 1.12, 0);
   pig.castShadow = true;
   pig.receiveShadow = true;
   pig.children.forEach(child => { child.castShadow = true; });
