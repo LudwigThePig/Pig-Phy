@@ -8,6 +8,7 @@ const defaultPos = () => ({
   x: randomPosition('x'),
   z: randomPosition('z'),
 });
+
 export class Cube {
   constructor(height = 1, width = 1, depth = 1, pos = defaultPos()) {
     this.geometry = new THREE.BoxGeometry(height, width, depth);

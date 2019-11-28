@@ -23,6 +23,7 @@ export const randomPosition = (axis, meshWidth = 1) => {
     const xMax = (sceneDimensions.X / 2) - offset;
     return randomBoundedInt(xMin, xMax);
   }
+
   const zMin = -(sceneDimensions.Z / 2) + offset;
   const zMax = (sceneDimensions.Z / 2) - offset;
   return randomBoundedInt(zMin, zMax);
