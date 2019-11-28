@@ -1,7 +1,7 @@
 import 'normalize.css';
 import './style.scss';
 
-import renderer from './renderer';
+import renderer from './mainThread';
 
 
 window.onload = () => {

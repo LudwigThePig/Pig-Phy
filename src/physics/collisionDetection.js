@@ -2,7 +2,7 @@ import * as THREE from 'three';
 
 
 /**
- * @param { object } mesh Instance of THREE.Mesh()
+ * @param { THREE.Mesh } mesh
  * @returns { object } object containing all of the bounding verticies for a mesh
  */
 export const gatherBoundingBox = mesh => {
@@ -22,18 +22,29 @@ export const gatherBoundingBox = mesh => {
 
 
 /**
- * Collision detection for every solid object.
+ * @param { THREE.Mesh } player
+ * @returns returns the maximum width, height, and depth of a mesh
+ */
+export const getMeshDimensions = player => {
+  const playerDimensions = new THREE.Box3().setFromObject(player);
+  return {
+    x: playerDimensions.max.x - playerDimensions.min.x,
+    y: playerDimensions.max.y - playerDimensions.min.y,
+    z: playerDimensions.max.z - playerDimensions.min.z,
+  };
+};
+
+
+/**
+ * @param { Array<objects> } collisions Array of bounding verticies
+ * @param { THREE.Mesh } pig the player to compare verticies against
+ * @returns { Array<number> } array of the ids of the objects that have been hit
  */
 export const checkCollisions = (collisions, pig) => {
   const collisionUUIDS = [];
 
   // Get the user's current collision area.
-  let pigDimensions = new THREE.Box3().setFromObject(pig);
-  pigDimensions = {
-    x: pigDimensions.max.x - pigDimensions.min.x,
-    y: pigDimensions.max.y - pigDimensions.min.y,
-    z: pigDimensions.max.z - pigDimensions.min.z,
-  };
+  const pigDimensions = getMeshDimensions(pig);
 
   const bounds = {
     xMin: pig.position.x - pigDimensions.x,
