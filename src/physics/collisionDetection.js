@@ -24,9 +24,12 @@ export const gatherBoundingBox = mesh => {
  */
 export const checkCollisions = (collisions, pig) => {
   // Get the user's current collision area.
-  const pigDimensions = new THREE.Box3()
-    .setFromObject(pig)
-    .getSize();
+  let pigDimensions = new THREE.Box3().setFromObject(pig);
+  pigDimensions = {
+    x: pigDimensions.max.x - pigDimensions.min.x,
+    y: pigDimensions.max.y - pigDimensions.min.y,
+    z: pigDimensions.max.z - pigDimensions.min.z,
+  };
 
   const bounds = {
     xMin: pig.position.x - pigDimensions.x,
