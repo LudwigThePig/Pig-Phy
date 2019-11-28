@@ -3,8 +3,8 @@ import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import { height, width, sceneDimensions } from './utils/dimensions';
 import color, { lightColors } from './utils/colors';
 import { moveRigidBody, movePlayer } from './controllers/movement';
-import { Cube, Sphere } from './loaders/shapes';
-import { gatherBoundingBox, checkCollisions } from './physics/collisionDetection';
+import { Cube, Sphere, CollisionBox } from './loaders/shapes';
+import { gatherBoundingBox, checkCollisions, getMeshDimensions } from './physics/collisionDetection';
 
 const OrbitControls = require('three-orbit-controls')(THREE);
 
@@ -113,6 +113,8 @@ const pigLoadCallback = gltf => {
   pig.castShadow = true;
   pig.receiveShadow = true;
   pig.children.forEach(child => { child.castShadow = true; });
+  const pigCollisionBox = new CollisionBox(pig).box;
+  pig.children.push(pigCollisionBox);
   scene.add(pig);
   pig.add(camera);
   document.addEventListener('keydown', keydown);

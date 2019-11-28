@@ -41,9 +41,7 @@ export const getMeshDimensions = player => {
  * @returns { Array<number> } array of the ids of the objects that have been hit
  */
 export const checkCollisions = (collisions, pig) => {
-  const collisionUUIDS = [];
-
-  // Get the user's current collision area.
+  const collisionIDs = [];
   const pigDimensions = getMeshDimensions(pig);
 
   const bounds = {
@@ -63,10 +61,10 @@ export const checkCollisions = (collisions, pig) => {
          && (bounds.zMin <= collisions[i].zMax && bounds.zMax >= collisions[i].zMin)) {
         // We hit a solid object! Stop all movements.
         console.log('🦜: WE GOT A HIT CAPTAIN!');
-        collisionUUIDS.push(collisions[i]);
+        collisionIDs.push(collisions[i]);
       }
     }
   }
 
-  return collisionUUIDS;
+  return collisionIDs;
 };

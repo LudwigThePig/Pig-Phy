@@ -2,6 +2,7 @@
 import * as THREE from 'three';
 import { randomPosition } from '../utils/randoms';
 import colors from '../utils/colors';
+import { getMeshDimensions } from '../physics/collisionDetection';
 
 
 const defaultPos = () => ({
@@ -30,5 +31,14 @@ export class Sphere {
     this.sphere.castShadow = true;
     this.sphere.name = 'sphere';
     this.sphere.receiveShadow = true;
+  }
+}
+
+// For Debugging Purposes
+export class CollisionBox {
+  constructor(mesh) {
+    const { x, y, z } = getMeshDimensions(mesh);
+    this.geometry = new THREE.BoxGeometry(x, y, z);
+    this.box = new THREE.Mesh(this.geometry);
   }
 }
