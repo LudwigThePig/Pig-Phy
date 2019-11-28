@@ -2,7 +2,7 @@ import * as THREE from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import { height, width, sceneDimensions } from './utils/dimensions';
 import color, { lightColors } from './utils/colors';
-import updatePlayerPosition from './controllers/keyboarInput';
+import { moveRigidBody, movePlayer } from './controllers/movement';
 import { Cube, Sphere } from './loaders/shapes';
 import { gatherBoundingBox, checkCollisions } from './physics/collisionDetection';
 
@@ -148,13 +148,20 @@ loader.load( // pig
 
 // MAIN FUNC
 const draw = () => {
-  checkCollisions(rigidBodies, pig);
+  const collisions = checkCollisions(rigidBodies, pig);
+
   controls.update();
   requestAnimationFrame(draw);
 
-  updatePlayerPosition(pig, keyboard);
+  movePlayer(pig, keyboard);
   camera.lookAt(pig.position);
 
+  if (collisions.length) {
+    for (let i = 0; i < collisions.length; i++) {
+      const object = scene.getObjectById(collisions[i].id);
+      moveRigidBody(object);
+    }
+  }
 
   renderer.render(scene, camera);
 };

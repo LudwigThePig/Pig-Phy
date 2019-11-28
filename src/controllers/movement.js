@@ -9,7 +9,7 @@ const key = {
 };
 
 
-export default (player, keyboard) => {
+export const movePlayer = (player, keyboard) => {
   if (keyboard[key.forward]) {
     player.position.x += Math.sin(player.rotation.y) * forwardVelocity;
     player.position.z += Math.cos(player.rotation.y) * forwardVelocity;
@@ -20,4 +20,9 @@ export default (player, keyboard) => {
   }
   if (keyboard[key.right]) player.rotation.y -= rotationVelocity;
   if (keyboard[key.left]) player.rotation.y += rotationVelocity;
+};
+
+export const moveRigidBody = (mesh, direction) => {
+  console.log(mesh);
+  mesh.position.y += 0.3;
 };

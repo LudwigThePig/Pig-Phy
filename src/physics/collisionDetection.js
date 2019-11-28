@@ -6,8 +6,10 @@ import * as THREE from 'three';
  * @returns { object } object containing all of the bounding verticies for a mesh
  */
 export const gatherBoundingBox = mesh => {
+  console.log(mesh);
   const boundingBox = new THREE.Box3().setFromObject(mesh);
   return {
+    id: mesh.id,
     type: 'collision',
     xMin: boundingBox.min.x,
     xMax: boundingBox.max.x,
@@ -23,6 +25,8 @@ export const gatherBoundingBox = mesh => {
  * Collision detection for every solid object.
  */
 export const checkCollisions = (collisions, pig) => {
+  const collisionUUIDS = [];
+
   // Get the user's current collision area.
   let pigDimensions = new THREE.Box3().setFromObject(pig);
   pigDimensions = {
@@ -41,14 +45,17 @@ export const checkCollisions = (collisions, pig) => {
   };
 
   // Run through each object and detect if there is a collision.
-  for (let index = 0; index < collisions.length; index++) {
-    if (collisions[index].type == 'collision') {
-      if ((bounds.xMin <= collisions[index].xMax && bounds.xMax >= collisions[index].xMin)
-         && (bounds.yMin <= collisions[index].yMax && bounds.yMax >= collisions[index].yMin)
-         && (bounds.zMin <= collisions[index].zMax && bounds.zMax >= collisions[index].zMin)) {
+  for (let i = 0; i < collisions.length; i++) {
+    if (collisions[i].type == 'collision') {
+      if ((bounds.xMin <= collisions[i].xMax && bounds.xMax >= collisions[i].xMin)
+         && (bounds.yMin <= collisions[i].yMax && bounds.yMax >= collisions[i].yMin)
+         && (bounds.zMin <= collisions[i].zMax && bounds.zMax >= collisions[i].zMin)) {
         // We hit a solid object! Stop all movements.
         console.log('🦜: WE GOT A HIT CAPTAIN!');
+        collisionUUIDS.push(collisions[i]);
       }
     }
   }
+
+  return collisionUUIDS;
 };

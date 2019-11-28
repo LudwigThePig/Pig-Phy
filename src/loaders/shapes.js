@@ -15,6 +15,7 @@ export class Cube {
     this.cube = new THREE.Mesh(this.geometry, this.material);
     this.cube.position.set(pos.x, height / 2, pos.z);
     this.cube.castShadow = true;
+    this.cube.name = 'Cube';
     this.cube.receiveShadow = true;
   }
 }
@@ -26,6 +27,7 @@ export class Sphere {
     this.sphere = new THREE.Mesh(this.geometry, this.material);
     this.sphere.position.set(pos.x, radius, pos.z);
     this.sphere.castShadow = true;
+    this.sphere.name = 'sphere';
     this.sphere.receiveShadow = true;
   }
 }
