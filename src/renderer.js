@@ -4,6 +4,7 @@ import { height, width, sceneDimensions } from './utils/dimensions';
 import color, { lightColors } from './utils/colors';
 import updatePlayerPosition from './controllers/keyboarInput';
 import { Cube, Sphere } from './loaders/shapes';
+import { gatherBoundingBox, checkCollisions } from './physics/collisionDetection';
 
 const OrbitControls = require('three-orbit-controls')(THREE);
 
@@ -67,24 +68,6 @@ scene.add(topLight);
 * Rigid Bodies *
 ************** */
 const rigidBodies = [];
-
-/**
- * @param { object } mesh Instance of THREE.Mesh()
- * @returns { object } object containing all of the bounding verticies for a mesh
- */
-const gatherBoundingBox = mesh => {
-  const boundingBox = new THREE.Box3().setFromObject(mesh);
-  return {
-    type: 'collision',
-    xMin: boundingBox.min.x,
-    xMax: boundingBox.max.x,
-    yMin: boundingBox.min.y,
-    yMax: boundingBox.max.y,
-    zMin: boundingBox.min.z,
-    zMax: boundingBox.max.z,
-  };
-};
-
 
 /**
  * @description Gathers all of the vertex data and pushes it onto the rigid bodies array
@@ -163,28 +146,9 @@ loader.load( // pig
 );
 
 
-// COLLISION DETECTION
-const checkCollision = () => {
-  // const cube = scene.getObjectByName('cube');
-  // const originPoint = cube.position.clone();
-  // for (let vertexIndex = 0; vertexIndex < cube.geometry.vertices.length; vertexIndex++) {
-  //   const localVertex = cube.geometry.vertices[vertexIndex].clone();
-  //   const globalVertex = localVertex.applyMatrix4(cube.matrix);
-  //   const directionVector = globalVertex.sub(cube.position);
-  //   const ray = new THREE.Raycaster(originPoint, directionVector.clone().normalize());
-  //   const collisionResults = ray.intersectObjects(rigidBodies);
-  //   if (collisionResults.length > 0 && collisionResults[0].distance < directionVector.length()) {
-  //     console.log(collisionResults[0].object.name);
-  //     collisionResults[0].object.material.transparent = true;
-  //     collisionResults[0].object.material.opacity = 0.4;
-  //   }
-  // }
-};
-
-
 // MAIN FUNC
 const draw = () => {
-  checkCollision();
+  checkCollisions(rigidBodies, pig);
   controls.update();
   requestAnimationFrame(draw);
 
