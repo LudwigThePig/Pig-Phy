@@ -8,6 +8,8 @@ import { gatherBoundingBox, checkCollisions } from './physics/collisionDetection
 
 const OrbitControls = require('three-orbit-controls')(THREE);
 
+const collisionThread = new Worker('collisions.js');
+
 
 /* ************
 * Input State *
