@@ -11,16 +11,19 @@ export const randomBoundedInt = (givenMin, givenMax) => {
  *
  * @param {str} axis one of 'x', 'z' (case insenstive)
  *  if none is given, random z pos is returned
+ * @param { number } meshWidth the width of the object to be placed.
  * @returns number
  */
-export const randomPosition = (axis) => {
+export const randomPosition = (axis, meshWidth = 1) => {
   const ax = axis.toLowerCase();
+  const offset = meshWidth / 2; // offset to avoid mesh from hanging over the edge
+
   if (ax === 'x') {
-    const xMin = -(sceneDimensions.X / 2);
-    const xMax = sceneDimensions.X / 2;
+    const xMin = -(sceneDimensions.X / 2) + offset;
+    const xMax = (sceneDimensions.X / 2) - offset;
     return randomBoundedInt(xMin, xMax);
   }
-  const zMin = -(sceneDimensions.Z / 2);
-  const zMax = sceneDimensions.Z / 2;
+  const zMin = -(sceneDimensions.Z / 2) + offset;
+  const zMax = (sceneDimensions.Z / 2) - offset;
   return randomBoundedInt(zMin, zMax);
 };
