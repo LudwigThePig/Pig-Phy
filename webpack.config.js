@@ -3,12 +3,15 @@ const path = require('path');
 const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
 
 module.exports = {
-  entry: './src/index.js',
+  entry: {
+    main: './src/index.js',
+    collision: './src/collisionThread.js',
+  },
   resolve: {
     extensions: ['.js'],
   },
   output: {
-    filename: 'bundle.js',
+    filename: '[name]-bundle.js',
     path: path.resolve(__dirname, 'public', 'js'),
   },
   module: {

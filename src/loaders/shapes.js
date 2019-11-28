@@ -39,9 +39,14 @@ export class CollisionBox {
   constructor(mesh) {
     const { x, y, z } = getMeshDimensions(mesh);
     this.geometry = new THREE.BoxGeometry(x, y, z);
-    this.box = new THREE.Mesh(this.geometry);
+    this.wireframe = new THREE.EdgesGeometry(this.geometry);
+    this.matreial = new THREE.LineBasicMaterial({ color: colors.green, linewidth: 2 });
+
+    this.box = new THREE.LineSegments(this.wireframe, this.matreial);
+    this.box.material.depthTest = false;
+    this.box.material.opacity = 0.95;
+    this.box.material.transparent = true;
     this.box.parent = mesh;
-    this.box.position.set(mesh.position.x, mesh.position.y, mesh.position.z);
     this.box.name = 'Collision Box';
   }
 }

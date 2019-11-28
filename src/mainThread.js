@@ -4,11 +4,11 @@ import { height, width, sceneDimensions } from './utils/dimensions';
 import color, { lightColors } from './utils/colors';
 import { moveRigidBody, movePlayer } from './controllers/movement';
 import { Cube, Sphere, CollisionBox } from './loaders/shapes';
-import { gatherBoundingBox, checkCollisions, getMeshDimensions } from './physics/collisionDetection';
+import { gatherBoundingBox, checkCollisions } from './physics/collisionDetection';
 
 const OrbitControls = require('three-orbit-controls')(THREE);
 
-const collisionThread = new Worker('js/collisions.js');
+const collisionThread = new Worker('js/collision-bundle.js');
 
 
 /* ************
@@ -110,7 +110,6 @@ let pig;
 const pigLoadCallback = gltf => {
   pig = gltf.scene;
   pig.children.push(new CollisionBox(pig).box); // debug box
-  console.log(pig);
   pig.position.set(0, 1.12, 0);
   pig.castShadow = true;
   pig.receiveShadow = true;
