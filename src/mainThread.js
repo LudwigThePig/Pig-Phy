@@ -109,12 +109,12 @@ const loader = new GLTFLoader();
 let pig;
 const pigLoadCallback = gltf => {
   pig = gltf.scene;
+  pig.children.push(new CollisionBox(pig).box); // debug box
+  console.log(pig);
   pig.position.set(0, 1.12, 0);
   pig.castShadow = true;
   pig.receiveShadow = true;
   pig.children.forEach(child => { child.castShadow = true; });
-  const pigCollisionBox = new CollisionBox(pig).box;
-  pig.children.push(pigCollisionBox);
   scene.add(pig);
   pig.add(camera);
   document.addEventListener('keydown', keydown);

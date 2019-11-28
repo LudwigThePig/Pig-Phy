@@ -40,5 +40,8 @@ export class CollisionBox {
     const { x, y, z } = getMeshDimensions(mesh);
     this.geometry = new THREE.BoxGeometry(x, y, z);
     this.box = new THREE.Mesh(this.geometry);
+    this.box.parent = mesh;
+    this.box.position.set(mesh.position.x, mesh.position.y, mesh.position.z);
+    this.box.name = 'Collision Box';
   }
 }
