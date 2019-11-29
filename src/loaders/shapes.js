@@ -37,7 +37,7 @@ class Shape {
     this.matrix = new THREE.Shape();
   }
 
-  showCollisionBox() {
+  getCollisionBox() {
     const { box } = new CollisionBox(this.matrix);
     return box;
   }

@@ -124,16 +124,18 @@ const pigLoadCallback = gltf => {
 const cubes = Array(20)
   .fill(0)
   .map(() => {
-    const { cube } = new Cube();
-    scene.add(cube);
-    return cube;
+    const cube = new Cube();
+    scene.add(cube.matrix);
+    scene.add(cube.getCollisionBox());
+    return cube.matrix;
   });
 applyRigidBody(cubes);
 
 const spheres = Array(20).fill(0).map(() => {
-  const { sphere } = new Sphere();
-  scene.add(sphere);
-  return sphere;
+  const sphere = new Sphere();
+  scene.add(sphere.matrix);
+  scene.add(sphere.getCollisionBox());
+  return sphere.matrix;
 });
 applyRigidBody(spheres);
 
