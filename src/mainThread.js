@@ -164,6 +164,7 @@ const draw = () => {
   const newPos = JSON.parse(JSON.stringify(pig.position));
   camera.lookAt(pig.position);
   const posDif = calculatePosDifference(oldPos, newPos);
+
   if (collisions.length) {
     for (let i = 0; i < collisions.length; i++) {
       const { id, index } = collisions[i];
