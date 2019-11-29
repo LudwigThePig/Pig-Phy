@@ -10,29 +10,6 @@ const defaultPos = () => ({
   z: randomPosition('z'),
 });
 
-export class Cube {
-  constructor(height = 1, width = 1, depth = 1, pos = defaultPos()) {
-    this.geometry = new THREE.BoxGeometry(height, width, depth);
-    this.material = new THREE.MeshPhongMaterial({ color: colors.pink });
-    this.cube = new THREE.Mesh(this.geometry, this.material);
-    this.cube.position.set(pos.x, height / 2, pos.z);
-    this.cube.castShadow = true;
-    this.cube.name = 'Cube';
-    this.cube.receiveShadow = true;
-  }
-}
-
-export class Sphere {
-  constructor(radius = 1, pos = defaultPos()) {
-    this.geometry = new THREE.SphereGeometry(radius, 12, 12);
-    this.material = new THREE.MeshPhongMaterial({ color: colors.purple });
-    this.sphere = new THREE.Mesh(this.geometry, this.material);
-    this.sphere.position.set(pos.x, radius, pos.z);
-    this.sphere.castShadow = true;
-    this.sphere.name = 'sphere';
-    this.sphere.receiveShadow = true;
-  }
-}
 
 // For Debugging Purposes
 export class CollisionBox {
@@ -48,5 +25,46 @@ export class CollisionBox {
     this.box.material.transparent = true;
     this.box.parent = mesh;
     this.box.name = 'Collision Box';
+  }
+}
+
+
+/**
+ * Parent Class with Methods
+ */
+class Shape {
+  constructor() {
+    this.matrix = new THREE.Shape();
+  }
+
+  showCollisionBox() {
+    const { box } = new CollisionBox(this.matrix);
+    return box;
+  }
+}
+
+export class Cube extends Shape {
+  constructor(height = 1, width = 1, depth = 1, pos = defaultPos()) {
+    super();
+    this.geometry = new THREE.BoxGeometry(height, width, depth);
+    this.material = new THREE.MeshPhongMaterial({ color: colors.pink });
+    this.matrix = new THREE.Mesh(this.geometry, this.material);
+    this.matrix.position.set(pos.x, height / 2, pos.z);
+    this.matrix.castShadow = true;
+    this.matrix.name = 'Cube';
+    this.matrix.receiveShadow = true;
+  }
+}
+
+export class Sphere extends Shape {
+  constructor(radius = 1, pos = defaultPos()) {
+    super();
+    this.geometry = new THREE.SphereGeometry(radius, 12, 12);
+    this.material = new THREE.MeshPhongMaterial({ color: colors.purple });
+    this.matrix = new THREE.Mesh(this.geometry, this.material);
+    this.matrix.position.set(pos.x, radius, pos.z);
+    this.matrix.castShadow = true;
+    this.matrix.name = 'sphere';
+    this.matrix.receiveShadow = true;
   }
 }
