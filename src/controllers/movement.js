@@ -35,8 +35,10 @@ export const movePlayer = (player, keyboard) => {
  * @param {*} direction
  * @returns { object } the new bounding box for the relocated mesh
  */
-export const moveRigidBody = (mesh, rigidBody) => {
-  console.log(mesh);
-  mesh.position.y += 0.3;
+export const moveRigidBody = (mesh, pos) => {
+  console.log(pos);
+  mesh.position.x += pos.x;
+  mesh.position.y += pos.y;
+  mesh.position.z += pos.z;
   return gatherBoundingBox(mesh);
 };

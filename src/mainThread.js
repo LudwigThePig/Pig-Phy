@@ -6,6 +6,7 @@ import { moveRigidBody, movePlayer } from './controllers/movement';
 import { Cube, Sphere } from './loaders/shapes';
 import { gatherBoundingBox, checkCollisions } from './physics/collisionDetection';
 import { debug, CollisionBox } from './utils/debug';
+import { calculatePosDifference, extractPosition } from './utils/movement';
 
 
 const OrbitControls = require('three-orbit-controls')(THREE);
@@ -96,12 +97,13 @@ const ground = new THREE.Mesh(groundGeometry, groundMaterial);
 ground.rotation.x = -90 * (Math.PI / 180);
 ground.position.y = 0;
 ground.receiveShadow = true;
-scene.add(ground);
-
-
 const gridHelper = new THREE.GridHelper(100, 4);
-scene.add(gridHelper);
-scene.add(new THREE.AxesHelper(6));
+
+if (!debug) scene.add(ground);
+else {
+  scene.add(gridHelper);
+  scene.add(new THREE.AxesHelper(6));
+}
 
 
 /* 🐷🐷🐷🐷🐷
@@ -155,19 +157,18 @@ loader.load( // pig
 // MAIN FUNC
 const draw = () => {
   const collisions = checkCollisions(rigidBodies, pig);
-
+  const oldPos = JSON.parse(JSON.stringify(pig.position));
   controls.update();
   requestAnimationFrame(draw);
-
   movePlayer(pig, keyboard);
+  const newPos = JSON.parse(JSON.stringify(pig.position));
   camera.lookAt(pig.position);
-
+  const posDif = calculatePosDifference(oldPos, newPos);
   if (collisions.length) {
     for (let i = 0; i < collisions.length; i++) {
-      console.log(collisions[i].id);
       const { id, index } = collisions[i];
       const object = scene.getObjectById(id);
-      rigidBodies[index] = moveRigidBody(object, rigidBodies[index]);
+      rigidBodies[index] = moveRigidBody(object, posDif);
     }
   }
 
