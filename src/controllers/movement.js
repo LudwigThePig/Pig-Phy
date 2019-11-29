@@ -1,4 +1,5 @@
 import { forwardVelocity, rotationVelocity } from '../utils/velocities';
+import { gatherBoundingBox } from '../physics/collisionDetection';
 
 
 const keys = {
@@ -32,9 +33,10 @@ export const movePlayer = (player, keyboard) => {
  * @description moves an object on collision
  * @param { Three.Mesh } mesh
  * @param {*} direction
- * @returns { void } function mutates the meesh input
+ * @returns { object } the new bounding box for the relocated mesh
  */
-export const moveRigidBody = (mesh, direction) => {
+export const moveRigidBody = (mesh, rigidBody) => {
   console.log(mesh);
   mesh.position.y += 0.3;
+  return gatherBoundingBox(mesh);
 };

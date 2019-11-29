@@ -2,31 +2,13 @@
 import * as THREE from 'three';
 import { randomPosition } from '../utils/randoms';
 import colors from '../utils/colors';
-import { getMeshDimensions } from '../physics/collisionDetection';
+import { CollisionBox } from '../utils/debug';
 
 
 const defaultPos = () => ({
   x: randomPosition('x'),
   z: randomPosition('z'),
 });
-
-
-// For Debugging Purposes
-export class CollisionBox {
-  constructor(mesh) {
-    const { x, y, z } = getMeshDimensions(mesh);
-    this.geometry = new THREE.BoxGeometry(x, y, z);
-    this.wireframe = new THREE.EdgesGeometry(this.geometry);
-    this.matreial = new THREE.LineBasicMaterial({ color: colors.green, linewidth: 2 });
-
-    this.box = new THREE.LineSegments(this.wireframe, this.matreial);
-    this.box.material.depthTest = false;
-    this.box.material.opacity = 0.95;
-    this.box.material.transparent = true;
-    this.box.parent = mesh;
-    this.box.name = 'Collision Box';
-  }
-}
 
 
 /**

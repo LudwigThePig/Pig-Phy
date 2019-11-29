@@ -43,7 +43,6 @@ export const getMeshDimensions = player => {
 export const checkCollisions = (collisions, pig) => {
   const collisionIDs = [];
   const pigDimensions = getMeshDimensions(pig);
-
   const bounds = {
     xMin: pig.position.x - (pigDimensions.x / 2),
     xMax: pig.position.x + (pigDimensions.x / 2),
@@ -61,7 +60,7 @@ export const checkCollisions = (collisions, pig) => {
          && (bounds.zMin <= collisions[i].zMax && bounds.zMax >= collisions[i].zMin)) {
         // We hit a solid object! Stop all movements.
         console.log('🦜: WE GOT A HIT CAPTAIN!');
-        collisionIDs.push(collisions[i]);
+        collisionIDs.push({ id: collisions[i].id, index: i });
       }
     }
   }

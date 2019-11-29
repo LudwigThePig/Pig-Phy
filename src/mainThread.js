@@ -3,8 +3,10 @@ import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import { height, width, sceneDimensions } from './utils/dimensions';
 import color, { lightColors } from './utils/colors';
 import { moveRigidBody, movePlayer } from './controllers/movement';
-import { Cube, Sphere, CollisionBox } from './loaders/shapes';
+import { Cube, Sphere } from './loaders/shapes';
 import { gatherBoundingBox, checkCollisions } from './physics/collisionDetection';
+import { debug, CollisionBox } from './utils/debug';
+
 
 const OrbitControls = require('three-orbit-controls')(THREE);
 
@@ -109,7 +111,7 @@ const loader = new GLTFLoader();
 let pig;
 const pigLoadCallback = gltf => {
   pig = gltf.scene;
-  pig.children.push(new CollisionBox(pig).box); // debug box
+  if (debug) pig.children.push(new CollisionBox(pig).box);
   pig.position.set(0, 1.12, 0);
   pig.castShadow = true;
   pig.receiveShadow = true;
@@ -162,8 +164,10 @@ const draw = () => {
 
   if (collisions.length) {
     for (let i = 0; i < collisions.length; i++) {
-      const object = scene.getObjectById(collisions[i].id);
-      moveRigidBody(object);
+      console.log(collisions[i].id);
+      const { id, index } = collisions[i];
+      const object = scene.getObjectById(id);
+      rigidBodies[index] = moveRigidBody(object, rigidBodies[index]);
     }
   }
 
