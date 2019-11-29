@@ -45,12 +45,12 @@ export const checkCollisions = (collisions, pig) => {
   const pigDimensions = getMeshDimensions(pig);
 
   const bounds = {
-    xMin: pig.position.x - pigDimensions.x,
-    xMax: pig.position.x + pigDimensions.x,
-    yMin: pig.position.y - pigDimensions.y,
-    yMax: pig.position.y + pigDimensions.y,
-    zMin: pig.position.z - pigDimensions.z,
-    zMax: pig.position.z + pigDimensions.z,
+    xMin: pig.position.x - (pigDimensions.x / 2),
+    xMax: pig.position.x + (pigDimensions.x / 2),
+    yMin: pig.position.y - (pigDimensions.y / 2),
+    yMax: pig.position.y + (pigDimensions.y / 2),
+    zMin: pig.position.z - (pigDimensions.z / 2),
+    zMax: pig.position.z + (pigDimensions.z / 2),
   };
 
   // Run through each object and detect if there is a collision.

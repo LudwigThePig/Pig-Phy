@@ -134,7 +134,6 @@ applyRigidBody(cubes);
 const spheres = Array(20).fill(0).map(() => {
   const sphere = new Sphere();
   scene.add(sphere.matrix);
-  scene.add(sphere.getCollisionBox());
   return sphere.matrix;
 });
 applyRigidBody(spheres);
