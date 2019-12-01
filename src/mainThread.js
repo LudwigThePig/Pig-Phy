@@ -13,6 +13,8 @@ const OrbitControls = require('three-orbit-controls')(THREE);
 
 const collisionThread = new Worker('js/collision-bundle.js');
 
+const loadingManager = new THREE.LoadingManager();
+loadingManager.onLoad = () => { draw(); };
 
 /* ************
 * State *
@@ -110,7 +112,7 @@ else {
 /* 🐷🐷🐷🐷🐷
 * PIG MODEL *
 🐷🐷🐷🐷🐷🐷 */
-const loader = new GLTFLoader();
+const loader = new GLTFLoader(loadingManager);
 let pig;
 const pigLoadCallback = gltf => {
   pig = gltf.scene;
@@ -123,7 +125,6 @@ const pigLoadCallback = gltf => {
   pig.add(camera);
   document.addEventListener('keydown', keydown);
   document.addEventListener('keyup', keyup);
-  draw();
 };
 
 const cubes = Array(20)
