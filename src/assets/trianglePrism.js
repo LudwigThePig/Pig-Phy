@@ -1,16 +1,13 @@
 import * as THREE from 'three';
 
-const coordA = [0, 0];
-const coordB = [4, 0];
-const coordC = [0, 4];
 
 export default class TrianglePrism {
-  constructor(a = coordA, b = coordB, c = coordC, depth = 5) {
+  constructor(height = 3, width = 5, depth = 5) {
     const triangle = new THREE.Shape()
-      .moveTo(...a)
-      .lineTo(...b)
-      .lineTo(...c)
-      .lineTo(...a);
+      .moveTo(0, 0)
+      .lineTo(0, height)
+      .lineTo(width, 0)
+      .lineTo(0, 0);
 
     const extrudeSettings = {
       depth,
@@ -20,5 +17,6 @@ export default class TrianglePrism {
     this.geometry = new THREE.ExtrudeGeometry(triangle, extrudeSettings);
     this.material = new THREE.MeshPhongMaterial({ side: THREE.DoubleSide });
     this.matrix = new THREE.Mesh(this.geometry, this.material);
+    this.matrix.position.set(width / -2, 0, depth / -2);
   }
 }

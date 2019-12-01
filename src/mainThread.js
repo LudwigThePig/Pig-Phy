@@ -161,7 +161,6 @@ const spheres = Array(20).fill(0).map(() => {
 applyRigidBody(spheres, 4);
 
 const slope = new TrianglePrism().matrix;
-slope.position.set(-2, 0, 0);
 scene.add(slope);
 
 /* ********
