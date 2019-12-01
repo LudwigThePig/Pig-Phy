@@ -80,10 +80,11 @@ topLight.shadowCameraVisible = true; // for debugging
 scene.add(topLight);
 
 
-/* *************
-* Rigid Bodies *
-************** */
+/* *************************
+* Rigid & Kinematic Bodies *
+************************** */
 const rigidBodies = [];
+const kinematicBodies = [];
 
 /**
  * @description Gathers all of the vertex data and pushes it onto the rigid bodies array
@@ -100,6 +101,13 @@ const applyRigidBody = (mesh, mass = 1) => {
   } else rigidBodies.push(gatherBoundingBox(mesh));
 };
 
+const applyKinematicBody = mesh => {
+  if (Array.isArray(mesh)) {
+    for (let i = 0; i < mesh.length; i++) {
+      kinematicBodies.push(gatherBoundingBox(mesh[i]));
+    }
+  } else kinematicBodies.push(gatherBoundingBox(mesh));
+};
 
 /* ********
 * Ground *
@@ -117,6 +125,7 @@ else {
   scene.add(gridHelper);
   scene.add(new THREE.AxesHelper(6));
 }
+applyKinematicBody(ground);
 
 
 /* 🐷🐷🐷🐷🐷
@@ -160,8 +169,12 @@ const spheres = Array(20).fill(0).map(() => {
 });
 applyRigidBody(spheres, 4);
 
+
+// Kinematic Slope for testing gravity forces
 const slope = new TrianglePrism().matrix;
 scene.add(slope);
+applyKinematicBody(slope);
+
 
 /* ********
 * LOADERS *
@@ -178,7 +191,9 @@ loader.load( // pig
 * MAIN FUNC *
 *********** */
 const draw = () => {
-  const collisions = checkCollisions(rigidBodies, pig);
+  const rigidCollisions = checkCollisions(rigidBodies, pig);
+  const kinematicCollisions = checkCollisions(kinematicBodies, pig);
+
   const oldPos = JSON.parse(JSON.stringify(pig.position));
   controls.update();
   requestAnimationFrame(draw);
@@ -187,12 +202,16 @@ const draw = () => {
   camera.lookAt(pig.position);
   const posDif = calculatePosDifference(oldPos, newPos);
 
-  if (collisions.length) {
-    for (let i = 0; i < collisions.length; i++) {
-      const { id, index } = collisions[i];
+  if (rigidCollisions.length) {
+    for (let i = 0; i < rigidCollisions.length; i++) {
+      const { id, index } = rigidCollisions[i];
       const object = scene.getObjectById(id);
       rigidBodies[index] = moveRigidBody(object, posDif, keyboard);
     }
+  }
+
+  if (kinematicBodies.length) {
+    console.log('We hit something solid!');
   }
 
   renderer.render(scene, camera);

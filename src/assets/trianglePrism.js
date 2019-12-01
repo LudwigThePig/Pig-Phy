@@ -1,6 +1,5 @@
 import * as THREE from 'three';
 
-
 export default class TrianglePrism {
   constructor(height = 3, width = 5, depth = 5) {
     const triangle = new THREE.Shape()

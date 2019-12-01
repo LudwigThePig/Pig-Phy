@@ -16,6 +16,10 @@ const keys = {
  * @returns { void } function mutates the player param
  */
 export const movePlayer = (player, keyboard) => {
+  // apply gravity
+  player.position.y -= 0.1;
+
+  // update movement
   if (keyboard[keys.forward]) {
     player.position.x += Math.sin(player.rotation.y) * forwardVelocity;
     player.position.z += Math.cos(player.rotation.y) * forwardVelocity;
