@@ -16,6 +16,21 @@ export default class Player {
     this.player.children.forEach(child => { child.castShadow = true; });
     this.player.mass = 3;
     this.player.isGrounded = true;
-    this.verticies = this.generateGeometry();
+
+    this.generateGeometry();
+  }
+
+  generateGeometry() {
+    const { children } = this.player;
+    const geometry = new THREE.Geometry();
+    for (let i = 0; i < children.length; i++) {
+      const child = children[i];
+      if (child.type === 'Mesh') {
+        // Gather the verticies from the bufferGeometry
+        const resolvedGeometry = new THREE.Geometry().fromBufferGeometry(child.geometry);
+        geometry.merge(resolvedGeometry);
+      }
+    }
+    this.geometry = geometry;
   }
 }
