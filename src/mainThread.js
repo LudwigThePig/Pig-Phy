@@ -1,6 +1,9 @@
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
-import { height, width, sceneDimensions } from './utils/dimensions';
+import 'normalize.css';
+
+import './style.scss';
+import { getCanvasDimensions, sceneDimensions } from './utils/dimensions';
 import color, { lightColors } from './utils/colors';
 import { moveRigidBody, movePlayer } from './controllers/movement';
 import { Cube, Sphere } from './loaders/shapes';
@@ -9,6 +12,9 @@ import { debug, CollisionBox } from './utils/debug';
 import { calculatePosDifference, extractPosition } from './utils/movement';
 
 
+/* *********
+* Managers *
+********** */
 const OrbitControls = require('three-orbit-controls')(THREE);
 
 const collisionThread = new Worker('js/collision-bundle.js');
@@ -16,14 +22,15 @@ const collisionThread = new Worker('js/collision-bundle.js');
 const loadingManager = new THREE.LoadingManager();
 loadingManager.onLoad = () => { draw(); };
 
-/* ************
+/* ******
 * State *
-************* */
+******* */
 let clock = performance.now();
 const keyboard = {};
 const getKeyCode = event => event.which;
 export const keydown = event => { keyboard[getKeyCode(event)] = true; };
 export const keyup = event => { keyboard[getKeyCode(event)] = false; };
+let { height, width } = getCanvasDimensions();
 
 
 /* ********
@@ -156,7 +163,9 @@ loader.load( // pig
 );
 
 
-// MAIN FUNC
+/* **********
+* MAIN FUNC *
+*********** */
 const draw = () => {
   const collisions = checkCollisions(rigidBodies, pig);
   const oldPos = JSON.parse(JSON.stringify(pig.position));
@@ -178,6 +187,21 @@ const draw = () => {
   renderer.render(scene, camera);
   clock = performance.now();
 };
+
+
+/* *********************
+* MISC EVENT LISTENERS *
+********************** */
+const onWindowResize = () => {
+  const newDimensions = getCanvasDimensions();
+  height = newDimensions.height;
+  width = newDimensions.width;
+
+  renderer.setSize(width, height);
+  camera.aspect = width / height;
+  camera.updateProjectionMatrix();
+};
+window.addEventListener('resize', onWindowResize);
 
 
 // Export for init
