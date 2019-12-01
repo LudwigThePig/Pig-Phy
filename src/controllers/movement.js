@@ -17,7 +17,7 @@ const keys = {
  */
 export const movePlayer = (player, keyboard) => {
   // apply gravity
-  player.position.y -= 0.1;
+  player.position.y -= 0.009;
 
   // update movement
   if (keyboard[keys.forward]) {

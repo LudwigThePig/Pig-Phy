@@ -11,6 +11,7 @@ import { gatherBoundingBox, checkCollisions } from './physics/collisionDetection
 import { debug, CollisionBox } from './utils/debug';
 import { calculatePosDifference, extractPosition } from './utils/movement';
 import TrianglePrism from './assets/trianglePrism';
+import Player from './assets/player';
 
 
 /* *********
@@ -134,18 +135,8 @@ applyKinematicBody(ground);
 const loader = new GLTFLoader(loadingManager);
 let pig;
 const pigLoadCallback = gltf => {
-  pig = gltf.scene;
-  if (debug) {
-    pig.children.push(new CollisionBox(pig).box);
-    pig.position.set(0, 5.12, 0);
-  } else {
-    pig.position.set(0, 1.12, 0);
-  }
-  pig.castShadow = true;
-  pig.receiveShadow = true;
-  pig.children.forEach(child => { child.castShadow = true; });
-  pig.mass = 3;
-  pig.isGrounded = true;
+  pig = new Player(gltf.scene).player;
+  console.log(pig.children);
   scene.add(pig);
   pig.add(camera);
   document.addEventListener('keydown', keydown);
@@ -172,9 +163,11 @@ applyRigidBody(spheres, 4);
 
 // Kinematic Slope for testing gravity forces
 const slope = new TrianglePrism().matrix;
-scene.add(slope);
-applyKinematicBody(slope);
-
+// scene.add(slope);
+// applyKinematicBody(slope);
+slope.geometry.computeBoundingBox();
+const box = slope.geometry.boundingBox.clone();
+console.log(box);
 
 /* ********
 * LOADERS *
@@ -210,8 +203,8 @@ const draw = () => {
     }
   }
 
-  if (kinematicBodies.length) {
-    console.log('We hit something solid!');
+  if (kinematicCollisions.length) {
+    // Broad collision sweep
   }
 
   renderer.render(scene, camera);

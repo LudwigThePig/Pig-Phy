@@ -17,5 +17,6 @@ export default class TrianglePrism {
     this.material = new THREE.MeshPhongMaterial({ side: THREE.DoubleSide });
     this.matrix = new THREE.Mesh(this.geometry, this.material);
     this.matrix.position.set(width / -2, 0, depth / -2);
+    this.matrix.name = 'slope';
   }
 }
