@@ -15,8 +15,9 @@ const collisionThread = new Worker('js/collision-bundle.js');
 
 
 /* ************
-* Input State *
+* State *
 ************* */
+let clock = performance.now();
 const keyboard = {};
 const getKeyCode = event => event.which;
 export const keydown = event => { keyboard[getKeyCode(event)] = true; };
@@ -169,11 +170,12 @@ const draw = () => {
     for (let i = 0; i < collisions.length; i++) {
       const { id, index } = collisions[i];
       const object = scene.getObjectById(id);
-      rigidBodies[index] = moveRigidBody(object, posDif);
+      rigidBodies[index] = moveRigidBody(object, posDif, keyboard);
     }
   }
 
   renderer.render(scene, camera);
+  clock = performance.now();
 };
 
 

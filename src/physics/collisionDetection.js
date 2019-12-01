@@ -6,7 +6,6 @@ import * as THREE from 'three';
  * @returns { object } object containing all of the bounding verticies for a mesh
  */
 export const gatherBoundingBox = mesh => {
-  console.log(mesh);
   const boundingBox = new THREE.Box3().setFromObject(mesh);
   return {
     id: mesh.id,
@@ -59,7 +58,6 @@ export const checkCollisions = (collisions, pig) => {
          && (bounds.yMin <= collisions[i].yMax && bounds.yMax >= collisions[i].yMin)
          && (bounds.zMin <= collisions[i].zMax && bounds.zMax >= collisions[i].zMin)) {
         // We hit a solid object! Stop all movements.
-        console.log('🦜: WE GOT A HIT CAPTAIN!');
         collisionIDs.push({ id: collisions[i].id, index: i });
       }
     }
