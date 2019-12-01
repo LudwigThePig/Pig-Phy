@@ -5,5 +5,5 @@ import renderer from './mainThread';
 
 
 window.onload = () => {
-  document.body.appendChild(renderer.domElement);
+  document.getElementById('canvas-container').appendChild(renderer.domElement);
 };

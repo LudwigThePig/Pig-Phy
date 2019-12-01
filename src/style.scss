@@ -9,7 +9,13 @@ body {
   font-family: Lato, sans-serif;  
 }
 
-
+#canvas-container{
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 canvas {
   border: 2px solid $active-color;
   display: block;
