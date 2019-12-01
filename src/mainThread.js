@@ -10,6 +10,7 @@ import { Cube, Sphere } from './assets/shapes';
 import { gatherBoundingBox, checkCollisions } from './physics/collisionDetection';
 import { debug, CollisionBox } from './utils/debug';
 import { calculatePosDifference, extractPosition } from './utils/movement';
+import TrianglePrism from './assets/trianglePrism';
 
 
 /* *********
@@ -125,8 +126,12 @@ const loader = new GLTFLoader(loadingManager);
 let pig;
 const pigLoadCallback = gltf => {
   pig = gltf.scene;
-  if (debug) pig.children.push(new CollisionBox(pig).box);
-  pig.position.set(0, 1.12, 0);
+  if (debug) {
+    pig.children.push(new CollisionBox(pig).box);
+    pig.position.set(0, 5.12, 0);
+  } else {
+    pig.position.set(0, 1.12, 0);
+  }
   pig.castShadow = true;
   pig.receiveShadow = true;
   pig.children.forEach(child => { child.castShadow = true; });
@@ -155,6 +160,9 @@ const spheres = Array(20).fill(0).map(() => {
 });
 applyRigidBody(spheres, 4);
 
+const slope = new TrianglePrism().matrix;
+slope.position.set(-2, 0, 0);
+scene.add(slope);
 
 /* ********
 * LOADERS *
@@ -189,7 +197,6 @@ const draw = () => {
   }
 
   renderer.render(scene, camera);
-  clock = performance.now();
 };
 
 
