@@ -6,7 +6,7 @@ import './style.scss';
 import { getCanvasDimensions, sceneDimensions } from './utils/dimensions';
 import color, { lightColors } from './utils/colors';
 import { moveRigidBody, movePlayer } from './controllers/movement';
-import { Cube, Sphere } from './loaders/shapes';
+import { Cube, Sphere } from './assets/shapes';
 import { gatherBoundingBox, checkCollisions } from './physics/collisionDetection';
 import { debug, CollisionBox } from './utils/debug';
 import { calculatePosDifference, extractPosition } from './utils/movement';
@@ -15,17 +15,17 @@ import { calculatePosDifference, extractPosition } from './utils/movement';
 /* *********
 * Managers *
 ********** */
+const loadingManager = new THREE.LoadingManager();
+loadingManager.onLoad = () => { draw(); };
+
 const OrbitControls = require('three-orbit-controls')(THREE);
 
 const collisionThread = new Worker('js/collision-bundle.js');
 
-const loadingManager = new THREE.LoadingManager();
-loadingManager.onLoad = () => { draw(); };
 
 /* ******
 * State *
 ******* */
-let clock = performance.now();
 const keyboard = {};
 const getKeyCode = event => event.which;
 export const keydown = event => { keyboard[getKeyCode(event)] = true; };
@@ -89,11 +89,13 @@ const rigidBodies = [];
  * @param { Array | Object } mesh a mesh or array of meshes.
  * @returns void
  */
-const applyRigidBody = mesh => {
+const applyRigidBody = (mesh, mass = 1) => {
   if (Array.isArray(mesh)) {
     for (let i = 0; i < mesh.length; i++) {
+      mesh[i].mass = mass;
       rigidBodies.push(gatherBoundingBox(mesh[i]));
     }
+    mesh.mass = mass;
   } else rigidBodies.push(gatherBoundingBox(mesh));
 };
 
@@ -128,6 +130,8 @@ const pigLoadCallback = gltf => {
   pig.castShadow = true;
   pig.receiveShadow = true;
   pig.children.forEach(child => { child.castShadow = true; });
+  pig.mass = 3;
+  pig.isGrounded = true;
   scene.add(pig);
   pig.add(camera);
   document.addEventListener('keydown', keydown);
@@ -142,14 +146,14 @@ const cubes = Array(20)
     scene.add(cube.getCollisionBox());
     return cube.matrix;
   });
-applyRigidBody(cubes);
+applyRigidBody(cubes, 1);
 
 const spheres = Array(20).fill(0).map(() => {
   const sphere = new Sphere();
   scene.add(sphere.matrix);
   return sphere.matrix;
 });
-applyRigidBody(spheres);
+applyRigidBody(spheres, 4);
 
 
 /* ********
