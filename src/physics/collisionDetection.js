@@ -67,6 +67,15 @@ export const broadCollisionSweep = (collisions, pig) => {
 };
 
 
-export const narrowCollisionSweep = (entity, pig) => {
+export const narrowCollisionSweep = (entities, pig) => {
+  for (let vertexIndex = 0; vertexIndex < pig.geometry.vertices.length; vertexIndex++) {
+    const localVertex = pig.geometry.vertices[vertexIndex].clone();
+    const globalVertex = localVertex.applyMatrix4(pig.matrix);
+    const directionVector = globalVertex.sub(pig.position);
+    const originPoint = pig.position.clone();
 
+    const ray = new THREE.Raycaster(originPoint, directionVector.clone().normalize());
+    const collisionResults = ray.intersectObjects(entities);
+    if (collisionResults.length > 0 && collisionResults[0].distance < directionVector.length()) { console.log(' Hit '); }
+  }
 };
