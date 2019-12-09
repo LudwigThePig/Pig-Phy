@@ -7,7 +7,7 @@ import * as THREE from 'three';
  */
 export const gatherBoundingBox = mesh => {
   const boundingBox = new THREE.Box3().setFromObject(mesh);
-  return {
+  mesh.boundingBox = {
     id: mesh.id,
     type: 'collision',
     xMin: boundingBox.min.x,
@@ -17,6 +17,7 @@ export const gatherBoundingBox = mesh => {
     zMin: boundingBox.min.z,
     zMax: boundingBox.max.z,
   };
+  return mesh;
 };
 
 
@@ -53,12 +54,13 @@ export const broadCollisionSweep = (collisions, pig) => {
 
   // Run through each object and detect if there is a collision.
   for (let i = 0; i < collisions.length; i++) {
-    if (collisions[i].type == 'collision') {
-      if ((bounds.xMin <= collisions[i].xMax && bounds.xMax >= collisions[i].xMin)
-         && (bounds.yMin <= collisions[i].yMax && bounds.yMax >= collisions[i].yMin)
-         && (bounds.zMin <= collisions[i].zMax && bounds.zMax >= collisions[i].zMin)) {
+    const bbox = collisions[i].boundingBox;
+    if (bbox.type == 'collision') {
+      if ((bounds.xMin <= bbox.xMax && bounds.xMax >= bbox.xMin)
+         && (bounds.yMin <= bbox.yMax && bounds.yMax >= bbox.yMin)
+         && (bounds.zMin <= bbox.zMax && bounds.zMax >= bbox.zMin)) {
         // We hit a solid object! Stop all movements.
-        collisionIDs.push({ id: collisions[i].id, index: i });
+        collisionIDs.push({ id: bbox.id, index: i });
       }
     }
   }
@@ -67,15 +69,16 @@ export const broadCollisionSweep = (collisions, pig) => {
 };
 
 
-export const narrowCollisionSweep = (entities, pig) => {
-  for (let vertexIndex = 0; vertexIndex < pig.geometry.vertices.length; vertexIndex++) {
-    const localVertex = pig.geometry.vertices[vertexIndex].clone();
+export const narrowCollisionSweep = (entity, pig) => {
+  const { vertices } = pig.compositeGeometry;
+  for (let vertexIndex = 0; vertexIndex < vertices.length; vertexIndex++) {
+    const localVertex = vertices[vertexIndex].clone();
     const globalVertex = localVertex.applyMatrix4(pig.matrix);
     const directionVector = globalVertex.sub(pig.position);
     const originPoint = pig.position.clone();
 
     const ray = new THREE.Raycaster(originPoint, directionVector.clone().normalize());
-    const collisionResults = ray.intersectObjects(entities);
-    if (collisionResults.length > 0 && collisionResults[0].distance < directionVector.length()) { console.log(' Hit '); }
+    const collisionResults = ray.intersectObject(entity);
+    if (collisionResults.length > 0 && collisionResults[0].distance < directionVector.length()) { console.log(`${Math.random > 0.5 ? '🎯' : '🎉'} Hit ${Math.random > 0.5 ? '🎅' : '😻'}`); }
   }
 };

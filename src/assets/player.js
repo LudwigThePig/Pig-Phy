@@ -31,6 +31,6 @@ export default class Player {
         geometry.merge(resolvedGeometry);
       }
     }
-    this.geometry = geometry;
+    this.player.compositeGeometry = geometry;
   }
 }

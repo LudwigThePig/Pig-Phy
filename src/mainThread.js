@@ -7,7 +7,7 @@ import { getCanvasDimensions, sceneDimensions } from './utils/dimensions';
 import color, { lightColors } from './utils/colors';
 import { moveRigidBody, movePlayer } from './controllers/movement';
 import { Cube, Sphere } from './assets/shapes';
-import { gatherBoundingBox, broadCollisionSweep } from './physics/collisionDetection';
+import { gatherBoundingBox, broadCollisionSweep, narrowCollisionSweep } from './physics/collisionDetection';
 import { debug, CollisionBox } from './utils/debug';
 import { calculatePosDifference, extractPosition } from './utils/movement';
 import TrianglePrism from './assets/trianglePrism';
@@ -163,11 +163,10 @@ applyRigidBody(spheres, 4);
 
 // Kinematic Slope for testing gravity forces
 const slope = new TrianglePrism().matrix;
-// scene.add(slope);
-// applyKinematicBody(slope);
+scene.add(slope);
+applyKinematicBody(slope);
 slope.geometry.computeBoundingBox();
 const box = slope.geometry.boundingBox.clone();
-console.log(box);
 
 /* ********
 * LOADERS *
@@ -198,6 +197,7 @@ const draw = () => {
   if (rigidCollisions.length) {
     for (let i = 0; i < rigidCollisions.length; i++) {
       const { id, index } = rigidCollisions[i];
+      narrowCollisionSweep(rigidBodies[index], pig);
       const object = scene.getObjectById(id);
       rigidBodies[index] = moveRigidBody(object, posDif, keyboard);
     }
