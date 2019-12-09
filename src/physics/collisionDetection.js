@@ -39,7 +39,7 @@ export const getMeshDimensions = player => {
  * @param { THREE.Mesh } pig the player to compare verticies against
  * @returns { Array<number> } array of the ids of the objects that have been hit
  */
-export const checkCollisions = (collisions, pig) => {
+export const broadCollisionSweep = (collisions, pig) => {
   const collisionIDs = [];
   const pigDimensions = getMeshDimensions(pig);
   const bounds = {

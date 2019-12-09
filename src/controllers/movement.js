@@ -1,4 +1,4 @@
-import { forwardVelocity, rotationVelocity } from '../utils/velocities';
+import { forwardVelocity, rotationVelocity, jumbVelocity } from '../utils/velocities';
 import { gatherBoundingBox } from '../physics/collisionDetection';
 
 
@@ -7,6 +7,9 @@ const keys = {
   backwards: 83, // S
   left: 65, // A
   right: 68, // A
+  spacebar: 32,
+  shift: 16,
+  c: 67,
 };
 
 /**
@@ -19,7 +22,7 @@ export const movePlayer = (player, keyboard) => {
   // apply gravity
   player.position.y -= 0.009;
 
-  // update movement
+  // Forwards And Backwards
   if (keyboard[keys.forward]) {
     player.position.x += Math.sin(player.rotation.y) * forwardVelocity;
     player.position.z += Math.cos(player.rotation.y) * forwardVelocity;
@@ -28,8 +31,14 @@ export const movePlayer = (player, keyboard) => {
     player.position.x -= Math.sin(player.rotation.y) * forwardVelocity;
     player.position.z -= Math.cos(player.rotation.y) * forwardVelocity;
   }
+
+  // Rotation
   if (keyboard[keys.right]) player.rotation.y -= rotationVelocity;
   if (keyboard[keys.left]) player.rotation.y += rotationVelocity;
+
+  // Jumping and Crouching
+  if (keyboard[keys.spacebar]) player.position.y += jumbVelocity;
+  if (keyboard[keys.shift] || keyboard[keys.c]) player.position.y -= (jumbVelocity / 2);
 };
 
 

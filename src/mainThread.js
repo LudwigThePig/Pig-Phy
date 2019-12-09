@@ -7,7 +7,7 @@ import { getCanvasDimensions, sceneDimensions } from './utils/dimensions';
 import color, { lightColors } from './utils/colors';
 import { moveRigidBody, movePlayer } from './controllers/movement';
 import { Cube, Sphere } from './assets/shapes';
-import { gatherBoundingBox, checkCollisions } from './physics/collisionDetection';
+import { gatherBoundingBox, broadCollisionSweep } from './physics/collisionDetection';
 import { debug, CollisionBox } from './utils/debug';
 import { calculatePosDifference, extractPosition } from './utils/movement';
 import TrianglePrism from './assets/trianglePrism';
@@ -184,8 +184,8 @@ loader.load( // pig
 * MAIN FUNC *
 *********** */
 const draw = () => {
-  const rigidCollisions = checkCollisions(rigidBodies, pig);
-  const kinematicCollisions = checkCollisions(kinematicBodies, pig);
+  const rigidCollisions = broadCollisionSweep(rigidBodies, pig);
+  const kinematicCollisions = broadCollisionSweep(kinematicBodies, pig);
 
   const oldPos = JSON.parse(JSON.stringify(pig.position));
   controls.update();
