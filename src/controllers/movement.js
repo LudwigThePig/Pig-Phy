@@ -20,7 +20,8 @@ const keys = {
  */
 export const movePlayer = (player, keyboard) => {
   // apply gravity
-  player.position.y -= 0.009;
+  if (!player.isGrounded) player.position.y -= 0.009;
+  player.rotation.z = 0;
 
   // Forwards And Backwards
   if (keyboard[keys.forward]) {
@@ -32,12 +33,19 @@ export const movePlayer = (player, keyboard) => {
     player.position.z -= Math.cos(player.rotation.y) * forwardVelocity;
   }
 
-  // Rotation
-  if (keyboard[keys.right]) player.rotation.y -= rotationVelocity;
-  if (keyboard[keys.left]) player.rotation.y += rotationVelocity;
+  // Y Rotation
+  if (keyboard[keys.right]) {
+    player.rotation.y -= rotationVelocity;
+    player.rotation.z = -25;
+  }
+  if (keyboard[keys.left]) {
+    player.rotation.y += rotationVelocity;
+    player.rotation.z = 25;
+  }
 
   // Jumping and Crouching
-  if (keyboard[keys.spacebar]) player.position.y += jumbVelocity;
+  if (player.isGrounded && keyboard[keys.spacebar]) player.position.y += jumbVelocity;
+
   if (keyboard[keys.shift] || keyboard[keys.c]) player.position.y -= (jumbVelocity / 2);
 };
 

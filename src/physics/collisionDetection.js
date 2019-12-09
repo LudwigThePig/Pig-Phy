@@ -65,3 +65,8 @@ export const broadCollisionSweep = (collisions, pig) => {
 
   return collisionIDs;
 };
+
+
+export const narrowCollisionSweep = (entity, pig) => {
+
+};
