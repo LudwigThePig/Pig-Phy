@@ -69,6 +69,14 @@ export const broadCollisionSweep = (collisions, pig) => {
 };
 
 
+/**
+ * @param { THREE.Mesh } entity An object that was caught up in our broad sweep
+ * @param { THREE.Mesh } pig our faithful piggy
+ * @returns { void } mutates the inputs
+ * @description compare two meshes, the player and some other junk. We check if the other
+ * entity by shooting rays out from the center of our player to each of its verticies.
+ * If one of those rays passes through the other mesh, we got a hit!
+ */
 export const narrowCollisionSweep = (entity, pig) => {
   const { vertices } = pig.compositeGeometry;
   for (let vertexIndex = 0; vertexIndex < vertices.length; vertexIndex++) {
