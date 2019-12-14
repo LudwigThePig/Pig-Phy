@@ -17,7 +17,6 @@ export default class Player {
     this.player.children.forEach(child => { child.castShadow = true; });
     this.player.mass = 0.1;
     this.player.isGrounded = true;
-
     this.generateGeometry();
     this.generateDimensions();
   }
@@ -42,5 +41,6 @@ export default class Player {
     this.player.width = x;
     this.player.height = y;
     this.player.depth = z;
+    this.player.area = x * y * z / 1000; // approximation of the pig's area in cm
   }
 }

@@ -138,6 +138,7 @@ const loader = new GLTFLoader(loadingManager);
 let pig;
 const pigLoadCallback = gltf => {
   pig = new Player(gltf.scene).player;
+  store.area = pig.area;
   scene.add(pig);
   pig.add(camera);
   document.addEventListener('keydown', keydown);
@@ -209,8 +210,8 @@ const draw = () => {
 
   let forceY = 0;
   forceY += pig.mass * store.gravityForce;
-  forceY += -0.5 * store.rho * store.coefficientAir * store.A * (store.vy ** 2);
-  console.log('forcey after', store.rho, store.coefficientAir, store.A, store.vy);
+  forceY += -0.5 * store.rho * store.coefficientAir * store.area * (store.vy ** 2);
+  console.log('forcey after', store.rho, store.coefficientAir, store.area, store.vy);
 
   // vy * dt + (0.5 * ay * dt * dt);
   const dy = -(store.vy * store.dt) + (0.5 * store.ay * (store.dt ** 2));

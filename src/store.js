@@ -7,7 +7,7 @@ class Store {
     this.width = width;
     this.vy = 0;
     this.ay = 0;
-    this.A = 1 * 2 * 3 / 1000; // Area in cm (APPROXIMATE)
+    this.area = 1 * 2 * 3 / 1000; // Area in cm (APPROXIMATE)
     this.d1 = new Date().valueOf(); // Current timestamp
     this.d2 = new Date().valueOf(); // Timestamp of last frame
     this.dt = 0.00; // delta time between frames
