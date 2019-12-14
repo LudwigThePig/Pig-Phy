@@ -12,6 +12,7 @@ import { debug } from './utils/debug';
 import { calculatePosDifference } from './utils/movement';
 import TrianglePrism from './assets/trianglePrism';
 import Player from './assets/player';
+import Store from './store';
 
 
 /* *********
@@ -32,7 +33,8 @@ const keyboard = {};
 const getKeyCode = event => event.which;
 export const keydown = event => { keyboard[getKeyCode(event)] = true; };
 export const keyup = event => { keyboard[getKeyCode(event)] = false; };
-let { height, width } = getCanvasDimensions();
+const globals = new Store();
+let { height, width } = globals;
 
 
 /* ********
