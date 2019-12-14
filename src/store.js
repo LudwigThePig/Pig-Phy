@@ -22,6 +22,6 @@ export default class Store {
   updateDeltaTime() {
     this.d2 = this.d1;
     this.d1 = new Date().valueOf();
-    this.dt = this.d1 - this.d2;
+    this.dt = (this.d1 - this.d2) / 1000;
   }
 }
