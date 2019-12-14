@@ -209,8 +209,8 @@ const draw = () => {
 
   let forceY = 0;
   forceY += pig.mass * store.gravityForce;
-
   forceY += -0.5 * store.rho * store.coefficientAir * store.A * (store.vy ** 2);
+  console.log('forcey after', store.rho, store.coefficientAir, store.A, store.vy);
 
   // vy * dt + (0.5 * ay * dt * dt);
   const dy = -(store.vy * store.dt) + (0.5 * store.ay * (store.dt ** 2));
@@ -219,7 +219,7 @@ const draw = () => {
   const newAY = forceY / pig.mass;
   const avgAY = (newAY + store.ay) / 2;
   store.vy += avgAY * store.dt;
-  console.log(store.vy);
+  console.log('VY', store.vy);
 
 
   if (pig.position.y - (pig.height / 2) <= 0) {

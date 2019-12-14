@@ -44,9 +44,9 @@ export const movePlayer = (player, keyboard) => {
     player.rotation.z = 25;
   }
 
-  // Jumping and Crouching
+  // Jump Impulse Force
   if (player.isGrounded && keyboard[keys.spacebar]) {
-    store.ay += (100 * player.mass);
+    // store.ay += (100 * player.mass * store.dt);
   }
 
   // Descend the pig. Just for dev purposes
