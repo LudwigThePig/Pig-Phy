@@ -1,9 +1,10 @@
+import { getCanvasDimensions } from './utils/dimensions';
+
 export default class Store {
   constructor() {
-    this.height = 400;
-    this.width = 400;
-    this.x = 200;
-    this.y = 0;
+    const { height, width } = getCanvasDimensions();
+    this.height = height;
+    this.width = width;
     this.vy = 0;
     this.ay = 0;
     this.m = 0.1; // Ball mass in kg
