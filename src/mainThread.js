@@ -89,7 +89,7 @@ const kinematicBodies = [];
 
 /**
  * @description Gathers all of the vertex data and pushes it onto the rigid bodies array
- * @param { Array | Object } mesh a mesh or array of meshes.
+ * @param { Array } mesh a mesh or array of meshes.
  * @returns void
  */
 const applyRigidBody = (mesh, mass = 1) => {
