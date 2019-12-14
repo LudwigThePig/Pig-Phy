@@ -33,8 +33,8 @@ const keyboard = {};
 const getKeyCode = event => event.which;
 export const keydown = event => { keyboard[getKeyCode(event)] = true; };
 export const keyup = event => { keyboard[getKeyCode(event)] = false; };
-const globals = new Store();
-let { height, width } = globals;
+const store = new Store();
+let { height, width } = store;
 
 
 /* ********
@@ -139,7 +139,6 @@ const loader = new GLTFLoader(loadingManager);
 let pig;
 const pigLoadCallback = gltf => {
   pig = new Player(gltf.scene).player;
-  console.log(pig.children);
   scene.add(pig);
   pig.add(camera);
   document.addEventListener('keydown', keydown);
@@ -186,9 +185,9 @@ loader.load( // pig
 * MAIN FUNC *
 *********** */
 const draw = () => {
+  store.updateDeltaTime();
   const rigidCollisions = broadCollisionSweep(rigidBodies, pig);
   const kinematicCollisions = broadCollisionSweep(kinematicBodies, pig);
-  console.log(pig.position.y - (pig.height / 2), pig.position.y);
 
   const oldPos = JSON.parse(JSON.stringify(pig.position));
   controls.update();
@@ -209,6 +208,24 @@ const draw = () => {
 
   if (kinematicCollisions.length) {
     // Broad collision sweep
+  }
+
+  let forceY = 0;
+  forceY += pig.mass * store.gravityForce;
+
+  forceY += -0.5 * store.rho * store.coefficientAir * store.A * (store.vy ** 2);
+  console.log('forceY', forceY);
+  const dy = (store.vy * store.dt) + (0.5 * store.ay * (store.dt ** 2));
+  console.log('forceY', forceY);
+
+  pig.position.y += dy;
+  const newAY = forceY / pig.mass;
+  const avgAY = (newAY + store.ay) / 2;
+  store.vy += avgAY * store.dt;
+
+  if (pig.position.y - (pig.height / 2) <= 0) {
+    store.vy *= store.e;
+    pig.position.y -= 20; // so the piggy doesn't get stuck in the floor
   }
 
   renderer.render(scene, camera);
