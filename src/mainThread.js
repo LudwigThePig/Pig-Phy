@@ -8,8 +8,8 @@ import color, { lightColors } from './utils/colors';
 import { moveRigidBody, movePlayer } from './controllers/movement';
 import { Cube, Sphere } from './assets/shapes';
 import { gatherBoundingBox, broadCollisionSweep, narrowCollisionSweep } from './physics/collisionDetection';
-import { debug, CollisionBox } from './utils/debug';
-import { calculatePosDifference, extractPosition } from './utils/movement';
+import { debug } from './utils/debug';
+import { calculatePosDifference } from './utils/movement';
 import TrianglePrism from './assets/trianglePrism';
 import Player from './assets/player';
 
