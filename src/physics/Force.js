@@ -23,10 +23,10 @@ export default class Force {
     curPos,
   ) {
     const lastAcceleration = acceleration;
-    const position = curPos + curVelocity * timeStep + (0.5 * lastAcceleration * timeStep ^ 2);
+    const position = (curPos + curVelocity * timeStep) + (0.5 * lastAcceleration * timeStep ** 2);
     const newAcceleration = force / mass;
     const avgAcceleration = (lastAcceleration + newAcceleration) / 2;
-    const velocity = curVelocity + avgAcceleration * timeStep;
+    const velocity = curVelocity + (avgAcceleration * timeStep);
     return { velocity, position };
   }
 }
