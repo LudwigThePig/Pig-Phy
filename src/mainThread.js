@@ -165,10 +165,10 @@ applyRigidBody(spheres, 4);
 
 // Kinematic Slope for testing gravity forces
 const slope = new TrianglePrism().matrix;
-scene.add(slope);
-applyKinematicBody(slope);
-slope.geometry.computeBoundingBox();
-const box = slope.geometry.boundingBox.clone();
+// scene.add(slope);
+// applyKinematicBody(slope);
+// slope.geometry.computeBoundingBox();
+// const box = slope.geometry.boundingBox.clone();
 
 /* ********
 * LOADERS *
@@ -206,25 +206,27 @@ const draw = () => {
     }
   }
 
-  if (kinematicCollisions.length) {
-    // Broad collision sweep
-  }
+  if (kinematicCollisions.length) { /* Broad collision sweep */ }
 
   let forceY = 0;
   forceY += pig.mass * store.gravityForce;
 
   forceY += -0.5 * store.rho * store.coefficientAir * store.A * (store.vy ** 2);
-  const dy = (store.vy * store.dt) + (0.5 * store.ay * (store.dt ** 2));
+
+  // vy * dt + (0.5 * ay * dt * dt);
+  const dy = -(store.vy * store.dt) + (0.5 * store.ay * (store.dt ** 2));
 
   pig.position.y += dy;
   const newAY = forceY / pig.mass;
-  store.ay = (newAY + store.ay) / 2;
-  store.vy += store.ay * store.dt;
+  const avgAY = (newAY + store.ay) / 2;
+  store.vy += avgAY * store.dt;
   console.log(store.vy);
+
 
   if (pig.position.y - (pig.height / 2) <= 0) {
     console.log('BOUNCE');
     store.vy *= store.e;
+    pig.position.y = pig.height / 2;
   }
 
   renderer.render(scene, camera);
