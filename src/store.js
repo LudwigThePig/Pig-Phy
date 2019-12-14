@@ -13,7 +13,7 @@ export default class Store {
     this.A = Math.PI * (this.r * this.r) / 10000;
     this.d1 = new Date().valueOf();
     this.d2 = new Date().valueOf();
-    this.e = -0.5; // Coefficient of restitution ('bounciness' of the floor)
+    this.e = -0.7; // Coefficient of restitution ('bounciness' of the floor)
     this.rho = 1.2; // Density of air. Try 1000 for water.
     this.coefficientAir = 0.47; // Coeffecient of drag for a ball
     this.gravityForce = 9.81; // meters per second

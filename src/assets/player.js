@@ -8,7 +8,7 @@ export default class Player {
     this.player = obj;
     if (debug) {
       this.player.children.push(new CollisionBox(this.player).box);
-      this.player.position.set(0, 5.12, 0);
+      this.player.position.set(0, 10.12, 0);
     } else {
       this.player.position.set(0, 1.12, 0);
     }
