@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import { debug, CollisionBox } from '../utils/debug';
+import { getMeshDimensions } from '../physics/collisionDetection';
 
 
 export default class Player {
@@ -18,6 +19,7 @@ export default class Player {
     this.player.isGrounded = true;
 
     this.generateGeometry();
+    this.generateDimensions();
   }
 
   generateGeometry() {
@@ -32,5 +34,13 @@ export default class Player {
       }
     }
     this.player.compositeGeometry = geometry;
+  }
+
+  generateDimensions() {
+    const { x, y, z } = getMeshDimensions(this.player);
+
+    this.player.width = x;
+    this.player.height = y;
+    this.player.depth = z;
   }
 }

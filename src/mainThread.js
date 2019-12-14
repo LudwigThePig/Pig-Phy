@@ -121,6 +121,7 @@ const ground = new THREE.Mesh(groundGeometry, groundMaterial);
 ground.rotation.x = -90 * (Math.PI / 180);
 ground.position.y = 0;
 ground.receiveShadow = true;
+scene.add(ground);
 const gridHelper = new THREE.GridHelper(100, 4);
 
 if (!debug) scene.add(ground);
@@ -187,6 +188,7 @@ loader.load( // pig
 const draw = () => {
   const rigidCollisions = broadCollisionSweep(rigidBodies, pig);
   const kinematicCollisions = broadCollisionSweep(kinematicBodies, pig);
+  console.log(pig.position.y - (pig.height / 2), pig.position.y);
 
   const oldPos = JSON.parse(JSON.stringify(pig.position));
   controls.update();
@@ -220,6 +222,7 @@ const onWindowResize = () => {
   const newDimensions = getCanvasDimensions();
   height = newDimensions.height;
   width = newDimensions.width;
+
 
   renderer.setSize(width, height);
   camera.aspect = width / height;
