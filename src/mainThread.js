@@ -12,6 +12,7 @@ import { debug } from './utils/debug';
 import { calculatePosDifference } from './utils/movement';
 import TrianglePrism from './assets/trianglePrism';
 import Player from './assets/player';
+import Store from './store';
 
 
 /* *********
@@ -32,7 +33,8 @@ const keyboard = {};
 const getKeyCode = event => event.which;
 export const keydown = event => { keyboard[getKeyCode(event)] = true; };
 export const keyup = event => { keyboard[getKeyCode(event)] = false; };
-let { height, width } = getCanvasDimensions();
+const store = new Store();
+let { height, width } = store;
 
 
 /* ********
@@ -119,6 +121,7 @@ const ground = new THREE.Mesh(groundGeometry, groundMaterial);
 ground.rotation.x = -90 * (Math.PI / 180);
 ground.position.y = 0;
 ground.receiveShadow = true;
+scene.add(ground);
 const gridHelper = new THREE.GridHelper(100, 4);
 
 if (!debug) scene.add(ground);
@@ -136,7 +139,6 @@ const loader = new GLTFLoader(loadingManager);
 let pig;
 const pigLoadCallback = gltf => {
   pig = new Player(gltf.scene).player;
-  console.log(pig.children);
   scene.add(pig);
   pig.add(camera);
   document.addEventListener('keydown', keydown);
@@ -163,10 +165,10 @@ applyRigidBody(spheres, 4);
 
 // Kinematic Slope for testing gravity forces
 const slope = new TrianglePrism().matrix;
-scene.add(slope);
-applyKinematicBody(slope);
-slope.geometry.computeBoundingBox();
-const box = slope.geometry.boundingBox.clone();
+// scene.add(slope);
+// applyKinematicBody(slope);
+// slope.geometry.computeBoundingBox();
+// const box = slope.geometry.boundingBox.clone();
 
 /* ********
 * LOADERS *
@@ -183,6 +185,7 @@ loader.load( // pig
 * MAIN FUNC *
 *********** */
 const draw = () => {
+  store.updateDeltaTime();
   const rigidCollisions = broadCollisionSweep(rigidBodies, pig);
   const kinematicCollisions = broadCollisionSweep(kinematicBodies, pig);
 
@@ -203,8 +206,27 @@ const draw = () => {
     }
   }
 
-  if (kinematicCollisions.length) {
-    // Broad collision sweep
+  if (kinematicCollisions.length) { /* Broad collision sweep */ }
+
+  let forceY = 0;
+  forceY += pig.mass * store.gravityForce;
+
+  forceY += -0.5 * store.rho * store.coefficientAir * store.A * (store.vy ** 2);
+
+  // vy * dt + (0.5 * ay * dt * dt);
+  const dy = -(store.vy * store.dt) + (0.5 * store.ay * (store.dt ** 2));
+
+  pig.position.y += dy;
+  const newAY = forceY / pig.mass;
+  const avgAY = (newAY + store.ay) / 2;
+  store.vy += avgAY * store.dt;
+  console.log(store.vy);
+
+
+  if (pig.position.y - (pig.height / 2) <= 0) {
+    console.log('BOUNCE');
+    store.vy *= store.e;
+    pig.position.y = pig.height / 2;
   }
 
   renderer.render(scene, camera);
@@ -218,6 +240,7 @@ const onWindowResize = () => {
   const newDimensions = getCanvasDimensions();
   height = newDimensions.height;
   width = newDimensions.width;
+
 
   renderer.setSize(width, height);
   camera.aspect = width / height;

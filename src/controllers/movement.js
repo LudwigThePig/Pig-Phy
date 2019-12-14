@@ -1,4 +1,4 @@
-import { forwardVelocity, rotationVelocity, jumbVelocity } from '../utils/velocities';
+import { forwardVelocity, rotationVelocity, jumpVelocity } from '../utils/velocities';
 import { gatherBoundingBox } from '../physics/collisionDetection';
 
 
@@ -44,9 +44,9 @@ export const movePlayer = (player, keyboard) => {
   }
 
   // Jumping and Crouching
-  if (player.isGrounded && keyboard[keys.spacebar]) player.position.y += jumbVelocity;
+  if (player.isGrounded && keyboard[keys.spacebar]) player.position.y += jumpVelocity;
 
-  if (keyboard[keys.shift] || keyboard[keys.c]) player.position.y -= (jumbVelocity / 2);
+  if (keyboard[keys.shift] || keyboard[keys.c]) player.position.y -= (jumpVelocity / 2);
 };
 
 

@@ -87,6 +87,6 @@ export const narrowCollisionSweep = (entity, pig) => {
 
     const ray = new THREE.Raycaster(originPoint, directionVector.clone().normalize());
     const collisionResults = ray.intersectObject(entity);
-    if (collisionResults.length > 0 && collisionResults[0].distance < directionVector.length()) { console.log(collisionResults[0]); }
+    if (collisionResults.length > 0 && collisionResults[0].distance < directionVector.length()) { console.log('Hit 🙀'); }
   }
 };
