@@ -1,5 +1,6 @@
 import { forwardVelocity, rotationVelocity, jumpVelocity } from '../utils/velocities';
 import { gatherBoundingBox } from '../physics/collisionDetection';
+import store from '../store';
 
 
 const keys = {
@@ -44,8 +45,11 @@ export const movePlayer = (player, keyboard) => {
   }
 
   // Jumping and Crouching
-  if (player.isGrounded && keyboard[keys.spacebar]) player.position.y += jumpVelocity;
+  if (player.isGrounded && keyboard[keys.spacebar]) {
+    store.ay += (100 * player.mass);
+  }
 
+  // Descend the pig. Just for dev purposes
   if (keyboard[keys.shift] || keyboard[keys.c]) player.position.y -= (jumpVelocity / 2);
 };
 
@@ -64,8 +68,8 @@ export const moveRigidBody = (mesh, pos, keyboard) => {
     mesh.position.x += Math.sin(mesh.rotation.y) * paddedForwardVelocity;
     mesh.position.z += Math.cos(mesh.rotation.y) * paddedForwardVelocity;
   }
-  // mesh.position.x += (pos.x * padding);
-  // mesh.position.y += (pos.y * padding);
-  // mesh.position.z += (pos.z * padding);
+  mesh.position.x += (pos.x * padding);
+  mesh.position.y += (pos.y * padding);
+  mesh.position.z += (pos.z * padding);
   return gatherBoundingBox(mesh);
 };
