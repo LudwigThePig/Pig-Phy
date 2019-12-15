@@ -36,8 +36,8 @@ export const getMeshDimensions = player => {
 
 
 /**
- * @param { Array<objects> } collisions Array of bounding verticies
- * @param { THREE.Mesh } pig the player to compare verticies against
+ * @param { Array<objects> } collisions Array of bounding vertices
+ * @param { THREE.Mesh } pig the player to compare vertices against
  * @returns { Array<number> } array of the ids of the objects that have been hit
  */
 export const broadCollisionSweep = (collisions, pig) => {
@@ -72,7 +72,7 @@ export const broadCollisionSweep = (collisions, pig) => {
 /**
  * @param { THREE.Mesh } entity An object that was caught up in our broad sweep
  * @param { THREE.Mesh } pig our faithful piggy
- * @returns { void } mutates the inputs
+ * @returns { bool } returns whether there was a collision or not.
  * @description compare two meshes, the player and some other junk. We check if the other
  * entity by shooting rays out from the center of our player to each of its verticies.
  * If one of those rays passes through the other mesh, we got a hit!
@@ -87,6 +87,10 @@ export const narrowCollisionSweep = (entity, pig) => {
 
     const ray = new THREE.Raycaster(originPoint, directionVector.clone().normalize());
     const collisionResults = ray.intersectObject(entity);
-    if (collisionResults.length > 0 && collisionResults[0].distance < directionVector.length()) { console.log('Hit 🙀'); }
+
+    if (collisionResults.length > 0 && collisionResults[0].distance < directionVector.length()) {
+      return true;
+    }
   }
+  return false;
 };
