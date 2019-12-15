@@ -21,6 +21,7 @@ class Store {
     this.vx = 0;
     this.vy = 0;
     this.vz = 0;
+    this.terminalVelocity = 2;
 
     // * Accelerations
     this.ax = 0;

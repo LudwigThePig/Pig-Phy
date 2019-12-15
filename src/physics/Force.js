@@ -42,7 +42,11 @@ const applyXForce = () => {
   store.dx = (store.vx * store.dt) + (0.5 * store.ax * (store.dt ** 2));
   store.pig.position.x += store.dx;
 
-  store.vx += forceX * store.dt;
+  store.ax = forceX / store.pig.mass;
+
+  if (store.vz < store.terminalVelocity && store.vz > -store.terminalVelocity) {
+    store.vx += store.ax * store.dt;
+  }
 };
 
 const applyYForce = () => {
@@ -61,6 +65,8 @@ const applyYForce = () => {
     const avgAY = (newAY + store.ay) / 2;
     store.vy += avgAY * store.dt;
 
+    store.ay = forceY / store.pig.mass;
+
     // Simulate colliding with the ground
     if (store.pig.position.y - (store.pig.height / 2) <= 0) {
       store.vy *= store.e;
@@ -77,12 +83,12 @@ export const applyZForce = () => {
   let forceZ = store.pig.mass * store.az;
   forceZ += calcAirResistance(store.vz);
   forceZ *= store.coefficientGround;
-  console.log('force z', forceZ);
   store.dz = (store.vz * store.dt) + (0.5 * store.az * (store.dt ** 2));
   store.pig.position.z += store.dz;
 
-  store.vz += forceZ * store.dt;
-  console.log('velocity z', store.vz);
+  if (store.vz < store.terminalVelocity && store.vz > -store.terminalVelocity) {
+    store.vz += store.az * store.dt;
+  }
 };
 
 export const applyForces = () => {
