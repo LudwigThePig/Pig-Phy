@@ -20,18 +20,16 @@ const keys = {
  * @returns { void } function mutates the player param
  */
 export const movePlayer = (player, keyboard) => {
-  // apply gravity
-  if (!player.isGrounded) player.position.y -= 0.009;
   player.rotation.z = 0;
 
   // Forwards And Backwards
-  if (keyboard[keys.forward]) {
-    player.position.x += Math.sin(player.rotation.y) * forwardVelocity;
-    player.position.z += Math.cos(player.rotation.y) * forwardVelocity;
+  if (keyboard[keys.forward] && store.isGrounded) {
+    store.vx += Math.sin(player.rotation.y) * forwardVelocity;
+    store.vz += Math.cos(player.rotation.y) * forwardVelocity;
   }
-  if (keyboard[keys.backwards]) {
-    player.position.x -= Math.sin(player.rotation.y) * forwardVelocity;
-    player.position.z -= Math.cos(player.rotation.y) * forwardVelocity;
+  if (keyboard[keys.backwards] && store.isGrounded) {
+    store.vx -= Math.sin(player.rotation.y) * forwardVelocity;
+    store.vz -= Math.cos(player.rotation.y) * forwardVelocity;
   }
 
   // Y Rotation

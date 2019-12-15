@@ -23,7 +23,9 @@ class Store {
     this.vz = 0;
 
     // * Accelerations
+    this.ax = 0;
     this.ay = 0;
+    this.az = 0;
 
     // * Time
     this.d1 = new Date().valueOf(); // Current timestamp

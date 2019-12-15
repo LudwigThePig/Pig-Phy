@@ -33,8 +33,13 @@ export default class Force {
   }
 }
 
-const applyXForce = () => {
+const calcAirResistance = v => -0.5 * store.rho * store.coefficientAir * store.pig.area * (v ** 2);
 
+const applyXForce = () => {
+  // let forceX = store.pig.mass;
+  // forceX += calcAirResistance(store.vx);
+  store.dx = (store.vx * store.dt) + (0.5 * store.ax * (store.dt ** 2));
+  store.pig.position.x += store.dx;
 };
 
 const applyYForce = () => {
@@ -44,7 +49,7 @@ const applyYForce = () => {
     // apply gravity force
     forceY += (store.pig.mass * store.gravityForce);
     // apply force of air resistance
-    forceY += -0.5 * store.rho * store.coefficientAir * store.pig.area * (store.vy ** 2);
+    forceY += calcAirResistance(store.vy);
     // Displacement of the pig
     store.dy = (store.vy * store.dt) + (0.5 * store.ay * (store.dt ** 2));
     store.pig.position.y += store.dy;
@@ -66,7 +71,11 @@ const applyYForce = () => {
 
 
 export const applyZForce = () => {
-
+  let forceZ = store.pig.mass;
+  forceZ += calcAirResistance(store.vz);
+  store.dz = (store.vz * store.dt) + (0.5 * store.az * (store.dt ** 2));
+  console.log(store.dz);
+  store.pig.position.z += store.dz;
 };
 
 export const applyForces = () => {
