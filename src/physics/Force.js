@@ -1,3 +1,5 @@
+import store from '../store';
+
 export default class Force {
   /**
    * A straightforward way to calculate the new pos
@@ -30,3 +32,30 @@ export default class Force {
     return { velocity, position };
   }
 }
+
+export const applyGravity = () => {
+  if (!store.isGrounded) {
+    let forceY = 0;
+
+    // apply gravity force
+    forceY += (store.pig.mass * store.gravityForce);
+    // apply force of air resistance
+    forceY += -0.5 * store.rho * store.coefficientAir * store.pig.area * (store.vy ** 2);
+    // Displacement of the pig
+    store.dy = (store.vy * store.dt) + (0.5 * store.ay * (store.dt ** 2));
+    store.pig.position.y += store.dy;
+    // calculate current acceleration so we can derive velocity
+    const newAY = forceY / -store.gravityForce;
+    const avgAY = (newAY + store.ay) / 2;
+    store.vy += avgAY * store.dt;
+
+    // Simulate colliding with the ground
+    if (store.pig.position.y - (store.pig.height / 2) <= 0) {
+      store.vy *= store.e;
+      if (store.vy > -0.5 && store.vy < 0.5) {
+        store.isGrounded = true;
+      }
+      store.pig.position.y = store.pig.height / 2;
+    }
+  }
+};

@@ -13,6 +13,7 @@ import { calculatePosDifference } from './utils/movement';
 import TrianglePrism from './assets/trianglePrism';
 import Player from './assets/player';
 import store from './store';
+import { applyGravity } from './physics/Force';
 
 
 /* *********
@@ -208,30 +209,7 @@ const draw = () => {
 
   if (kinematicCollisions.length) { /* Broad collision sweep */ }
   // If not grounded, apply gravity force
-  if (!store.isGrounded) {
-    let forceY = 0;
-
-    // apply gravity force
-    forceY += (store.pig.mass * store.gravityForce);
-    // apply force of air resistance
-    forceY += -0.5 * store.rho * store.coefficientAir * store.pig.area * (store.vy ** 2);
-    // Displacement of the pig
-    store.dy = (store.vy * store.dt) + (0.5 * store.ay * (store.dt ** 2));
-    store.pig.position.y += store.dy;
-    // calculate current acceleration so we can derive velocity
-    const newAY = forceY / -store.gravityForce;
-    const avgAY = (newAY + store.ay) / 2;
-    store.vy += avgAY * store.dt;
-
-    // Simulate colliding with the ground
-    if (store.pig.position.y - (store.pig.height / 2) <= 0) {
-      store.vy *= store.e;
-      if (store.vy > -0.5 && store.vy < 0.5) {
-        store.isGrounded = true;
-      }
-      store.pig.position.y = store.pig.height / 2;
-    }
-  }
+  applyGravity();
 
   renderer.render(scene, camera);
 };
