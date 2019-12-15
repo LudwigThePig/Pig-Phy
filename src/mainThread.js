@@ -137,12 +137,10 @@ applyKinematicBody(ground);
 * PIG MODEL *
 🐷🐷🐷🐷🐷🐷 */
 const loader = new GLTFLoader(loadingManager);
-let pig;
 const pigLoadCallback = gltf => {
-  pig = new Player(gltf.scene).player;
-  store.area = pig.area;
-  scene.add(pig);
-  pig.add(camera);
+  store.pig = new Player(gltf.scene).player;
+  scene.add(store.pig);
+  store.pig.add(camera);
   document.addEventListener('keydown', keydown);
   document.addEventListener('keyup', keyup);
 };
@@ -187,18 +185,18 @@ loader.load( // pig
 *********** */
 const draw = () => {
   store.updateDeltaTime();
-  const rigidCollisions = broadCollisionSweep(rigidBodies, pig)
-    .filter(({ index }) => narrowCollisionSweep(rigidBodies[index], pig));
+  const rigidCollisions = broadCollisionSweep(rigidBodies)
+    .filter(({ index }) => narrowCollisionSweep(rigidBodies[index]));
 
-  const kinematicCollisions = broadCollisionSweep(kinematicBodies, pig)
-    .filter(({ index }) => narrowCollisionSweep(rigidBodies[index], pig));
+  const kinematicCollisions = broadCollisionSweep(kinematicBodies, store.pig)
+    .filter(({ index }) => narrowCollisionSweep(rigidBodies[index], store.pig));
 
-  const oldPos = JSON.parse(JSON.stringify(pig.position));
+  const oldPos = JSON.parse(JSON.stringify(store.pig.position));
   controls.update();
   requestAnimationFrame(draw);
-  movePlayer(pig, keyboard);
-  const newPos = JSON.parse(JSON.stringify(pig.position));
-  camera.lookAt(pig.position);
+  movePlayer(store.pig, keyboard);
+  const newPos = JSON.parse(JSON.stringify(store.pig.position));
+  camera.lookAt(store.pig.position);
   const posDif = calculatePosDifference(oldPos, newPos);
   if (rigidCollisions.length) {
     for (let i = 0; i < rigidCollisions.length; i++) {
@@ -214,24 +212,24 @@ const draw = () => {
     let forceY = 0;
 
     // apply gravity force
-    forceY += (pig.mass * store.gravityForce);
+    forceY += (store.pig.mass * store.gravityForce);
     // apply force of air resistance
-    forceY += -0.5 * store.rho * store.coefficientAir * store.area * (store.vy ** 2);
+    forceY += -0.5 * store.rho * store.coefficientAir * store.pig.area * (store.vy ** 2);
     // Displacement of the pig
     store.dy = (store.vy * store.dt) + (0.5 * store.ay * (store.dt ** 2));
-    pig.position.y += store.dy;
+    store.pig.position.y += store.dy;
     // calculate current acceleration so we can derive velocity
     const newAY = forceY / -store.gravityForce;
     const avgAY = (newAY + store.ay) / 2;
     store.vy += avgAY * store.dt;
 
     // Simulate colliding with the ground
-    if (pig.position.y - (pig.height / 2) <= 0) {
+    if (store.pig.position.y - (store.pig.height / 2) <= 0) {
       store.vy *= store.e;
       if (store.vy > -0.5 && store.vy < 0.5) {
         store.isGrounded = true;
       }
-      pig.position.y = pig.height / 2;
+      store.pig.position.y = store.pig.height / 2;
     }
   }
 

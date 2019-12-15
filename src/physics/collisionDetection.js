@@ -1,4 +1,5 @@
 import * as THREE from 'three';
+import store from '../store';
 
 
 /**
@@ -25,12 +26,12 @@ export const gatherBoundingBox = mesh => {
  * @param { THREE.Mesh } player
  * @returns returns the maximum width, height, and depth of a mesh
  */
-export const getMeshDimensions = player => {
-  const playerDimensions = new THREE.Box3().setFromObject(player);
+export const getMeshDimensions = mesh => {
+  const meshDimensions = new THREE.Box3().setFromObject(mesh);
   return {
-    x: playerDimensions.max.x - playerDimensions.min.x,
-    y: playerDimensions.max.y - playerDimensions.min.y,
-    z: playerDimensions.max.z - playerDimensions.min.z,
+    x: meshDimensions.max.x - meshDimensions.min.x,
+    y: meshDimensions.max.y - meshDimensions.min.y,
+    z: meshDimensions.max.z - meshDimensions.min.z,
   };
 };
 
@@ -40,16 +41,16 @@ export const getMeshDimensions = player => {
  * @param { THREE.Mesh } pig the player to compare vertices against
  * @returns { Array<number> } array of the ids of the objects that have been hit
  */
-export const broadCollisionSweep = (collisions, pig) => {
+export const broadCollisionSweep = (collisions) => {
   const collisionIDs = [];
-  const pigDimensions = getMeshDimensions(pig);
+  const pigDimensions = getMeshDimensions(store.pig);
   const bounds = {
-    xMin: pig.position.x - (pigDimensions.x / 2),
-    xMax: pig.position.x + (pigDimensions.x / 2),
-    yMin: pig.position.y - (pigDimensions.y / 2),
-    yMax: pig.position.y + (pigDimensions.y / 2),
-    zMin: pig.position.z - (pigDimensions.z / 2),
-    zMax: pig.position.z + (pigDimensions.z / 2),
+    xMin: store.pig.position.x - (pigDimensions.x / 2),
+    xMax: store.pig.position.x + (pigDimensions.x / 2),
+    yMin: store.pig.position.y - (pigDimensions.y / 2),
+    yMax: store.pig.position.y + (pigDimensions.y / 2),
+    zMin: store.pig.position.z - (pigDimensions.z / 2),
+    zMax: store.pig.position.z + (pigDimensions.z / 2),
   };
 
   // Run through each object and detect if there is a collision.
@@ -77,13 +78,13 @@ export const broadCollisionSweep = (collisions, pig) => {
  * entity by shooting rays out from the center of our player to each of its verticies.
  * If one of those rays passes through the other mesh, we got a hit!
  */
-export const narrowCollisionSweep = (entity, pig) => {
-  const { vertices } = pig.compositeGeometry;
+export const narrowCollisionSweep = (entity) => {
+  const { vertices } = store.pig.compositeGeometry;
   for (let vertexIndex = 0; vertexIndex < vertices.length; vertexIndex++) {
     const localVertex = vertices[vertexIndex].clone();
-    const globalVertex = localVertex.applyMatrix4(pig.matrix);
-    const directionVector = globalVertex.sub(pig.position);
-    const originPoint = pig.position.clone();
+    const globalVertex = localVertex.applyMatrix4(store.pig.matrix);
+    const directionVector = globalVertex.sub(store.pig.position);
+    const originPoint = store.pig.position.clone();
 
     const ray = new THREE.Raycaster(originPoint, directionVector.clone().normalize());
     const collisionResults = ray.intersectObject(entity);

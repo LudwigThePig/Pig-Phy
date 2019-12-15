@@ -6,7 +6,9 @@ class Store {
     this.height = height;
     this.width = width;
 
+
     // * Pig stuff
+    this.pig = null;
     this.isGrounded = false;
     this.area = 1 * 2 * 3 / 1000; // Area of the pig in cm (APPROXIMATE)
 
