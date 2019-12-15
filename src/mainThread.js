@@ -207,8 +207,7 @@ const draw = () => {
   }
 
   if (kinematicCollisions.length) { /* Broad collision sweep */ }
-  console.log(store.grounded);
-  // If not grounded, apply gravity
+  // If not grounded, apply gravity force
   if (!store.isGrounded) {
     let forceY = 0;
     forceY += pig.mass * store.gravityForce;

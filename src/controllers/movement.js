@@ -45,9 +45,9 @@ export const movePlayer = (player, keyboard) => {
   }
 
   // Jump Impulse Force
-  if (player.isGrounded && keyboard[keys.spacebar]) {
+  if (store.isGrounded && keyboard[keys.spacebar]) {
     store.isGrounded = false;
-    store.ay += (1000 * player.mass * store.dt);
+    store.vy += (store.jumpForce / player.mass); // Jump force is really just velocity change
   }
 
   // Descend the pig. Just for dev purposes
