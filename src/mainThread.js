@@ -218,8 +218,8 @@ const draw = () => {
     // apply force of air resistance
     forceY += -0.5 * store.rho * store.coefficientAir * store.area * (store.vy ** 2);
     // Displacement of the pig
-    const dy = (store.vy * store.dt) + (0.5 * store.ay * (store.dt ** 2));
-    pig.position.y += dy;
+    store.dy = (store.vy * store.dt) + (0.5 * store.ay * (store.dt ** 2));
+    pig.position.y += store.dy;
     // calculate current acceleration so we can derive velocity
     const newAY = forceY / -store.gravityForce;
     const avgAY = (newAY + store.ay) / 2;
