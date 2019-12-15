@@ -207,26 +207,26 @@ const draw = () => {
   }
 
   if (kinematicCollisions.length) { /* Broad collision sweep */ }
+  console.log(store.grounded);
+  // If not grounded, apply gravity
+  if (!store.isGrounded) {
+    let forceY = 0;
+    forceY += pig.mass * store.gravityForce;
+    forceY += -0.5 * store.rho * store.coefficientAir * store.area * (store.vy ** 2);
 
-  let forceY = 0;
-  forceY += pig.mass * store.gravityForce;
-  forceY += -0.5 * store.rho * store.coefficientAir * store.area * (store.vy ** 2);
-  console.log('forcey after', store.rho, store.coefficientAir, store.area, store.vy);
+    const dy = -(store.vy * store.dt) + (0.5 * store.ay * (store.dt ** 2));
+    pig.position.y += dy;
+    const newAY = forceY / pig.mass;
+    const avgAY = (newAY + store.ay) / 2;
+    store.vy += avgAY * store.dt;
 
-  // vy * dt + (0.5 * ay * dt * dt);
-  const dy = -(store.vy * store.dt) + (0.5 * store.ay * (store.dt ** 2));
-
-  pig.position.y += dy;
-  const newAY = forceY / pig.mass;
-  const avgAY = (newAY + store.ay) / 2;
-  store.vy += avgAY * store.dt;
-  console.log('VY', store.vy);
-
-
-  if (pig.position.y - (pig.height / 2) <= 0) {
-    console.log('BOUNCE');
-    store.vy *= store.e;
-    pig.position.y = pig.height / 2;
+    if (pig.position.y - (pig.height / 2) <= 0) {
+      store.vy *= store.e;
+      if (store.vy > -0.5 && store.vy < 0.5) {
+        store.isGrounded = true;
+      }
+      pig.position.y = pig.height / 2;
+    }
   }
 
   renderer.render(scene, camera);
