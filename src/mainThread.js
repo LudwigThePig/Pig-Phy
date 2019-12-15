@@ -13,7 +13,7 @@ import { calculatePosDifference } from './utils/movement';
 import TrianglePrism from './assets/trianglePrism';
 import Player from './assets/player';
 import store from './store';
-import { applyGravity } from './physics/Force';
+import { applyForces } from './physics/Force';
 
 
 /* *********
@@ -209,7 +209,7 @@ const draw = () => {
 
   if (kinematicCollisions.length) { /* Broad collision sweep */ }
   // If not grounded, apply gravity force
-  applyGravity();
+  applyForces();
 
   renderer.render(scene, camera);
 };

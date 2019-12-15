@@ -33,7 +33,11 @@ export default class Force {
   }
 }
 
-export const applyGravity = () => {
+const applyXForce = () => {
+
+};
+
+const applyYForce = () => {
   if (!store.isGrounded) {
     let forceY = 0;
 
@@ -58,4 +62,15 @@ export const applyGravity = () => {
       store.pig.position.y = store.pig.height / 2;
     }
   }
+};
+
+
+export const applyZForce = () => {
+
+};
+
+export const applyForces = () => {
+  applyXForce();
+  applyYForce();
+  applyZForce();
 };
