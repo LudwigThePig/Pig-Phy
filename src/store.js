@@ -7,7 +7,7 @@ class Store {
     this.width = width;
     this.isGrounded = false;
     this.area = 1 * 2 * 3 / 1000; // Area in cm (APPROXIMATE)
-    this.jumpForce = 1000;
+    this.jumpForce = 500;
     this.vy = 0;
     this.ay = 0;
     this.d1 = new Date().valueOf(); // Current timestamp
@@ -16,7 +16,7 @@ class Store {
     this.e = -0.4; // Coefficient of restitution ('bounciness' of the floor)
     this.rho = 1.2; // Density of air. Try 1000 for water.
     this.coefficientAir = 0.47; // Coeffecient of drag for a ball
-    this.gravityForce = 9.81; // meters per second
+    this.gravityForce = -9.81; // meters per second
   }
 
   /**

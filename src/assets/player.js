@@ -15,7 +15,7 @@ export default class Player {
     this.player.castShadow = true;
     this.player.receiveShadow = true;
     this.player.children.forEach(child => { child.castShadow = true; });
-    this.player.mass = 90; // in kilograms
+    this.player.mass = 40; // in kilograms
     this.player.isGrounded = true;
     this.generateGeometry();
     this.generateDimensions();

@@ -166,10 +166,10 @@ applyRigidBody(spheres, 4);
 
 // Kinematic Slope for testing gravity forces
 const slope = new TrianglePrism().matrix;
-// scene.add(slope);
-// applyKinematicBody(slope);
 // slope.geometry.computeBoundingBox();
 // const box = slope.geometry.boundingBox.clone();
+// scene.add(slope);
+// applyKinematicBody(slope);
 
 /* ********
 * LOADERS *
@@ -212,15 +212,20 @@ const draw = () => {
   // If not grounded, apply gravity force
   if (!store.isGrounded) {
     let forceY = 0;
-    forceY += pig.mass * store.gravityForce;
-    forceY += -0.5 * store.rho * store.coefficientAir * store.area * (store.vy ** 2);
 
-    const dy = -(store.vy * store.dt) + (0.5 * store.ay * (store.dt ** 2));
+    // apply gravity force
+    forceY += (pig.mass * store.gravityForce);
+    // apply force of air resistance
+    forceY += -0.5 * store.rho * store.coefficientAir * store.area * (store.vy ** 2);
+    // Displacement of the pig
+    const dy = (store.vy * store.dt) + (0.5 * store.ay * (store.dt ** 2));
     pig.position.y += dy;
-    const newAY = forceY / pig.mass;
+    // calculate current acceleration so we can derive velocity
+    const newAY = forceY / -store.gravityForce;
     const avgAY = (newAY + store.ay) / 2;
     store.vy += avgAY * store.dt;
 
+    // Simulate colliding with the ground
     if (pig.position.y - (pig.height / 2) <= 0) {
       store.vy *= store.e;
       if (store.vy > -0.5 && store.vy < 0.5) {
