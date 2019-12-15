@@ -64,6 +64,8 @@ const controls = new OrbitControls(camera);
 
 camera.position.z = 5;
 camera.position.y = 5;
+controls.minDistance = 0;
+controls.maxDistance = 40;
 camera.lookAt(new THREE.Vector3(0, 1, 0));
 
 
@@ -150,7 +152,6 @@ const cubes = Array(20)
   .map(() => {
     const cube = new Cube();
     scene.add(cube.matrix);
-    scene.add(cube.getCollisionBox());
     return cube.matrix;
   });
 applyRigidBody(cubes, 1);
