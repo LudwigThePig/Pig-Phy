@@ -42,7 +42,7 @@ const applyXForce = () => {
   store.dx = (store.vx * store.dt) + (0.5 * store.ax * (store.dt ** 2));
   store.pig.position.x += store.dx;
 
-  store.ax = forceX / store.pig.mass;
+  // store.ax = forceX / store.pig.mass;
 
   if (store.vz < store.terminalVelocity && store.vz > -store.terminalVelocity) {
     store.vx += store.ax * store.dt;

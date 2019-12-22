@@ -186,9 +186,9 @@ loader.load( // pig
 *********** */
 const draw = () => {
   store.updateDeltaTime();
+
   const rigidCollisions = broadCollisionSweep(rigidBodies)
     .filter(({ index }) => narrowCollisionSweep(rigidBodies[index]));
-
   const kinematicCollisions = broadCollisionSweep(kinematicBodies, store.pig)
     .filter(({ index }) => narrowCollisionSweep(rigidBodies[index], store.pig));
 
@@ -196,8 +196,10 @@ const draw = () => {
   controls.update();
   requestAnimationFrame(draw);
   movePlayer(store.pig, keyboard);
+
   const newPos = JSON.parse(JSON.stringify(store.pig.position));
   camera.lookAt(store.pig.position);
+
   const posDif = calculatePosDifference(oldPos, newPos);
   if (rigidCollisions.length) {
     for (let i = 0; i < rigidCollisions.length; i++) {
