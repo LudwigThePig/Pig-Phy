@@ -35,6 +35,12 @@ export default class Force {
 
 const calcAirResistance = v => -0.5 * store.rho * store.coefficientAir * store.pig.area * (v ** 2);
 
+const calcNewVelocity = (a, v, terminalV) => {
+  const newVelocity = v + a * store.dt;
+  const sign = newVelocity < 0 ? -1 : 1;
+  return sign * Math.min(terminalV, Math.abs(newVelocity));
+};
+
 const applyXForce = () => {
   let forceX = store.pig.mass * store.ax;
   forceX += calcAirResistance(store.vx);
@@ -44,9 +50,7 @@ const applyXForce = () => {
 
   store.ax = forceX / store.pig.mass;
 
-  if (store.vz < store.terminalVelocity && store.vz > -store.terminalVelocity) {
-    store.vx += store.ax * store.dt;
-  }
+  store.vx = calcNewVelocity(store.vx, store.ax, store.terminalVelocity.xz);
 };
 
 const applyYForce = () => {
@@ -80,15 +84,23 @@ const applyYForce = () => {
 
 
 export const applyZForce = () => {
+  // let forceX = store.pig.mass * store.ax;
+  // forceX += calcAirResistance(store.vx);
+  // forceX -= forceX * store.coefficientGround;
+  // store.dx = (store.vx * store.dt) + (0.5 * store.ax * (store.dt ** 2));
+  // store.pig.position.x += store.dx;
+
+
   let forceZ = store.pig.mass * store.az;
   forceZ += calcAirResistance(store.vz);
-  forceZ *= store.coefficientGround;
+  forceZ -= forceZ * store.coefficientGround;
   store.dz = (store.vz * store.dt) + (0.5 * store.az * (store.dt ** 2));
   store.pig.position.z += store.dz;
 
-  if (store.vz < store.terminalVelocity && store.vz > -store.terminalVelocity) {
-    store.vz += store.az * store.dt;
-  }
+  store.az = forceZ / store.pig.mass;
+
+
+  store.vz = calcNewVelocity(store.vz, store.az, store.terminalVelocity.xz);
 };
 
 export const applyForces = () => {
