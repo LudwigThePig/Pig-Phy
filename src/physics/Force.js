@@ -38,11 +38,11 @@ const calcAirResistance = v => -0.5 * store.rho * store.coefficientAir * store.p
 const applyXForce = () => {
   let forceX = store.pig.mass * store.ax;
   forceX += calcAirResistance(store.vx);
-  forceX *= store.coefficientGround;
+  forceX -= forceX * store.coefficientGround;
   store.dx = (store.vx * store.dt) + (0.5 * store.ax * (store.dt ** 2));
   store.pig.position.x += store.dx;
 
-  // store.ax = forceX / store.pig.mass;
+  store.ax = forceX / store.pig.mass;
 
   if (store.vz < store.terminalVelocity && store.vz > -store.terminalVelocity) {
     store.vx += store.ax * store.dt;
