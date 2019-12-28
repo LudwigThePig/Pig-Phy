@@ -36,7 +36,7 @@ export default class Force {
 const calcAirResistance = v => -0.5 * store.rho * store.coefficientAir * store.pig.area * (v ** 2);
 
 const calcNewVelocity = (a, v, terminalV) => {
-  const newVelocity = v + a * store.dt;
+  const newVelocity = v + (a * store.dt);
   const sign = newVelocity < 0 ? -1 : 1;
   return sign * Math.min(terminalV, Math.abs(newVelocity));
 };
@@ -52,6 +52,7 @@ const applyXZForce = () => {
     forceX -= forceX * store.coefficientGround;
     forceZ -= forceZ * store.coefficientGround;
   }
+
 
   store.dx = (store.vx * store.dt) + (0.5 * store.ax * (store.dt ** 2));
   store.dz = (store.vz * store.dt) + (0.5 * store.az * (store.dt ** 2));
