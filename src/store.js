@@ -22,7 +22,7 @@ class Store {
     this.vy = 0;
     this.vz = 0;
     this.terminalVelocity = {
-      xz: 3,
+      xz: 10,
     };
 
 

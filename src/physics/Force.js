@@ -41,17 +41,31 @@ const calcNewVelocity = (a, v, terminalV) => {
   return sign * Math.min(terminalV, Math.abs(newVelocity));
 };
 
-const applyXForce = () => {
+const applyXZForce = () => {
   let forceX = store.pig.mass * store.ax;
+  let forceZ = store.pig.mass * store.az;
+
   forceX += calcAirResistance(store.vx);
-  forceX -= forceX * store.coefficientGround;
+  forceZ += calcAirResistance(store.vz);
+
+  if (store.pig.isGrounded) {
+    forceX -= forceX * store.coefficientGround;
+    forceZ -= forceZ * store.coefficientGround;
+  }
+
   store.dx = (store.vx * store.dt) + (0.5 * store.ax * (store.dt ** 2));
+  store.dz = (store.vz * store.dt) + (0.5 * store.az * (store.dt ** 2));
+
   store.pig.position.x += store.dx;
+  store.pig.position.z += store.dz;
 
   store.ax = forceX / store.pig.mass;
+  store.az = forceZ / store.pig.mass;
 
   store.vx = calcNewVelocity(store.vx, store.ax, store.terminalVelocity.xz);
+  store.vz = calcNewVelocity(store.vz, store.az, store.terminalVelocity.xz);
 };
+
 
 const applyYForce = () => {
   if (!store.isGrounded) {
@@ -82,29 +96,7 @@ const applyYForce = () => {
   }
 };
 
-
-export const applyZForce = () => {
-  // let forceX = store.pig.mass * store.ax;
-  // forceX += calcAirResistance(store.vx);
-  // forceX -= forceX * store.coefficientGround;
-  // store.dx = (store.vx * store.dt) + (0.5 * store.ax * (store.dt ** 2));
-  // store.pig.position.x += store.dx;
-
-
-  let forceZ = store.pig.mass * store.az;
-  forceZ += calcAirResistance(store.vz);
-  forceZ -= forceZ * store.coefficientGround;
-  store.dz = (store.vz * store.dt) + (0.5 * store.az * (store.dt ** 2));
-  store.pig.position.z += store.dz;
-
-  store.az = forceZ / store.pig.mass;
-
-
-  store.vz = calcNewVelocity(store.vz, store.az, store.terminalVelocity.xz);
-};
-
 export const applyForces = () => {
-  applyXForce();
   applyYForce();
-  applyZForce();
+  applyXZForce();
 };
