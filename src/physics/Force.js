@@ -48,7 +48,7 @@ const applyXZForce = () => {
   forceX += calcAirResistance(store.vx);
   forceZ += calcAirResistance(store.vz);
 
-  if (store.pig.isGrounded) {
+  if (store.isGrounded) {
     forceX -= forceX * store.coefficientGround;
     forceZ -= forceZ * store.coefficientGround;
   }
