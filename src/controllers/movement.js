@@ -23,11 +23,11 @@ export const movePlayer = (player, keyboard) => {
   player.rotation.z = 0;
 
   // Forwards And Backwards
-  if (keyboard[keys.forward] && store.isGrounded) {
+  if (keyboard[keys.forward] && store.isGrounded && !store.isSliding) {
     store.ax += Math.sin(player.rotation.y) * forwardVelocity;
     store.az += Math.cos(player.rotation.y) * forwardVelocity;
   }
-  if (keyboard[keys.backwards] && store.isGrounded) {
+  if (keyboard[keys.backwards] && store.isGrounded && !store.isSliding) {
     store.ax -= Math.sin(player.rotation.y) * forwardVelocity;
     store.az -= Math.cos(player.rotation.y) * forwardVelocity;
   }
