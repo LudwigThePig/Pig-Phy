@@ -41,6 +41,16 @@ const calcNewVelocity = (a, v, terminalV) => {
   return sign * Math.min(terminalV, Math.abs(newVelocity));
 };
 
+const calcGroundFriction = force => {
+  if (!store.isGrounded) return force;
+
+  const friction = store.isSliding
+    ? store.coefficientGround / 7
+    : store.coefficientGround;
+
+  return force - (force * friction);
+};
+
 const applyXZForce = () => {
   // F = M * A
   let forceX = store.pig.mass * store.ax;
@@ -50,10 +60,8 @@ const applyXZForce = () => {
   // Frictions
   forceX += calcAirResistance(store.vx);
   forceZ += calcAirResistance(store.vz);
-  if (store.isGrounded) {
-    forceX -= forceX * store.coefficientGround;
-    forceZ -= forceZ * store.coefficientGround;
-  }
+  forceX = calcGroundFriction(forceX);
+  forceZ = calcGroundFriction(forceZ);
 
   // Calculate Displacement (Verlet Integration)
   store.dx = (store.vx * store.dt) + (0.5 * store.ax * (store.dt ** 2));

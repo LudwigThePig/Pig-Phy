@@ -10,6 +10,7 @@ class Store {
     // * Pig stuff
     this.pig = null;
     this.isGrounded = false;
+    this.isSliding = false;
     this.area = 1 * 2 * 3 / 1000; // Area of the pig in cm (APPROXIMATE)
 
     // * Displacements

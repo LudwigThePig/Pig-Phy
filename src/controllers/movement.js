@@ -48,8 +48,13 @@ export const movePlayer = (player, keyboard) => {
     store.vy += (store.jumpForce / player.mass); // Jump force is really just velocity change
   }
 
-  // Descend the pig. Just for dev purposes
-  if (keyboard[keys.shift] || keyboard[keys.c]) player.position.y -= (jumpVelocity / 2);
+
+  // Slide the Pig :)
+  if (keyboard[keys.shift] || keyboard[keys.c]) {
+    store.isSliding = true;
+  } else if (store.isSliding) { // Avoid redundant reassignment
+    store.isSliding = false;
+  }
 };
 
 
