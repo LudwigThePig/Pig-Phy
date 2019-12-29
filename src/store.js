@@ -42,7 +42,7 @@ class Store {
 
 
     // * Force Coefficients
-    this.e = -0.4; // Coefficient of restitution ('bounciness' of the floor)
+    this.e = -0.2; // Coefficient of restitution ('bounciness' of the floor)
     this.rho = 1.2; // Density of air. Try 1000 for water.
     this.coefficientAir = 0.47; // Air Resistance
     this.coefficientGround = 0.1; // Ground Friction

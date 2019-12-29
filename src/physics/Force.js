@@ -42,27 +42,32 @@ const calcNewVelocity = (a, v, terminalV) => {
 };
 
 const applyXZForce = () => {
+  // F = M * A
   let forceX = store.pig.mass * store.ax;
   let forceZ = store.pig.mass * store.az;
 
+
+  // Frictions
   forceX += calcAirResistance(store.vx);
   forceZ += calcAirResistance(store.vz);
-
   if (store.isGrounded) {
     forceX -= forceX * store.coefficientGround;
     forceZ -= forceZ * store.coefficientGround;
   }
 
-
+  // Calculate Displacement (Verlet Integration)
   store.dx = (store.vx * store.dt) + (0.5 * store.ax * (store.dt ** 2));
   store.dz = (store.vz * store.dt) + (0.5 * store.az * (store.dt ** 2));
 
+  // Update Position with Displacement
   store.pig.position.x += store.dx;
   store.pig.position.z += store.dz;
 
+  // Calculate New Acceleration
   store.ax = forceX / store.pig.mass;
   store.az = forceZ / store.pig.mass;
 
+  // Calculate New Velocity
   store.vx = calcNewVelocity(store.vx, store.ax, store.terminalVelocity.xz);
   store.vz = calcNewVelocity(store.vz, store.az, store.terminalVelocity.xz);
 };
