@@ -12,7 +12,11 @@
 
 # About
 
-Although this is a game and running the repo locally will launch a game, the aim of this project is to develop a 3d game engine. This project will be sufficiently complete when I abandon it and start a new repo with all of the things that I have learned in here. This is more of a draft than a final product.
+🍝🍝🍝🍝🍝🍝🍝
+
+Although this is a game and running the repo locally will launch a game, the aim of this project is not to build a game. This repo is a little area to hack around and learn about the fundamentals of game engine development. The code herein is poorly written, filled with tech debt, and repetitive. There are no state machines or ECS to save you, just one eslint config and the occasional jsdoc comment.
+
+This project will be sufficiently complete when it is abandoned for a new project that bears any semblance of forethought.
 
 # Technology
 
