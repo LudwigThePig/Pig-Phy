@@ -91,6 +91,23 @@ export const narrowCollisionSweep = (entity) => {
 
     if (collisionResults.length > 0 && collisionResults[0].distance < directionVector.length()) {
       console.log(directionVector, store);
+      /**
+       * Some notes one what to do with this collision
+       *
+       * 1. Need momentum of both bodies before collision (mass * velocity)
+       * 2. Need to apply resultant velocities to each body
+       * 3. Apply air resistance and such to the other bodies
+       *
+       *
+       * Calculating new velocities (from stack exchange)
+       * v: velocity after collision
+       * u: velocity before collision
+       * m: mass (use the largest number possible for the mass of a fixed, static object)
+       *
+       * A.v = (A.u * (A.m - B.m) + (2 * B.m * B.u)) / (A.m + B.m)
+       * B.v = (B.u * (B.m - A.m) + (2 * A.m * A.u)) / (A.m + B.m)
+       */
+
       return true;
     }
   }
