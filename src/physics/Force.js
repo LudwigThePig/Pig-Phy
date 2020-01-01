@@ -53,15 +53,15 @@ const calcGroundFriction = force => {
 
 const applyXZForce = () => {
   // F = M * A
-  let forceX = store.pig.mass * store.ax;
-  let forceZ = store.pig.mass * store.az;
+  store.forceX = store.pig.mass * store.ax;
+  store.forceZ = store.pig.mass * store.az;
 
 
   // Frictions
-  forceX += calcAirResistance(store.vx);
-  forceZ += calcAirResistance(store.vz);
-  forceX = calcGroundFriction(forceX);
-  forceZ = calcGroundFriction(forceZ);
+  store.forceX += calcAirResistance(store.vx);
+  store.forceZ += calcAirResistance(store.vz);
+  store.forceX = calcGroundFriction(store.forceX);
+  store.forceZ = calcGroundFriction(store.forceZ);
 
   // Calculate Displacement (Verlet Integration)
   store.dx = (store.vx * store.dt) + (0.5 * store.ax * (store.dt ** 2));
@@ -72,8 +72,8 @@ const applyXZForce = () => {
   store.pig.position.z += store.dz;
 
   // Calculate New Acceleration
-  store.ax = forceX / store.pig.mass;
-  store.az = forceZ / store.pig.mass;
+  store.ax = store.forceX / store.pig.mass;
+  store.az = store.forceZ / store.pig.mass;
 
   // Calculate New Velocity
   store.vx = calcNewVelocity(store.vx, store.ax, store.terminalVelocity.xz);
@@ -83,21 +83,21 @@ const applyXZForce = () => {
 
 const applyYForce = () => {
   if (!store.isGrounded) {
-    let forceY = 0;
+    store.forceY = 0;
 
     // apply gravity force
-    forceY += (store.pig.mass * store.gravityForce);
+    store.forceY += (store.pig.mass * store.gravityForce);
     // apply force of air resistance
-    forceY += calcAirResistance(store.vy);
+    store.forceY += calcAirResistance(store.vy);
     // Displacement of the pig
     store.dy = (store.vy * store.dt) + (0.5 * store.ay * (store.dt ** 2));
     store.pig.position.y += store.dy;
     // calculate current acceleration so we can derive velocity
-    const newAY = forceY / -store.gravityForce;
+    const newAY = store.forceY / -store.gravityForce;
     const avgAY = (newAY + store.ay) / 2;
     store.vy += avgAY * store.dt;
 
-    store.ay = forceY / store.pig.mass;
+    store.ay = store.forceY / store.pig.mass;
 
     // Simulate colliding with the ground
     if (store.pig.position.y - (store.pig.height / 2) <= 0) {

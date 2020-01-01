@@ -90,6 +90,7 @@ export const narrowCollisionSweep = (entity) => {
     const collisionResults = ray.intersectObject(entity);
 
     if (collisionResults.length > 0 && collisionResults[0].distance < directionVector.length()) {
+      console.log(directionVector, store);
       return true;
     }
   }

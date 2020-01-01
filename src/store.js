@@ -12,12 +12,14 @@ class Store {
     this.isGrounded = false;
     this.isSliding = false;
     this.area = 1 * 2 * 3 / 1000; // Area of the pig in cm (APPROXIMATE)
-
+    // * Pig Forces
+    this.forceX = 0;
+    this.forceY = 0;
+    this.forceZ = 0;
     // * Displacements
     this.dx = 0;
     this.dy = 0;
     this.dz = 0;
-
     // * Velocities
     this.vx = 0;
     this.vy = 0;
