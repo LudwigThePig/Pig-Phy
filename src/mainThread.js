@@ -139,7 +139,7 @@ applyKinematicBody(ground);
 🐷🐷🐷🐷🐷🐷 */
 const loader = new GLTFLoader(loadingManager);
 const pigLoadCallback = gltf => {
-  store.pig = new Player(gltf.scene).player;
+  store.pig = new Player(gltf.scene, 40).player;
   scene.add(store.pig);
   store.pig.add(camera);
   document.addEventListener('keydown', keydown);
@@ -149,14 +149,14 @@ const pigLoadCallback = gltf => {
 const cubes = Array(20)
   .fill(0)
   .map(() => {
-    const cube = new Cube();
+    const cube = new Cube(5);
     scene.add(cube.matrix);
     return cube.matrix;
   });
 applyRigidBody(cubes, 1);
 
 const spheres = Array(20).fill(0).map(() => {
-  const sphere = new Sphere();
+  const sphere = new Sphere(15);
   scene.add(sphere.matrix);
   return sphere.matrix;
 });
