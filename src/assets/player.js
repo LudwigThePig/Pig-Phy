@@ -1,10 +1,12 @@
 import * as THREE from 'three';
 import { debug, CollisionBox } from '../utils/debug';
 import { getMeshDimensions } from '../physics/collisionDetection';
+import RigidBody from './RigidBody';
 
 
-export default class Player {
+export default class Player extends RigidBody {
   constructor(obj) {
+    super();
     this.player = obj;
     if (debug) {
       this.player.children.push(new CollisionBox(this.player).box);

@@ -3,6 +3,7 @@ import * as THREE from 'three';
 import { randomPosition } from '../utils/randoms';
 import colors from '../utils/colors';
 import { CollisionBox } from '../utils/debug';
+import RigidBody from './RigidBody';
 
 
 const defaultPos = () => ({
@@ -14,8 +15,9 @@ const defaultPos = () => ({
 /**
  * Parent Class with Methods
  */
-class Shape {
+class Shape extends RigidBody {
   constructor() {
+    super();
     this.matrix = new THREE.Shape();
   }
 
