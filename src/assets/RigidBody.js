@@ -1,5 +1,8 @@
 export default class RigidBody {
-  constructor() {
+  /**
+   * @param {number} mass mass of rigid body in kg
+   */
+  constructor(mass = 10) {
     this.f = {
       x: 0,
       y: 0,
@@ -15,5 +18,6 @@ export default class RigidBody {
       y: 0,
       z: 0,
     };
+    this.mass = mass;
   }
 }
