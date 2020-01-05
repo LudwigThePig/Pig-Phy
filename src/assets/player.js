@@ -5,8 +5,8 @@ import RigidBody from './RigidBody';
 
 
 export default class Player extends RigidBody {
-  constructor(obj) {
-    super();
+  constructor(obj, mass) {
+    super(mass);
     this.player = obj;
     if (debug) {
       this.player.children.push(new CollisionBox(this.player).box);
@@ -17,7 +17,7 @@ export default class Player extends RigidBody {
     this.player.castShadow = true;
     this.player.receiveShadow = true;
     this.player.children.forEach(child => { child.castShadow = true; });
-    this.player.mass = 40; // in kilograms
+    this.player.mass = mass; // in kilograms
     this.player.isGrounded = true;
     this.generateGeometry();
     this.generateDimensions();

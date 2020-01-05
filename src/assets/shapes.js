@@ -16,8 +16,8 @@ const defaultPos = () => ({
  * Parent Class with Methods
  */
 class Shape extends RigidBody {
-  constructor() {
-    super();
+  constructor(mass) {
+    super(mass);
     this.matrix = new THREE.Shape();
   }
 
@@ -28,8 +28,8 @@ class Shape extends RigidBody {
 }
 
 export class Cube extends Shape {
-  constructor(height = 1, width = 1, depth = 1, pos = defaultPos()) {
-    super();
+  constructor(height = 1, width = 1, depth = 1, pos = defaultPos(), mass) {
+    super(mass);
     this.geometry = new THREE.BoxGeometry(height, width, depth);
     this.material = new THREE.MeshPhongMaterial({ color: colors.pink });
     this.matrix = new THREE.Mesh(this.geometry, this.material);
@@ -41,8 +41,8 @@ export class Cube extends Shape {
 }
 
 export class Sphere extends Shape {
-  constructor(radius = 1, pos = defaultPos()) {
-    super();
+  constructor(radius = 1, pos = defaultPos(), mass) {
+    super(mass);
     this.geometry = new THREE.SphereGeometry(radius, 12, 12);
     this.material = new THREE.MeshPhongMaterial({ color: colors.purple });
     this.matrix = new THREE.Mesh(this.geometry, this.material);
