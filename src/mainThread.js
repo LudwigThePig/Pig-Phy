@@ -149,14 +149,14 @@ const pigLoadCallback = gltf => {
 const cubes = Array(20)
   .fill(0)
   .map(() => {
-    const cube = new Cube(5);
+    const cube = new Cube(undefined, undefined, undefined, undefined, 5);
     scene.add(cube.matrix);
     return cube.matrix;
   });
 applyRigidBody(cubes, 1);
 
 const spheres = Array(20).fill(0).map(() => {
-  const sphere = new Sphere(15);
+  const sphere = new Sphere(undefined, undefined, undefined, undefined, 15);
   scene.add(sphere.matrix);
   return sphere.matrix;
 });
