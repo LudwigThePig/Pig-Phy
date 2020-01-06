@@ -28,7 +28,9 @@ class Shape extends RigidBody {
 }
 
 export class Cube extends Shape {
-  constructor(height = 1, width = 1, depth = 1, pos = defaultPos(), mass) {
+  constructor({
+    height = 1, width = 1, depth = 1, pos = defaultPos(), mass,
+  }) {
     super(mass);
     this.geometry = new THREE.BoxGeometry(height, width, depth);
     this.material = new THREE.MeshPhongMaterial({ color: colors.pink });
@@ -41,7 +43,7 @@ export class Cube extends Shape {
 }
 
 export class Sphere extends Shape {
-  constructor(radius = 1, pos = defaultPos(), mass) {
+  constructor({ radius = 1, pos = defaultPos(), mass }) {
     super(mass);
     this.geometry = new THREE.SphereGeometry(radius, 12, 12);
     this.material = new THREE.MeshPhongMaterial({ color: colors.purple });
