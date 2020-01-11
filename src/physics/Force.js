@@ -51,7 +51,9 @@ const calcGroundFriction = force => {
   return force - (force * friction);
 };
 
-const applyXZForce = () => {
+
+export const applyForces = () => {
+  // * _______X and Z Forces_______ *
   // F = M * A
   store.forceX = store.pig.mass * store.ax;
   store.forceZ = store.pig.mass * store.az;
@@ -78,10 +80,9 @@ const applyXZForce = () => {
   // Calculate New Velocity
   store.vx = calcNewVelocity(store.vx, store.ax, store.terminalVelocity.xz);
   store.vz = calcNewVelocity(store.vz, store.az, store.terminalVelocity.xz);
-};
 
 
-const applyYForce = () => {
+  // * _______Y Force_______ *
   if (!store.isGrounded) {
     store.forceY = 0;
 
@@ -108,9 +109,4 @@ const applyYForce = () => {
       store.pig.position.y = store.pig.height / 2;
     }
   }
-};
-
-export const applyForces = () => {
-  applyYForce();
-  applyXZForce();
 };

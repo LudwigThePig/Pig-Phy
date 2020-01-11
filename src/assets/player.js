@@ -6,7 +6,7 @@ import RigidBody from './RigidBody';
 
 export default class Player extends RigidBody {
   constructor(obj, mass) {
-    super(mass);
+    super(obj, mass);
     this.player = obj;
     if (debug) {
       this.player.children.push(new CollisionBox(this.player).box);
