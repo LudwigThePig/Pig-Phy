@@ -3,6 +3,7 @@ export default class GameManager {
     // These are the components
     this.meshes = [];
     this.rbs = [];
+    this.inputs = {};
 
     // Entity Stuff
     this.pointer = 0;

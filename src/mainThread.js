@@ -3,6 +3,7 @@ import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import 'normalize.css';
 
 import './style.scss';
+import GameManager from './GameManager';
 import { getCanvasDimensions, sceneDimensions } from './utils/dimensions';
 import color, { lightColors } from './utils/colors';
 import { moveRigidBody, movePlayer } from './controllers/movement';
@@ -19,6 +20,8 @@ import { applyForces } from './physics/Force';
 /* *********
 * Managers *
 ********** */
+
+const game = new GameManager();
 const loadingManager = new THREE.LoadingManager();
 loadingManager.onLoad = () => { draw(); };
 
@@ -30,10 +33,9 @@ const collisionThread = new Worker('js/collision-bundle.js');
 /* ******
 * State *
 ******* */
-const keyboard = {};
 const getKeyCode = event => event.which;
-export const keydown = event => { keyboard[getKeyCode(event)] = true; };
-export const keyup = event => { keyboard[getKeyCode(event)] = false; };
+export const keydown = event => { game.inputs[getKeyCode(event)] = true; };
+export const keyup = event => { game.inputs[getKeyCode(event)] = false; };
 let { height, width } = store;
 
 
@@ -195,7 +197,7 @@ const draw = () => {
   const oldPos = JSON.parse(JSON.stringify(store.pig.position));
   controls.update();
   requestAnimationFrame(draw);
-  movePlayer(store.pig, keyboard);
+  movePlayer(store.pig, game.inputs);
 
   const newPos = JSON.parse(JSON.stringify(store.pig.position));
   camera.lookAt(store.pig.position);
@@ -205,7 +207,7 @@ const draw = () => {
     for (let i = 0; i < rigidCollisions.length; i++) {
       const { id, index } = rigidCollisions[i];
       const object = scene.getObjectById(id);
-      rigidBodies[index] = moveRigidBody(object, posDif, keyboard);
+      rigidBodies[index] = moveRigidBody(object, posDif, game.inputs);
     }
   }
 
