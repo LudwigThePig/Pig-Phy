@@ -2,7 +2,8 @@ export default class GameManager {
   constructor() {
     // These are the components
     this.meshes = [];
-    this.rbs = [];
+    this.collidables = [];
+    this.physics = [];
     this.inputs = {};
 
     // Entity Stuff
