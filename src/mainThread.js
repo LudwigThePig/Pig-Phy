@@ -131,8 +131,14 @@ else {
 * PIG MODEL *
 🐷🐷🐷🐷🐷🐷 */
 const loader = new GLTFLoader(loadingManager);
-const pigLoadCallback = gltf => {
-  store.pig = new Player(gltf.scene, 40).player;
+const pigLoadCallback = gltf => { // TODO: ECS
+  const pigObj = new Player(gltf.scene, 40);
+  store.pig = pigObj.mesh;
+
+  // Start of ECS Implemenation
+  const pig = game.createEntity();
+  game.meshes[pig] = pigObj.mesh;
+
   scene.add(store.pig);
   store.pig.add(camera);
   document.addEventListener('keydown', keydown);
@@ -142,16 +148,26 @@ const pigLoadCallback = gltf => {
 const cubes = Array(20)
   .fill(0)
   .map(() => {
-    const cube = new Cube({ mass: 5 });
-    scene.add(cube.matrix);
-    return cube.matrix;
+    const cubeObj = new Cube({ mass: 5 });
+    scene.add(cubeObj.matrix);
+
+    // Start of ECS Implemenation
+    const cube = game.createEntity();
+    game.meshes[cube] = cubeObj;
+
+    return cubeObj.matrix;
   });
 applyRigidBody(cubes, 1);
 
 const spheres = Array(20).fill(0).map(() => {
-  const sphere = new Sphere({ mass: 15 });
-  scene.add(sphere.matrix);
-  return sphere.matrix;
+  const sphereObj = new Sphere({ mass: 15 });
+
+  // Start of ECS Implemenation
+  const sphere = game.createEntity();
+  game.meshes[sphere] = sphereObj;
+
+  scene.add(sphereObj.matrix);
+  return sphereObj.matrix;
 });
 applyRigidBody(spheres, 4);
 
