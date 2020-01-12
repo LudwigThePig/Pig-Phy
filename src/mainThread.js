@@ -91,7 +91,6 @@ scene.add(topLight);
 * Rigid & Kinematic Bodies *
 ************************** */
 const rigidBodies = [];
-const kinematicBodies = [];
 
 /**
  * @description Gathers all of the vertex data and pushes it onto the rigid bodies array
@@ -108,13 +107,6 @@ const applyRigidBody = (mesh, mass = 1) => {
   } else rigidBodies.push(gatherBoundingBox(mesh));
 };
 
-const applyKinematicBody = mesh => {
-  if (Array.isArray(mesh)) {
-    for (let i = 0; i < mesh.length; i++) {
-      kinematicBodies.push(gatherBoundingBox(mesh[i]));
-    }
-  } else kinematicBodies.push(gatherBoundingBox(mesh));
-};
 
 /* ********
 * Ground *
@@ -133,7 +125,6 @@ else {
   scene.add(gridHelper);
   scene.add(new THREE.AxesHelper(6));
 }
-applyKinematicBody(ground);
 
 
 /* 🐷🐷🐷🐷🐷
@@ -191,8 +182,6 @@ const draw = () => {
 
   const rigidCollisions = broadCollisionSweep(rigidBodies)
     .filter(({ index }) => narrowCollisionSweep(rigidBodies[index]));
-  const kinematicCollisions = broadCollisionSweep(kinematicBodies, store.pig)
-    .filter(({ index }) => narrowCollisionSweep(rigidBodies[index], store.pig));
 
   const oldPos = JSON.parse(JSON.stringify(store.pig.position));
   controls.update();
@@ -211,8 +200,6 @@ const draw = () => {
     }
   }
 
-  if (kinematicCollisions.length) { /* Broad collision sweep */ }
-  // If not grounded, apply gravity force
   applyForces();
 
   renderer.render(scene, camera);
