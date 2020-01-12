@@ -7,24 +7,24 @@ import RigidBody from './RigidBody';
 export default class Player extends RigidBody {
   constructor(obj, mass) {
     super(obj, mass);
-    this.player = obj;
+    this.mesh = obj;
     if (debug) {
-      this.player.children.push(new CollisionBox(this.player).box);
-      this.player.position.set(0, 10.12, 0);
+      this.mesh.children.push(new CollisionBox(this.mesh).box);
+      this.mesh.position.set(0, 10.12, 0);
     } else {
-      this.player.position.set(0, 1.12, 0);
+      this.mesh.position.set(0, 1.12, 0);
     }
-    this.player.castShadow = true;
-    this.player.receiveShadow = true;
-    this.player.children.forEach(child => { child.castShadow = true; });
-    this.player.mass = mass; // in kilograms
-    this.player.isGrounded = true;
+    this.mesh.castShadow = true;
+    this.mesh.receiveShadow = true;
+    this.mesh.children.forEach(child => { child.castShadow = true; });
+    this.mesh.mass = mass; // in kilograms
+    this.mesh.isGrounded = true;
     this.generateGeometry();
     this.generateDimensions();
   }
 
   generateGeometry() {
-    const { children } = this.player;
+    const { children } = this.mesh;
     const geometry = new THREE.Geometry();
     for (let i = 0; i < children.length; i++) {
       const child = children[i];
@@ -34,15 +34,15 @@ export default class Player extends RigidBody {
         geometry.merge(resolvedGeometry);
       }
     }
-    this.player.compositeGeometry = geometry;
+    this.mesh.compositeGeometry = geometry;
   }
 
   generateDimensions() {
-    const { x, y, z } = getMeshDimensions(this.player);
+    const { x, y, z } = getMeshDimensions(this.mesh);
 
-    this.player.width = x;
-    this.player.height = y;
-    this.player.depth = z;
-    this.player.area = x * y * z / 1000; // approximation of the pig's area in cm
+    this.mesh.width = x;
+    this.mesh.height = y;
+    this.mesh.depth = z;
+    this.mesh.area = x * y * z / 1000; // approximation of the pig's area in cm
   }
 }
