@@ -21,6 +21,7 @@ class GameManager {
     this.jumpForce = 500;
     this.gravityForce = -9.81; // meters per second
 
+    this.terminalVelocity = { xz: 30 };
 
     // Force Coefficients
     this.e = -0.2; // Coefficient of restitution ('bounciness' of the floor)

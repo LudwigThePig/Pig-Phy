@@ -200,6 +200,7 @@ loader.load( // pig
 *********** */
 const draw = () => {
   store.updateDeltaTime();
+  game.updateDeltaTime();
 
   const rigidCollisions = broadCollisionSweep(game.collidables)
     .filter(({ index }) => narrowCollisionSweep(game.collidables[index]));

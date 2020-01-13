@@ -56,32 +56,34 @@ const calcGroundFriction = force => {
 
 export const applyForces = () => {
   // * _______X and Z Forces_______ *
+  const pigPhy = game.physics[game.pig];
   // F = M * A
-  store.forceX = game.meshes[game.pig].mass * store.ax;
-  store.forceZ = game.meshes[game.pig].mass * store.az;
+  pigPhy.f.x = game.meshes[game.pig].mass * pigPhy.a.x;
+  pigPhy.f.z = game.meshes[game.pig].mass * pigPhy.a.z;
 
 
   // Frictions
-  store.forceX += calcAirResistance(store.vx);
-  store.forceZ += calcAirResistance(store.vz);
-  store.forceX = calcGroundFriction(store.forceX);
-  store.forceZ = calcGroundFriction(store.forceZ);
+  pigPhy.f.x += calcAirResistance(pigPhy.v.x);
+  pigPhy.f.z += calcAirResistance(pigPhy.v.z);
+  pigPhy.f.x = calcGroundFriction(pigPhy.f.x);
+  pigPhy.f.z = calcGroundFriction(pigPhy.f.z);
 
   // Calculate Displacement (Verlet Integration)
-  store.dx = (store.vx * store.dt) + (0.5 * store.ax * (store.dt ** 2));
-  store.dz = (store.vz * store.dt) + (0.5 * store.az * (store.dt ** 2));
+  pigPhy.d.x = (pigPhy.v.x * game.dt) + (0.5 * pigPhy.a.x * (game.dt ** 2));
+  pigPhy.d.z = (pigPhy.v.z * game.dt) + (0.5 * pigPhy.a.z * (game.dt ** 2));
 
   // Update Position with Displacement
-  game.meshes[game.pig].position.x += store.dx;
-  game.meshes[game.pig].position.z += store.dz;
+  game.meshes[game.pig].position.x += pigPhy.d.x;
+  game.meshes[game.pig].position.z += pigPhy.d.z;
 
   // Calculate New Acceleration
-  store.ax = store.forceX / game.meshes[game.pig].mass;
-  store.az = store.forceZ / game.meshes[game.pig].mass;
+  pigPhy.a.x = pigPhy.f.x / game.meshes[game.pig].mass;
+  pigPhy.a.x = pigPhy.f.x / game.meshes[game.pig].mass;
+  pigPhy.a.z = pigPhy.f.z / game.meshes[game.pig].mass;
 
   // Calculate New Velocity
-  store.vx = calcNewVelocity(store.vx, store.ax, store.terminalVelocity.xz);
-  store.vz = calcNewVelocity(store.vz, store.az, store.terminalVelocity.xz);
+  pigPhy.v.x = calcNewVelocity(pigPhy.v.x, pigPhy.a.x, game.terminalVelocity.xz);
+  pigPhy.v.z = calcNewVelocity(pigPhy.v.z, pigPhy.a.z, game.terminalVelocity.xz);
 
 
   // * _______Y Force_______ *
@@ -93,12 +95,12 @@ export const applyForces = () => {
     // apply force of air resistance
     store.forceY += calcAirResistance(store.vy);
     // Displacement of the pig
-    store.dy = (store.vy * store.dt) + (0.5 * store.ay * (store.dt ** 2));
+    store.dy = (store.vy * game.dt) + (0.5 * store.ay * (game.dt ** 2));
     game.meshes[game.pig].position.y += store.dy;
     // calculate current acceleration so we can derive velocity
     const newAY = store.forceY / -store.gravityForce;
     const avgAY = (newAY + store.ay) / 2;
-    store.vy += avgAY * store.dt;
+    store.vy += avgAY * game.dt;
 
     store.ay = store.forceY / game.meshes[game.pig].mass;
 
@@ -129,8 +131,8 @@ export const applyRigidBodyForces = entity => {
   entity.f.z = calcGroundFriction(entity.f.z);
 
   // Calculate Displacement (Verlet Integration)
-  entity.d.x = (entity.v.x * store.dt) + (0.5 * entity.a.x * (store.dt ** 2));
-  entity.d.z = (entity.v.z * store.dt) + (0.5 * entity.a.z * (store.dt ** 2));
+  entity.d.x = (entity.v.x * game.dt) + (0.5 * entity.a.x * (game.dt ** 2));
+  entity.d.z = (entity.v.z * game.dt) + (0.5 * entity.a.z * (game.dt ** 2));
 
   // Update Position with Displacement
   entity.position.x += entity.d.x;
@@ -141,7 +143,7 @@ export const applyRigidBodyForces = entity => {
   entity.a.z = entity.f.z / entity.mass;
 
   // Calculate New Velocity
-  entity.v.x = calcNewVelocity(entity.v.x, entity.a.x, store.terminalVelocity.xz);
-  entity.v.z = calcNewVelocity(entity.v.z, entity.a.z, store.terminalVelocity.xz);
+  entity.v.x = calcNewVelocity(entity.v.x, entity.a.x, game.terminalVelocity.xz);
+  entity.v.z = calcNewVelocity(entity.v.z, entity.a.z, game.terminalVelocity.xz);
   // TODO: Y Force Calc
 };

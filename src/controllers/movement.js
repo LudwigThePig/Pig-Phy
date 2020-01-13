@@ -1,6 +1,7 @@
 import { forwardVelocity, rotationVelocity, jumpVelocity } from '../utils/velocities';
 import { gatherBoundingBox } from '../physics/collisionDetection';
 import store from '../store';
+import game from '../gameManager';
 
 
 const keys = {
@@ -21,15 +22,17 @@ const keys = {
  */
 export const movePlayer = (player, keyboard) => {
   player.rotation.z = 0;
+  const pigPhy = game.physics[game.pig];
+
 
   // Forwards And Backwards
   if (keyboard[keys.forward] && store.isGrounded && !store.isSliding) {
-    store.ax += Math.sin(player.rotation.y) * forwardVelocity;
-    store.az += Math.cos(player.rotation.y) * forwardVelocity;
+    pigPhy.a.x += Math.sin(player.rotation.y) * forwardVelocity;
+    pigPhy.a.z += Math.cos(player.rotation.y) * forwardVelocity;
   }
   if (keyboard[keys.backwards] && store.isGrounded && !store.isSliding) {
-    store.ax -= Math.sin(player.rotation.y) * forwardVelocity;
-    store.az -= Math.cos(player.rotation.y) * forwardVelocity;
+    pigPhy.a.x -= Math.sin(player.rotation.y) * forwardVelocity;
+    pigPhy.a.z -= Math.cos(player.rotation.y) * forwardVelocity;
   }
 
   // Y Rotation
