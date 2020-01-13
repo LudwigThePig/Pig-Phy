@@ -138,6 +138,8 @@ const pigLoadCallback = gltf => { // TODO: ECS
   // Start of ECS Implemenation
   const pig = game.createEntity();
   game.meshes[pig] = pigObj.mesh;
+  game.physics[pig] = pigObj.physics;
+  console.log(game);
 
   scene.add(store.pig);
   store.pig.add(camera);
@@ -154,6 +156,8 @@ const cubes = Array(20)
     // Start of ECS Implemenation
     const cube = game.createEntity();
     game.meshes[cube] = cubeObj;
+    game.collidables[cube] = gatherBoundingBox(cubeObj.matrix);
+    game.physics[cube] = cubeObj.physics;
 
     return cubeObj.matrix;
   });
@@ -165,6 +169,7 @@ const spheres = Array(20).fill(0).map(() => {
   // Start of ECS Implemenation
   const sphere = game.createEntity();
   game.meshes[sphere] = sphereObj;
+  game.collidables[sphere] = gatherBoundingBox(sphereObj.matrix);
 
   scene.add(sphereObj.matrix);
   return sphereObj.matrix;

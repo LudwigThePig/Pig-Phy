@@ -7,7 +7,7 @@ export default class GameManager {
     this.inputs = {};
 
     // Entity Stuff
-    this.pointer = 0;
+    this.pointer = -1;
     this.entities = [];
 
     //*  Misc Settings
