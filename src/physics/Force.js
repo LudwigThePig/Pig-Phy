@@ -1,4 +1,3 @@
-import store from '../store';
 import game from '../gameManager';
 
 
@@ -35,7 +34,7 @@ export default class Force {
   }
 }
 
-const calcAirResistance = v => -0.5 * game.rho * store.coefficientAir * game.meshes[game.pig].area * (v ** 2);
+const calcAirResistance = v => -0.5 * game.rho * game.coefficientAir * game.meshes[game.pig].area * (v ** 2);
 
 const calcNewVelocity = (a, v, terminalV) => {
   const newVelocity = v + (a * game.dt);
@@ -46,9 +45,9 @@ const calcNewVelocity = (a, v, terminalV) => {
 const calcGroundFriction = force => {
   if (!game.isGrounded) return force;
 
-  const friction = store.isSliding
-    ? store.coefficientGround / 7
-    : store.coefficientGround;
+  const friction = game.isSliding
+    ? game.coefficientGround / 7
+    : game.coefficientGround;
 
   return force - (force * friction);
 };
@@ -88,26 +87,26 @@ export const applyForces = () => {
 
   // * _______Y Force_______ *
   if (!game.isGrounded) {
-    store.forceY = 0;
+    pigPhy.f.y = 0;
 
     // apply gravity force
-    store.forceY += (game.meshes[game.pig].mass * store.gravityForce);
+    pigPhy.f.y += (game.meshes[game.pig].mass * game.gravityForce);
     // apply force of air resistance
-    store.forceY += calcAirResistance(store.vy);
+    pigPhy.f.y += calcAirResistance(pigPhy.v.y);
     // Displacement of the pig
-    store.dy = (store.vy * game.dt) + (0.5 * store.ay * (game.dt ** 2));
-    game.meshes[game.pig].position.y += store.dy;
+    pigPhy.d.y = (pigPhy.v.y * game.dt) + (0.5 * pigPhy.a.y * (game.dt ** 2));
+    game.meshes[game.pig].position.y += pigPhy.d.y;
     // calculate current acceleration so we can derive velocity
-    const newAY = store.forceY / -store.gravityForce;
-    const avgAY = (newAY + store.ay) / 2;
-    store.vy += avgAY * game.dt;
+    const newAY = pigPhy.f.y / -game.gravityForce;
+    const avgAY = (newAY + pigPhy.a.y) / 2;
+    pigPhy.v.y += avgAY * game.dt;
 
-    store.ay = store.forceY / game.meshes[game.pig].mass;
+    pigPhy.a.y = pigPhy.f.y / game.meshes[game.pig].mass;
 
     // Simulate colliding with the ground
     if (game.meshes[game.pig].position.y - (game.meshes[game.pig].height / 2) <= 0) {
-      store.vy *= store.e;
-      if (store.vy > -0.5 && store.vy < 0.5) {
+      pigPhy.v.y *= game.e;
+      if (pigPhy.v.y > -0.5 && pigPhy.v.y < 0.5) {
         game.isGrounded = true;
       }
       game.meshes[game.pig].position.y = game.meshes[game.pig].height / 2;

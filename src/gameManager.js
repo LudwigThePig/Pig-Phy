@@ -1,5 +1,12 @@
+import { getCanvasDimensions } from './utils/dimensions';
+
 class GameManager {
   constructor() {
+    const { height, width } = getCanvasDimensions();
+    this.height = height;
+    this.width = width;
+
+
     // These are the components
     this.meshes = [];
     this.collidables = [];
@@ -9,6 +16,7 @@ class GameManager {
     // Player specific stuff
     this.pig = undefined; // pointer for the pig
     this.isGrounded = false;
+    this.isSliding = false;
 
     // Entity Stuff
     this.pointer = -1;

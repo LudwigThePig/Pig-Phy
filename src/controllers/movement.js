@@ -1,6 +1,5 @@
 import { forwardVelocity, rotationVelocity, jumpVelocity } from '../utils/velocities';
 import { gatherBoundingBox } from '../physics/collisionDetection';
-import store from '../store';
 import game from '../gameManager';
 
 
@@ -26,11 +25,11 @@ export const movePlayer = (player, keyboard) => {
 
 
   // Forwards And Backwards
-  if (keyboard[keys.forward] && game.isGrounded && !store.isSliding) {
+  if (keyboard[keys.forward] && game.isGrounded && !game.isSliding) {
     pigPhy.a.x += Math.sin(player.rotation.y) * forwardVelocity;
     pigPhy.a.z += Math.cos(player.rotation.y) * forwardVelocity;
   }
-  if (keyboard[keys.backwards] && game.isGrounded && !store.isSliding) {
+  if (keyboard[keys.backwards] && game.isGrounded && !game.isSliding) {
     pigPhy.a.x -= Math.sin(player.rotation.y) * forwardVelocity;
     pigPhy.a.z -= Math.cos(player.rotation.y) * forwardVelocity;
   }
@@ -48,15 +47,15 @@ export const movePlayer = (player, keyboard) => {
   // Jump Impulse Force
   if (game.isGrounded && keyboard[keys.spacebar]) {
     game.isGrounded = false;
-    store.vy += (store.jumpForce / player.mass); // Jump force is really just velocity change
+    pigPhy.v.y += (game.jumpForce / player.mass); // Jump force is really just velocity change
   }
 
 
   // Slide the Pig :)
   if (keyboard[keys.shift] || keyboard[keys.c]) {
-    store.isSliding = true;
-  } else if (store.isSliding) { // Avoid redundant reassignment
-    store.isSliding = false;
+    game.isSliding = true;
+  } else if (game.isSliding) { // Avoid redundant reassignment
+    game.isSliding = false;
   }
 };
 

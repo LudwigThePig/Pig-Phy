@@ -13,7 +13,6 @@ import { debug } from './utils/debug';
 import { calculatePosDifference } from './utils/movement';
 import TrianglePrism from './assets/trianglePrism';
 import Player from './assets/player';
-import store from './store';
 import { applyForces } from './physics/Force';
 
 
@@ -35,7 +34,7 @@ const collisionThread = new Worker('js/collision-bundle.js');
 const getKeyCode = event => event.which;
 export const keydown = event => { game.inputs[getKeyCode(event)] = true; };
 export const keyup = event => { game.inputs[getKeyCode(event)] = false; };
-let { height, width } = store;
+let { height, width } = game;
 
 
 /* ********
@@ -132,7 +131,6 @@ else {
 const loader = new GLTFLoader(loadingManager);
 const pigLoadCallback = gltf => { // TODO: ECS
   const pigObj = new Player(gltf.scene, 40);
-  store.pig = pigObj.mesh;
 
   // Start of ECS Implemenation
   const pig = game.createEntity();
@@ -199,7 +197,6 @@ loader.load( // pig
 * MAIN FUNC *
 *********** */
 const draw = () => {
-  store.updateDeltaTime();
   game.updateDeltaTime();
 
   const rigidCollisions = broadCollisionSweep(game.collidables)
