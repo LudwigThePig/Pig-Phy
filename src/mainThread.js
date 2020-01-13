@@ -3,6 +3,7 @@ import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import 'normalize.css';
 
 import './style.scss';
+import game from './gameManager';
 import { getCanvasDimensions, sceneDimensions } from './utils/dimensions';
 import color, { lightColors } from './utils/colors';
 import { moveRigidBody, movePlayer } from './controllers/movement';
@@ -12,13 +13,13 @@ import { debug } from './utils/debug';
 import { calculatePosDifference } from './utils/movement';
 import TrianglePrism from './assets/trianglePrism';
 import Player from './assets/player';
-import store from './store';
 import { applyForces } from './physics/Force';
 
 
 /* *********
 * Managers *
 ********** */
+
 const loadingManager = new THREE.LoadingManager();
 loadingManager.onLoad = () => { draw(); };
 
@@ -30,11 +31,10 @@ const collisionThread = new Worker('js/collision-bundle.js');
 /* ******
 * State *
 ******* */
-const keyboard = {};
 const getKeyCode = event => event.which;
-export const keydown = event => { keyboard[getKeyCode(event)] = true; };
-export const keyup = event => { keyboard[getKeyCode(event)] = false; };
-let { height, width } = store;
+export const keydown = event => { game.inputs[getKeyCode(event)] = true; };
+export const keyup = event => { game.inputs[getKeyCode(event)] = false; };
+let { height, width } = game;
 
 
 /* ********
@@ -89,7 +89,6 @@ scene.add(topLight);
 * Rigid & Kinematic Bodies *
 ************************** */
 const rigidBodies = [];
-const kinematicBodies = [];
 
 /**
  * @description Gathers all of the vertex data and pushes it onto the rigid bodies array
@@ -106,13 +105,6 @@ const applyRigidBody = (mesh, mass = 1) => {
   } else rigidBodies.push(gatherBoundingBox(mesh));
 };
 
-const applyKinematicBody = mesh => {
-  if (Array.isArray(mesh)) {
-    for (let i = 0; i < mesh.length; i++) {
-      kinematicBodies.push(gatherBoundingBox(mesh[i]));
-    }
-  } else kinematicBodies.push(gatherBoundingBox(mesh));
-};
 
 /* ********
 * Ground *
@@ -131,17 +123,24 @@ else {
   scene.add(gridHelper);
   scene.add(new THREE.AxesHelper(6));
 }
-applyKinematicBody(ground);
 
 
 /* 🐷🐷🐷🐷🐷
 * PIG MODEL *
 🐷🐷🐷🐷🐷🐷 */
 const loader = new GLTFLoader(loadingManager);
-const pigLoadCallback = gltf => {
-  store.pig = new Player(gltf.scene, 40).player;
-  scene.add(store.pig);
-  store.pig.add(camera);
+const pigLoadCallback = gltf => { // TODO: ECS
+  const pigObj = new Player(gltf.scene, 40);
+
+  // Start of ECS Implemenation
+  const pig = game.createEntity();
+  game.pig = pig;
+  game.meshes[pig] = pigObj.mesh;
+  game.physics[pig] = pigObj.physics;
+  console.log(game);
+
+  scene.add(game.meshes[game.pig]);
+  game.meshes[game.pig].add(camera);
   document.addEventListener('keydown', keydown);
   document.addEventListener('keyup', keyup);
 };
@@ -149,16 +148,29 @@ const pigLoadCallback = gltf => {
 const cubes = Array(20)
   .fill(0)
   .map(() => {
-    const cube = new Cube({ mass: 5 });
-    scene.add(cube.matrix);
-    return cube.matrix;
+    const cubeObj = new Cube({ mass: 5 });
+    scene.add(cubeObj.matrix);
+
+    // Start of ECS Implemenation
+    const cube = game.createEntity();
+    game.meshes[cube] = cubeObj;
+    game.collidables[cube] = gatherBoundingBox(cubeObj.matrix);
+    game.physics[cube] = cubeObj.physics;
+
+    return cubeObj.matrix;
   });
 applyRigidBody(cubes, 1);
 
 const spheres = Array(20).fill(0).map(() => {
-  const sphere = new Sphere({ mass: 15 });
-  scene.add(sphere.matrix);
-  return sphere.matrix;
+  const sphereObj = new Sphere({ mass: 15 });
+
+  // Start of ECS Implemenation
+  const sphere = game.createEntity();
+  game.meshes[sphere] = sphereObj;
+  game.collidables[sphere] = gatherBoundingBox(sphereObj.matrix);
+
+  scene.add(sphereObj.matrix);
+  return sphereObj.matrix;
 });
 applyRigidBody(spheres, 4);
 
@@ -185,32 +197,24 @@ loader.load( // pig
 * MAIN FUNC *
 *********** */
 const draw = () => {
-  store.updateDeltaTime();
+  game.updateDeltaTime();
 
-  const rigidCollisions = broadCollisionSweep(rigidBodies)
-    .filter(({ index }) => narrowCollisionSweep(rigidBodies[index]));
-  const kinematicCollisions = broadCollisionSweep(kinematicBodies, store.pig)
-    .filter(({ index }) => narrowCollisionSweep(rigidBodies[index], store.pig));
+  const rigidCollisions = broadCollisionSweep(game.collidables)
+    .filter(({ index }) => narrowCollisionSweep(game.collidables[index]));
 
-  const oldPos = JSON.parse(JSON.stringify(store.pig.position));
-  controls.update();
+  const oldPos = JSON.parse(JSON.stringify(game.meshes[game.pig].position));
+  controls.update(); // Orbital controls
   requestAnimationFrame(draw);
-  movePlayer(store.pig, keyboard);
+  movePlayer(game.meshes[game.pig], game.inputs);
 
-  const newPos = JSON.parse(JSON.stringify(store.pig.position));
-  camera.lookAt(store.pig.position);
+  const newPos = JSON.parse(JSON.stringify(game.meshes[game.pig].position));
+  camera.lookAt(game.meshes[game.pig].position);
 
-  const posDif = calculatePosDifference(oldPos, newPos);
+  const posDif = calculatePosDifference(oldPos, newPos); // Poor attempt at calculating vectors
   if (rigidCollisions.length) {
-    for (let i = 0; i < rigidCollisions.length; i++) {
-      const { id, index } = rigidCollisions[i];
-      const object = scene.getObjectById(id);
-      rigidBodies[index] = moveRigidBody(object, posDif, keyboard);
-    }
+    console.log('🎯🎯🎯🎯');
   }
 
-  if (kinematicCollisions.length) { /* Broad collision sweep */ }
-  // If not grounded, apply gravity force
   applyForces();
 
   renderer.render(scene, camera);
