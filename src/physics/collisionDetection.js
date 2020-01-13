@@ -1,5 +1,4 @@
 import * as THREE from 'three';
-import store from '../store';
 import game from '../gameManager';
 
 
@@ -81,12 +80,14 @@ export const broadCollisionSweep = (collisions) => {
  * If one of those rays passes through the other mesh, we got a hit!
  */
 export const narrowCollisionSweep = (entity) => {
-  const { vertices } = store.pig.compositeGeometry;
+  const pigMesh = game.meshes[game.pig];
+
+  const { vertices } = pigMesh.compositeGeometry;
   for (let vertexIndex = 0; vertexIndex < vertices.length; vertexIndex++) {
     const localVertex = vertices[vertexIndex].clone();
-    const globalVertex = localVertex.applyMatrix4(store.pig.matrix);
-    const directionVector = globalVertex.sub(store.pig.position);
-    const originPoint = store.pig.position.clone();
+    const globalVertex = localVertex.applyMatrix4(pigMesh.matrix);
+    const directionVector = globalVertex.sub(pigMesh.position);
+    const originPoint = pigMesh.position.clone();
 
     const ray = new THREE.Raycaster(originPoint, directionVector.clone().normalize());
     const collisionResults = ray.intersectObject(entity);
