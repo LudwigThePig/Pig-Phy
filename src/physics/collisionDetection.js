@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import store from '../store';
+import game from '../gameManager';
 
 
 /**
@@ -43,20 +44,22 @@ export const getMeshDimensions = mesh => {
  */
 export const broadCollisionSweep = (collisions) => {
   const collisionIDs = [];
-  const pigDimensions = getMeshDimensions(store.pig);
+  const pigMesh = game.meshes[game.pig];
+  const pigDimensions = getMeshDimensions(pigMesh);
   const bounds = {
-    xMin: store.pig.position.x - (pigDimensions.x / 2),
-    xMax: store.pig.position.x + (pigDimensions.x / 2),
-    yMin: store.pig.position.y - (pigDimensions.y / 2),
-    yMax: store.pig.position.y + (pigDimensions.y / 2),
-    zMin: store.pig.position.z - (pigDimensions.z / 2),
-    zMax: store.pig.position.z + (pigDimensions.z / 2),
+    xMin: pigMesh.position.x - (pigDimensions.x / 2),
+    xMax: pigMesh.position.x + (pigDimensions.x / 2),
+    yMin: pigMesh.position.y - (pigDimensions.y / 2),
+    yMax: pigMesh.position.y + (pigDimensions.y / 2),
+    zMin: pigMesh.position.z - (pigDimensions.z / 2),
+    zMax: pigMesh.position.z + (pigDimensions.z / 2),
   };
 
   // Run through each object and detect if there is a collision.
   for (let i = 0; i < collisions.length; i++) {
+    if (!collisions[i]) continue;
     const bbox = collisions[i].boundingBox;
-    if (bbox.type == 'collision') {
+    if (bbox.type === 'collision') {
       if ((bounds.xMin <= bbox.xMax && bounds.xMax >= bbox.xMin)
          && (bounds.yMin <= bbox.yMax && bounds.yMax >= bbox.yMin)
          && (bounds.zMin <= bbox.zMax && bounds.zMax >= bbox.zMin)) {
@@ -68,7 +71,6 @@ export const broadCollisionSweep = (collisions) => {
 
   return collisionIDs;
 };
-
 
 /**
  * @param { THREE.Mesh } entity An object that was caught up in our broad sweep

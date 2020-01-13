@@ -3,7 +3,7 @@ import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import 'normalize.css';
 
 import './style.scss';
-import GameManager from './GameManager';
+import game from './gameManager';
 import { getCanvasDimensions, sceneDimensions } from './utils/dimensions';
 import color, { lightColors } from './utils/colors';
 import { moveRigidBody, movePlayer } from './controllers/movement';
@@ -21,7 +21,6 @@ import { applyForces } from './physics/Force';
 * Managers *
 ********** */
 
-const game = new GameManager();
 const loadingManager = new THREE.LoadingManager();
 loadingManager.onLoad = () => { draw(); };
 
@@ -137,6 +136,7 @@ const pigLoadCallback = gltf => { // TODO: ECS
 
   // Start of ECS Implemenation
   const pig = game.createEntity();
+  game.pig = pig;
   game.meshes[pig] = pigObj.mesh;
   game.physics[pig] = pigObj.physics;
   console.log(game);
@@ -203,6 +203,7 @@ const draw = () => {
 
   const rigidCollisions = broadCollisionSweep(rigidBodies)
     .filter(({ index }) => narrowCollisionSweep(rigidBodies[index]));
+  // const collisions = broadCollisionSweep2(game.collidables);
 
   const oldPos = JSON.parse(JSON.stringify(store.pig.position));
   controls.update();

@@ -1,10 +1,11 @@
-export default class GameManager {
+class GameManager {
   constructor() {
     // These are the components
     this.meshes = [];
     this.collidables = [];
     this.physics = [];
     this.inputs = {};
+    this.pig = undefined; // The Pig
 
     // Entity Stuff
     this.pointer = -1;
@@ -40,3 +41,8 @@ export default class GameManager {
     this.dt = (this.d1 - this.d2) / 1000;
   }
 }
+
+
+const game = new GameManager();
+
+export default game;
