@@ -5,7 +5,10 @@ class GameManager {
     this.collidables = [];
     this.physics = [];
     this.inputs = {};
-    this.pig = undefined; // The Pig
+
+    // Player specific stuff
+    this.pig = undefined; // pointer for the pig
+    this.isGrounded = false;
 
     // Entity Stuff
     this.pointer = -1;

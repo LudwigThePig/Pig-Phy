@@ -18,7 +18,6 @@ export default class Player extends RigidBody {
     this.mesh.receiveShadow = true;
     this.mesh.children.forEach(child => { child.castShadow = true; });
     this.mesh.mass = mass; // in kilograms
-    this.mesh.isGrounded = true;
     this.generateGeometry();
     this.generateDimensions();
   }

@@ -44,7 +44,7 @@ const calcNewVelocity = (a, v, terminalV) => {
 };
 
 const calcGroundFriction = force => {
-  if (!store.isGrounded) return force;
+  if (!game.isGrounded) return force;
 
   const friction = store.isSliding
     ? store.coefficientGround / 7
@@ -87,7 +87,7 @@ export const applyForces = () => {
 
 
   // * _______Y Force_______ *
-  if (!store.isGrounded) {
+  if (!game.isGrounded) {
     store.forceY = 0;
 
     // apply gravity force
@@ -108,7 +108,7 @@ export const applyForces = () => {
     if (game.meshes[game.pig].position.y - (game.meshes[game.pig].height / 2) <= 0) {
       store.vy *= store.e;
       if (store.vy > -0.5 && store.vy < 0.5) {
-        store.isGrounded = true;
+        game.isGrounded = true;
       }
       game.meshes[game.pig].position.y = game.meshes[game.pig].height / 2;
     }

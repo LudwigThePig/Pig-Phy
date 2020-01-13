@@ -26,11 +26,11 @@ export const movePlayer = (player, keyboard) => {
 
 
   // Forwards And Backwards
-  if (keyboard[keys.forward] && store.isGrounded && !store.isSliding) {
+  if (keyboard[keys.forward] && game.isGrounded && !store.isSliding) {
     pigPhy.a.x += Math.sin(player.rotation.y) * forwardVelocity;
     pigPhy.a.z += Math.cos(player.rotation.y) * forwardVelocity;
   }
-  if (keyboard[keys.backwards] && store.isGrounded && !store.isSliding) {
+  if (keyboard[keys.backwards] && game.isGrounded && !store.isSliding) {
     pigPhy.a.x -= Math.sin(player.rotation.y) * forwardVelocity;
     pigPhy.a.z -= Math.cos(player.rotation.y) * forwardVelocity;
   }
@@ -46,8 +46,8 @@ export const movePlayer = (player, keyboard) => {
   }
 
   // Jump Impulse Force
-  if (store.isGrounded && keyboard[keys.spacebar]) {
-    store.isGrounded = false;
+  if (game.isGrounded && keyboard[keys.spacebar]) {
+    game.isGrounded = false;
     store.vy += (store.jumpForce / player.mass); // Jump force is really just velocity change
   }
 
