@@ -141,8 +141,8 @@ const pigLoadCallback = gltf => { // TODO: ECS
   game.physics[pig] = pigObj.physics;
   console.log(game);
 
-  scene.add(store.pig);
-  store.pig.add(camera);
+  scene.add(game.meshes[game.pig]);
+  game.meshes[game.pig].add(camera);
   document.addEventListener('keydown', keydown);
   document.addEventListener('keyup', keyup);
 };
@@ -201,25 +201,20 @@ loader.load( // pig
 const draw = () => {
   store.updateDeltaTime();
 
-  const rigidCollisions = broadCollisionSweep(rigidBodies)
-    .filter(({ index }) => narrowCollisionSweep(rigidBodies[index]));
-  // const collisions = broadCollisionSweep2(game.collidables);
+  const rigidCollisions = broadCollisionSweep(game.collidables)
+    .filter(({ index }) => narrowCollisionSweep(game.collidables[index]));
 
-  const oldPos = JSON.parse(JSON.stringify(store.pig.position));
-  controls.update();
+  const oldPos = JSON.parse(JSON.stringify(game.meshes[game.pig].position));
+  controls.update(); // Orbital controls
   requestAnimationFrame(draw);
-  movePlayer(store.pig, game.inputs);
+  movePlayer(game.meshes[game.pig], game.inputs);
 
-  const newPos = JSON.parse(JSON.stringify(store.pig.position));
-  camera.lookAt(store.pig.position);
+  const newPos = JSON.parse(JSON.stringify(game.meshes[game.pig].position));
+  camera.lookAt(game.meshes[game.pig].position);
 
-  const posDif = calculatePosDifference(oldPos, newPos);
+  const posDif = calculatePosDifference(oldPos, newPos); // Poor attempt at calculating vectors
   if (rigidCollisions.length) {
-    for (let i = 0; i < rigidCollisions.length; i++) {
-      const { id, index } = rigidCollisions[i];
-      const object = scene.getObjectById(id);
-      rigidBodies[index] = moveRigidBody(object, posDif, game.inputs);
-    }
+    console.log('🎯🎯🎯🎯');
   }
 
   applyForces();

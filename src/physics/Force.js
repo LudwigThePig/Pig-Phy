@@ -1,4 +1,6 @@
 import store from '../store';
+import game from '../gameManager';
+
 
 export default class Force {
   /**
@@ -33,10 +35,10 @@ export default class Force {
   }
 }
 
-const calcAirResistance = v => -0.5 * store.rho * store.coefficientAir * store.pig.area * (v ** 2);
+const calcAirResistance = v => -0.5 * game.rho * store.coefficientAir * game.meshes[game.pig].area * (v ** 2);
 
 const calcNewVelocity = (a, v, terminalV) => {
-  const newVelocity = v + (a * store.dt);
+  const newVelocity = v + (a * game.dt);
   const sign = newVelocity < 0 ? -1 : 1;
   return sign * Math.min(terminalV, Math.abs(newVelocity));
 };
@@ -55,8 +57,8 @@ const calcGroundFriction = force => {
 export const applyForces = () => {
   // * _______X and Z Forces_______ *
   // F = M * A
-  store.forceX = store.pig.mass * store.ax;
-  store.forceZ = store.pig.mass * store.az;
+  store.forceX = game.meshes[game.pig].mass * store.ax;
+  store.forceZ = game.meshes[game.pig].mass * store.az;
 
 
   // Frictions
@@ -70,12 +72,12 @@ export const applyForces = () => {
   store.dz = (store.vz * store.dt) + (0.5 * store.az * (store.dt ** 2));
 
   // Update Position with Displacement
-  store.pig.position.x += store.dx;
-  store.pig.position.z += store.dz;
+  game.meshes[game.pig].position.x += store.dx;
+  game.meshes[game.pig].position.z += store.dz;
 
   // Calculate New Acceleration
-  store.ax = store.forceX / store.pig.mass;
-  store.az = store.forceZ / store.pig.mass;
+  store.ax = store.forceX / game.meshes[game.pig].mass;
+  store.az = store.forceZ / game.meshes[game.pig].mass;
 
   // Calculate New Velocity
   store.vx = calcNewVelocity(store.vx, store.ax, store.terminalVelocity.xz);
@@ -87,26 +89,26 @@ export const applyForces = () => {
     store.forceY = 0;
 
     // apply gravity force
-    store.forceY += (store.pig.mass * store.gravityForce);
+    store.forceY += (game.meshes[game.pig].mass * store.gravityForce);
     // apply force of air resistance
     store.forceY += calcAirResistance(store.vy);
     // Displacement of the pig
     store.dy = (store.vy * store.dt) + (0.5 * store.ay * (store.dt ** 2));
-    store.pig.position.y += store.dy;
+    game.meshes[game.pig].position.y += store.dy;
     // calculate current acceleration so we can derive velocity
     const newAY = store.forceY / -store.gravityForce;
     const avgAY = (newAY + store.ay) / 2;
     store.vy += avgAY * store.dt;
 
-    store.ay = store.forceY / store.pig.mass;
+    store.ay = store.forceY / game.meshes[game.pig].mass;
 
     // Simulate colliding with the ground
-    if (store.pig.position.y - (store.pig.height / 2) <= 0) {
+    if (game.meshes[game.pig].position.y - (game.meshes[game.pig].height / 2) <= 0) {
       store.vy *= store.e;
       if (store.vy > -0.5 && store.vy < 0.5) {
         store.isGrounded = true;
       }
-      store.pig.position.y = store.pig.height / 2;
+      game.meshes[game.pig].position.y = game.meshes[game.pig].height / 2;
     }
   }
 };
