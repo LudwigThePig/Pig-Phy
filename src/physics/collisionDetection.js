@@ -36,6 +36,10 @@ export const getMeshDimensions = mesh => {
 };
 
 
+export const isNarrowCollision = (entityA, entityB) => {};
+export const isBroadCollision = (entityA, entityB) => {};
+export const handleCollision = (entityA, entityB) => {};
+
 /**
  * @param { Array<objects> } collisions Array of bounding vertices
  * @param { THREE.Mesh } pig the player to compare vertices against
