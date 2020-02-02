@@ -39,7 +39,7 @@ export const getMeshDimensions = mesh => {
 /**
  * @param {THREE.Mesh} entityA a collidable entity
  * @param {THREE.Mesh} entityB another collidable entity
- * @returns {bool} true if the two entities' bounding box intersect.
+ * @returns {boolean} true if the two entities' bounding box intersect.
  * @description This function compares two entities against eachother to determine if there bounding
  * boxes are interescting. Bounding boxes are just six coordinates--min and max x/y/z coordinates.
  * As the name suggests, this is a rough and cheap approximation. If this tests passes, we perform
@@ -80,16 +80,25 @@ export const isBroadCollision = (entityA, entityB) => {
 };
 
 
+/**
+ * @param {THREE.Mesh} entityA a collidable entity
+ * @param {THREE.Mesh} entityB another collidable entity
+ * @returns {boolean} true if the entities are intersecting
+ */
 export const isNarrowCollision = (entityA, entityB) => {
   let rayCastingEntity;
   let targetEntity;
-  if (entityB.name === 'pig') {
-    rayCastingEntity = entityB;
-    targetEntity = entityA;
-  } else {
+
+  // Raycasting from the entity with more verticies provides more precision.
+  // Not sure if this is good practice...
+  if (entityA.geometry.vertices.length > entityB.geometry.vertices.length) {
     rayCastingEntity = entityA;
     targetEntity = entityB;
+  } else {
+    rayCastingEntity = entityB;
+    targetEntity = entityA;
   }
+
   const { vertices } = rayCastingEntity.geometry;
 
   for (let vertexIndex = 0; vertexIndex < vertices.length; vertexIndex++) {
@@ -107,6 +116,7 @@ export const isNarrowCollision = (entityA, entityB) => {
   }
   return false;
 };
+
 export const handleCollision = (entityA, entityB) => {
   /**
    * Some notes one what to do with this collision
@@ -124,6 +134,8 @@ export const handleCollision = (entityA, entityB) => {
    * A.v = (A.u * (A.m - B.m) + (2 * B.m * B.u)) / (A.m + B.m)
    * B.v = (B.u * (B.m - A.m) + (2 * A.m * A.u)) / (A.m + B.m)
    */
+  entityA.position.x += 1;
+  entityB.position.x -= 1;
 };
 
 /**

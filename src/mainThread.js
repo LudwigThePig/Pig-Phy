@@ -6,13 +6,12 @@ import './style.scss';
 import game from './gameManager';
 import { getCanvasDimensions, sceneDimensions } from './utils/dimensions';
 import color, { lightColors } from './utils/colors';
-import { moveRigidBody, movePlayer } from './controllers/movement';
+import { movePlayer } from './controllers/movement';
 import { Cube, Sphere } from './assets/shapes';
 import {
-  gatherBoundingBox, broadCollisionSweep, narrowCollisionSweep, isBroadCollision, isNarrowCollision, handleCollision,
+  gatherBoundingBox, isBroadCollision, isNarrowCollision, handleCollision,
 } from './physics/collisionDetection';
 import { debug } from './utils/debug';
-import { calculatePosDifference } from './utils/movement';
 import TrianglePrism from './assets/trianglePrism';
 import Player from './assets/player';
 import { applyForces } from './physics/Force';
@@ -87,27 +86,6 @@ topLight.shadowCameraVisible = true; // for debugging
 scene.add(topLight);
 
 
-/* *************************
-* Rigid & Kinematic Bodies *
-************************** */
-const rigidBodies = [];
-
-/**
- * @description Gathers all of the vertex data and pushes it onto the rigid bodies array
- * @param { Array } mesh a mesh or array of meshes.
- * @returns void
- */
-const applyRigidBody = (mesh, mass = 1) => {
-  if (Array.isArray(mesh)) {
-    for (let i = 0; i < mesh.length; i++) {
-      mesh[i].mass = mass;
-      rigidBodies.push(gatherBoundingBox(mesh[i]));
-    }
-    mesh.mass = mass;
-  } else rigidBodies.push(gatherBoundingBox(mesh));
-};
-
-
 /* ********
 * Ground *
 ********** */
@@ -139,9 +117,8 @@ const pigLoadCallback = gltf => { // TODO: ECS
   const pig = game.createEntity();
   game.pig = pig;
   game.meshes[pig] = pigObj.mesh;
-  game.collidables[pig] = gatherBoundingBox(pigObj.mesh);
+  game.collidables[pig] = pigObj.mesh;
   game.physics[pig] = pigObj.physics;
-  console.log(game);
 
   scene.add(game.meshes[game.pig]);
   game.meshes[game.pig].add(camera);
@@ -158,12 +135,11 @@ const cubes = Array(20)
     // Start of ECS Implemenation
     const cube = game.createEntity();
     game.meshes[cube] = cubeObj;
-    game.collidables[cube] = gatherBoundingBox(cubeObj.matrix);
+    game.collidables[cube] = cubeObj.matrix;
     game.physics[cube] = cubeObj.physics;
 
     return cubeObj.matrix;
   });
-applyRigidBody(cubes, 1);
 
 const spheres = Array(20).fill(0).map(() => {
   const sphereObj = new Sphere({ mass: 15 });
@@ -171,13 +147,10 @@ const spheres = Array(20).fill(0).map(() => {
   // Start of ECS Implemenation
   const sphere = game.createEntity();
   game.meshes[sphere] = sphereObj;
-  // TODO: remove gather bounding box. It's utility for identifying types is matched through the ecs
-  // todo: and the bounding box is created in the class constructor instead.
-  game.collidables[sphere] = gatherBoundingBox(sphereObj.matrix);
+  game.collidables[sphere] = sphereObj.matrix;
   scene.add(sphereObj.matrix);
   return sphereObj.matrix;
 });
-applyRigidBody(spheres, 4);
 
 
 // Kinematic Slope for testing gravity forces
@@ -204,9 +177,7 @@ loader.load( // pig
 const draw = () => {
   game.updateDeltaTime();
 
-  const rigidCollisions = broadCollisionSweep(game.collidables)
-    .filter(({ index }) => narrowCollisionSweep(game.collidables[index]));
-
+  // Collision Detection
   for (let i = 0; i < game.collidables.length - 1; i++) {
     for (let j = i + 1; j < game.collidables.length; j++) {
       if (isBroadCollision(game.collidables[i], game.collidables[j])
@@ -216,18 +187,12 @@ const draw = () => {
     }
   }
 
-  const oldPos = JSON.parse(JSON.stringify(game.meshes[game.pig].position));
   controls.update(); // Orbital controls
   requestAnimationFrame(draw);
   movePlayer(game.meshes[game.pig], game.inputs);
 
-  const newPos = JSON.parse(JSON.stringify(game.meshes[game.pig].position));
   camera.lookAt(game.meshes[game.pig].position);
-
-  const posDif = calculatePosDifference(oldPos, newPos); // Poor attempt at calculating vectors
-
   applyForces();
-
   renderer.render(scene, camera);
 };
 
