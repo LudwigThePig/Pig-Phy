@@ -73,7 +73,6 @@ export const isBroadCollision = (entityA, entityB) => {
   if ((boundsA.xMin <= boundsB.xMax && boundsA.xMax >= boundsB.xMin)
       && (boundsA.yMin <= boundsB.yMax && boundsA.yMax >= boundsB.yMin)
       && (boundsA.zMin <= boundsB.zMax && boundsA.zMax >= boundsB.zMin)) {
-    console.log(boundsA, boundsB);
     entityB.position.y += 0.1;
     return false;
   }
