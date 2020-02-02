@@ -138,6 +138,7 @@ const pigLoadCallback = gltf => { // TODO: ECS
   const pig = game.createEntity();
   game.pig = pig;
   game.meshes[pig] = pigObj.mesh;
+  game.collidables[pig] = gatherBoundingBox(pigObj.mesh);
   game.physics[pig] = pigObj.physics;
   console.log(game);
 
@@ -169,8 +170,9 @@ const spheres = Array(20).fill(0).map(() => {
   // Start of ECS Implemenation
   const sphere = game.createEntity();
   game.meshes[sphere] = sphereObj;
+  // TODO: remove gather bounding box. It's utility for identifying types is matched through the ecs
+  // todo: and the bounding box is created in the class constructor instead.
   game.collidables[sphere] = gatherBoundingBox(sphereObj.matrix);
-
   scene.add(sphereObj.matrix);
   return sphereObj.matrix;
 });
