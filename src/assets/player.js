@@ -1,6 +1,4 @@
 import * as THREE from 'three';
-import { debug, CollisionBox } from '../utils/debug';
-import { getMeshDimensions } from '../physics/collisionDetection';
 import RigidBody from './RigidBody';
 
 
@@ -8,12 +6,6 @@ export default class Player extends RigidBody {
   constructor(obj, mass) {
     super(obj, mass);
     this.mesh = obj;
-    if (debug) {
-      this.mesh.children.push(new CollisionBox(this.mesh).box);
-      this.mesh.position.set(0, 10.12, 0);
-    } else {
-      this.mesh.position.set(0, 1.12, 0);
-    }
     this.mesh.castShadow = true;
     this.mesh.receiveShadow = true;
     this.mesh.children.forEach(child => { child.castShadow = true; });

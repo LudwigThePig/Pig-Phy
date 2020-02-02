@@ -1,5 +1,38 @@
 import * as THREE from 'three';
 
+/**
+ * @param { THREE.Mesh } mesh
+ * @returns { object } object containing all of the bounding verticies for a mesh
+ */
+export const gatherBoundingBox = mesh => {
+  const boundingBox = new THREE.Box3().setFromObject(mesh);
+  mesh.boundingBox = {
+    id: mesh.id,
+    type: 'collision',
+    xMin: boundingBox.min.x,
+    xMax: boundingBox.max.x,
+    yMin: boundingBox.min.y,
+    yMax: boundingBox.max.y,
+    zMin: boundingBox.min.z,
+    zMax: boundingBox.max.z,
+  };
+  return mesh;
+};
+
+
+/**
+ * @param { THREE.Mesh } player
+ * @returns returns the maximum width, height, and depth of a mesh
+ */
+export const getMeshDimensions = mesh => {
+  const meshDimensions = new THREE.Box3().setFromObject(mesh);
+  return {
+    x: meshDimensions.max.x - meshDimensions.min.x,
+    y: meshDimensions.max.y - meshDimensions.min.y,
+    z: meshDimensions.max.z - meshDimensions.min.z,
+  };
+};
+
 
 /**
  * @param {THREE.Mesh} entityA a collidable entity

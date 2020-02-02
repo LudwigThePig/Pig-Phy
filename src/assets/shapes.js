@@ -2,7 +2,6 @@
 import * as THREE from 'three';
 import { randomPosition } from '../utils/randoms';
 import colors from '../utils/colors';
-import { CollisionBox } from '../utils/debug';
 import RigidBody from './RigidBody';
 
 
@@ -19,11 +18,6 @@ class Shape extends RigidBody {
   constructor(mass) {
     super(mass);
     this.matrix = new THREE.Shape();
-  }
-
-  getCollisionBox() {
-    const { box } = new CollisionBox(this.matrix);
-    return box;
   }
 }
 
