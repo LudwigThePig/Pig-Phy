@@ -133,7 +133,8 @@ else {
 const loader = new GLTFLoader(loadingManager);
 const pigLoadCallback = gltf => { // TODO: ECS
   const pigObj = new Player(gltf.scene, 40);
-
+  pigObj.mesh.name = 'pig';
+  pigObj.mesh.type = 'pig';
   // Start of ECS Implemenation
   const pig = game.createEntity();
   game.pig = pig;
@@ -205,9 +206,7 @@ const draw = () => {
 
   const rigidCollisions = broadCollisionSweep(game.collidables)
     .filter(({ index }) => narrowCollisionSweep(game.collidables[index]));
-  if (rigidCollisions.length) {
-    console.log('🎯🎯🎯🎯', rigidCollisions);
-  }
+
   for (let i = 0; i < game.collidables.length - 1; i++) {
     for (let j = i + 1; j < game.collidables.length; j++) {
       if (isBroadCollision(game.collidables[i], game.collidables[j])

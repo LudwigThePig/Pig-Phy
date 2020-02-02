@@ -72,14 +72,59 @@ export const isBroadCollision = (entityA, entityB) => {
   if ((absBoundA.xMin <= absBoundB.xMax && absBoundA.xMax >= absBoundB.xMin)
       && (absBoundA.yMin <= absBoundB.yMax && absBoundA.yMax >= absBoundB.yMin)
       && (absBoundA.zMin <= absBoundB.zMax && absBoundA.zMax >= absBoundB.zMin)) {
+    // entityB.position.y += 0.1;
+
     return true;
   }
   return false;
 };
-export const isNarrowCollision = (entityA, entityB) => {
 
+
+export const isNarrowCollision = (entityA, entityB) => {
+  let rayCastingEntity;
+  let targetEntity;
+  if (entityB.name === 'pig') {
+    rayCastingEntity = entityB;
+    targetEntity = entityA;
+  } else {
+    rayCastingEntity = entityA;
+    targetEntity = entityB;
+  }
+  const { vertices } = rayCastingEntity.geometry;
+
+  for (let vertexIndex = 0; vertexIndex < vertices.length; vertexIndex++) {
+    const localVertex = vertices[vertexIndex].clone();
+    const globalVertex = localVertex.applyMatrix4(rayCastingEntity.matrix);
+    const directionVector = globalVertex.sub(rayCastingEntity.position);
+    const originPoint = rayCastingEntity.position.clone();
+
+    const ray = new THREE.Raycaster(originPoint, directionVector.clone().normalize());
+    const collisionResults = ray.intersectObject(targetEntity);
+
+    if (collisionResults.length > 0 && collisionResults[0].distance < directionVector.length()) {
+      return true;
+    }
+  }
+  return false;
 };
-export const handleCollision = (entityA, entityB) => {};
+export const handleCollision = (entityA, entityB) => {
+  /**
+   * Some notes one what to do with this collision
+   *
+   * 1. Need momentum of both bodies before collision (mass * velocity)
+   * 2. Need to apply resultant velocities to each body
+   * 3. Apply air resistance and such to the other bodies
+   *
+   *
+   * Calculating new velocities (from stack exchange)
+   * v: velocity after collision
+   * u: velocity before collision
+   * m: mass (use the largest number possible for the mass of a fixed, static object)
+   *
+   * A.v = (A.u * (A.m - B.m) + (2 * B.m * B.u)) / (A.m + B.m)
+   * B.v = (B.u * (B.m - A.m) + (2 * A.m * A.u)) / (A.m + B.m)
+   */
+};
 
 /**
  * @param { Array<objects> } collisions Array of bounding vertices
@@ -138,23 +183,7 @@ export const narrowCollisionSweep = (entity) => {
     const collisionResults = ray.intersectObject(entity);
 
     if (collisionResults.length > 0 && collisionResults[0].distance < directionVector.length()) {
-      console.log(entity);
-      /**
-       * Some notes one what to do with this collision
-       *
-       * 1. Need momentum of both bodies before collision (mass * velocity)
-       * 2. Need to apply resultant velocities to each body
-       * 3. Apply air resistance and such to the other bodies
-       *
-       *
-       * Calculating new velocities (from stack exchange)
-       * v: velocity after collision
-       * u: velocity before collision
-       * m: mass (use the largest number possible for the mass of a fixed, static object)
-       *
-       * A.v = (A.u * (A.m - B.m) + (2 * B.m * B.u)) / (A.m + B.m)
-       * B.v = (B.u * (B.m - A.m) + (2 * A.m * A.u)) / (A.m + B.m)
-       */
+      console.log('old');
 
       return true;
     }
