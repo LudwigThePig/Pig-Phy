@@ -87,6 +87,9 @@ export const applyForces = () => {
 
   // * _______Y Force_______ *
   if (!game.isGrounded) {
+    // The position of the pig when on the ground
+    const groundPos = game.meshes[game.pig].height / 4;
+
     pigPhy.f.y = 0;
 
     // apply gravity force
@@ -104,12 +107,12 @@ export const applyForces = () => {
     pigPhy.a.y = pigPhy.f.y / game.meshes[game.pig].mass;
 
     // Simulate colliding with the ground
-    if (game.meshes[game.pig].position.y - (game.meshes[game.pig].height / 2) <= 0) {
+    if (game.meshes[game.pig].position.y - groundPos <= 0) {
       pigPhy.v.y *= game.e;
       if (pigPhy.v.y > -0.5 && pigPhy.v.y < 0.5) {
         game.isGrounded = true;
       }
-      game.meshes[game.pig].position.y = game.meshes[game.pig].height / 2;
+      game.meshes[game.pig].position.y = groundPos;
     }
   }
 };
