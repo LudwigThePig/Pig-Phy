@@ -2,20 +2,6 @@ import * as THREE from 'three';
 
 
 /**
- * @param { THREE.Mesh } player
- * @returns returns the maximum width, height, and depth of a mesh
- */
-export const getMeshDimensions = mesh => {
-  const meshDimensions = new THREE.Box3().setFromObject(mesh);
-  return {
-    x: meshDimensions.max.x - meshDimensions.min.x,
-    y: meshDimensions.max.y - meshDimensions.min.y,
-    z: meshDimensions.max.z - meshDimensions.min.z,
-  };
-};
-
-
-/**
  * @param {THREE.Mesh} entityA a collidable entity
  * @param {THREE.Mesh} entityB another collidable entity
  * @returns {boolean} true if the two entities' bounding box intersect.

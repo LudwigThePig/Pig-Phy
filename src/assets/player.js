@@ -39,7 +39,10 @@ export default class Player extends RigidBody {
   }
 
   generateDimensions() {
-    const { x, y, z } = getMeshDimensions(this.mesh);
+    const meshDimensions = new THREE.Box3().setFromObject(this.mesh);
+    const x = meshDimensions.max.x - meshDimensions.min.x;
+    const y = meshDimensions.max.y - meshDimensions.min.y;
+    const z = meshDimensions.max.z - meshDimensions.min.z;
 
     this.mesh.width = x;
     this.mesh.height = y;
