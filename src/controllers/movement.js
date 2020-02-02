@@ -1,5 +1,4 @@
 import { forwardVelocity, rotationVelocity, jumpVelocity } from '../utils/velocities';
-import { gatherBoundingBox } from '../physics/collisionDetection';
 import game from '../gameManager';
 
 
@@ -59,23 +58,4 @@ export const movePlayer = (player, keyboard) => {
   }
 };
 
-
-/**
- * @description moves an object on collision
- * @param { Three.Mesh } mesh
- * @param {*} direction
- * @returns { object } the new bounding box for the relocated mesh
- */
-export const moveRigidBody = (mesh, pos, keyboard) => {
-  const padding = 1.4;
-  const paddedForwardVelocity = padding * forwardVelocity;
-  const paddedRotationVelocity = padding * rotationVelocity;
-  if (keyboard[keys.left] || keyboard[keys.rotation]) {
-    mesh.position.x += Math.sin(mesh.rotation.y) * paddedForwardVelocity;
-    mesh.position.z += Math.cos(mesh.rotation.y) * paddedForwardVelocity;
-  }
-  mesh.position.x += (pos.x * padding);
-  mesh.position.y += (pos.y * padding);
-  mesh.position.z += (pos.z * padding);
-  return gatherBoundingBox(mesh);
-};
+export const filler = 'stop yelling at me!';

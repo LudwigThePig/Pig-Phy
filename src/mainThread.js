@@ -9,7 +9,7 @@ import color, { lightColors } from './utils/colors';
 import { movePlayer } from './controllers/movement';
 import { Cube, Sphere } from './assets/shapes';
 import {
-  gatherBoundingBox, isBroadCollision, isNarrowCollision, handleCollision,
+  isBroadCollision, isNarrowCollision, handleCollision,
 } from './physics/collisionDetection';
 import { debug } from './utils/debug';
 import TrianglePrism from './assets/trianglePrism';
