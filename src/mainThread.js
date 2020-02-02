@@ -8,7 +8,9 @@ import { getCanvasDimensions, sceneDimensions } from './utils/dimensions';
 import color, { lightColors } from './utils/colors';
 import { moveRigidBody, movePlayer } from './controllers/movement';
 import { Cube, Sphere } from './assets/shapes';
-import { gatherBoundingBox, broadCollisionSweep, narrowCollisionSweep } from './physics/collisionDetection';
+import {
+  gatherBoundingBox, broadCollisionSweep, narrowCollisionSweep, isBroadCollision, isNarrowCollision, handleCollision,
+} from './physics/collisionDetection';
 import { debug } from './utils/debug';
 import { calculatePosDifference } from './utils/movement';
 import TrianglePrism from './assets/trianglePrism';
@@ -201,6 +203,17 @@ const draw = () => {
 
   const rigidCollisions = broadCollisionSweep(game.collidables)
     .filter(({ index }) => narrowCollisionSweep(game.collidables[index]));
+  if (rigidCollisions.length) {
+    console.log('🎯🎯🎯🎯', rigidCollisions);
+  }
+  for (let i = 0; i < game.collidables.length - 1; i++) {
+    for (let j = i + 1; j < game.collidables.length; j++) {
+      if (isBroadCollision(game.collidables[i], game.collidables[j])
+      && isNarrowCollision(game.collidables[i], game.collidables[j])) {
+        handleCollision(game.collidables[i], game.collidables[j]);
+      }
+    }
+  }
 
   const oldPos = JSON.parse(JSON.stringify(game.meshes[game.pig].position));
   controls.update(); // Orbital controls
@@ -211,9 +224,6 @@ const draw = () => {
   camera.lookAt(game.meshes[game.pig].position);
 
   const posDif = calculatePosDifference(oldPos, newPos); // Poor attempt at calculating vectors
-  if (rigidCollisions.length) {
-    console.log('🎯🎯🎯🎯');
-  }
 
   applyForces();
 

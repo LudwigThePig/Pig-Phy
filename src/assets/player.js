@@ -33,6 +33,8 @@ export default class Player extends RigidBody {
         geometry.merge(resolvedGeometry);
       }
     }
+    geometry.computeBoundingBox();
+    this.mesh.geometry = geometry;
     this.mesh.compositeGeometry = geometry;
   }
 

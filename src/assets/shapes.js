@@ -33,6 +33,7 @@ export class Cube extends Shape {
   }) {
     super(mass);
     this.geometry = new THREE.BoxGeometry(height, width, depth);
+    this.geometry.computeBoundingBox();
     this.material = new THREE.MeshPhongMaterial({ color: colors.pink });
     this.matrix = new THREE.Mesh(this.geometry, this.material);
     this.matrix.position.set(pos.x, height / 2, pos.z);
@@ -46,6 +47,7 @@ export class Sphere extends Shape {
   constructor({ radius = 1, pos = defaultPos(), mass }) {
     super(mass);
     this.geometry = new THREE.SphereGeometry(radius, 12, 12);
+    this.geometry.computeBoundingBox();
     this.material = new THREE.MeshPhongMaterial({ color: colors.purple });
     this.matrix = new THREE.Mesh(this.geometry, this.material);
     this.matrix.position.set(pos.x, radius, pos.z);
