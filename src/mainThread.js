@@ -9,7 +9,7 @@ import color, { lightColors } from './utils/colors';
 import { moveRigidBody, movePlayer } from './controllers/movement';
 import { Cube, Sphere } from './assets/shapes';
 import {
- gatherBoundingBox, broadCollisionSweep, narrowCollisionSweep, isBroadCollision, isNarrowCollision, handleCollision 
+  gatherBoundingBox, broadCollisionSweep, narrowCollisionSweep, isBroadCollision, isNarrowCollision, handleCollision,
 } from './physics/collisionDetection';
 import { debug } from './utils/debug';
 import { calculatePosDifference } from './utils/movement';
@@ -207,7 +207,7 @@ const draw = () => {
     console.log('🎯🎯🎯🎯', rigidCollisions);
   }
   for (let i = 0; i < game.collidables.length - 1; i++) {
-    for (let j = i; j < game.collidables.length; j++) {
+    for (let j = i + 1; j < game.collidables.length; j++) {
       if (isBroadCollision(game.collidables[i], game.collidables[j])
       && isNarrowCollision(game.collidables[i], game.collidables[j])) {
         handleCollision(game.collidables[i], game.collidables[j]);

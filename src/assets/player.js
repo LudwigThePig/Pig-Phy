@@ -35,6 +35,7 @@ export default class Player extends RigidBody {
     }
     geometry.computeBoundingBox();
     this.mesh.geometry = geometry;
+    this.mesh.compositeGeometry = geometry;
   }
 
   generateDimensions() {

@@ -33,6 +33,7 @@ export class Cube extends Shape {
   }) {
     super(mass);
     this.geometry = new THREE.BoxGeometry(height, width, depth);
+    this.geometry.computeBoundingBox();
     this.material = new THREE.MeshPhongMaterial({ color: colors.pink });
     this.matrix = new THREE.Mesh(this.geometry, this.material);
     this.matrix.position.set(pos.x, height / 2, pos.z);
