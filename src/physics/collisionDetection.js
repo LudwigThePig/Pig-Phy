@@ -1,4 +1,5 @@
 import * as THREE from 'three';
+import game from '../gameManager';
 
 /**
  * @param { THREE.Mesh } mesh

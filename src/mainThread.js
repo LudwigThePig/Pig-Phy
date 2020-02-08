@@ -144,12 +144,13 @@ const cubes = Array(20)
 
 const spheres = Array(20).fill(0).map(() => {
   const sphereObj = new Sphere({ mass: 15 });
+  scene.add(sphereObj.matrix);
 
   // Start of ECS Implemenation
   const sphere = game.createEntity();
   game.meshes[sphere] = sphereObj;
   game.collidables[sphere] = sphereObj.matrix;
-  scene.add(sphereObj.matrix);
+  game.physics[sphere] = sphereObj.physics;
   return sphereObj.matrix;
 });
 
