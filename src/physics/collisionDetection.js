@@ -121,6 +121,7 @@ export const isNarrowCollision = (entityA, entityB) => {
  * @returns {void} function mutates the entities
  */
 export const handleCollision = (A, B) => {
+  if (!A || !B) return;
   /**
    * Some notes one what to do with this collision
    *

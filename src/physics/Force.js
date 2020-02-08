@@ -124,36 +124,3 @@ export const applyForces = entityPtr => {
     }
   }
 };
-
-
-// This is the same as above but abstracted to handle an instance of RigidBody
-export const applyRigidBodyForces = entity => {
-  // * _______X and Z Forces_______ *
-  // F = M * A
-  entity.f.x = entity.mass * entity.a.x;
-  entity.f.z = entity.mass * entity.a.z;
-
-
-  // Frictions
-  entity.f.x += calcAirResistance(entity.v.x);
-  entity.f.z += calcAirResistance(entity.v.z);
-  entity.f.x = calcGroundFriction(entity.f.x);
-  entity.f.z = calcGroundFriction(entity.f.z);
-
-  // Calculate Displacement (Verlet Integration)
-  entity.d.x = (entity.v.x * game.dt) + (0.5 * entity.a.x * (game.dt ** 2));
-  entity.d.z = (entity.v.z * game.dt) + (0.5 * entity.a.z * (game.dt ** 2));
-
-  // Update Position with Displacement
-  entity.position.x += entity.d.x;
-  entity.position.z += entity.d.z;
-
-  // Calculate New Acceleration
-  entity.a.x = entity.f.x / entity.mass;
-  entity.a.z = entity.f.z / entity.mass;
-
-  // Calculate New Velocity
-  entity.v.x = calcNewVelocity(entity.v.x, entity.a.x, game.terminalVelocity.xz);
-  entity.v.z = calcNewVelocity(entity.v.z, entity.a.z, game.terminalVelocity.xz);
-  // TODO: Y Force Calc
-};
