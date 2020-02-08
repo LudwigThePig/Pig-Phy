@@ -88,6 +88,10 @@ export const applyForces = () => {
   // * _______Y Force_______ *
   if (!game.isGrounded) {
     // The position of the pig when on the ground
+    // In the future this will be a helper function that
+    // gets the height of the terrain's height at the pig's
+    // x and z position. The terrain height will likely be
+    // kept in a matrix
     const groundPos = game.meshes[game.pig].height / 4;
 
     pigPhy.f.y = 0;
@@ -110,6 +114,9 @@ export const applyForces = () => {
     if (game.meshes[game.pig].position.y - groundPos <= 0) {
       pigPhy.v.y *= game.e;
       if (pigPhy.v.y > -0.5 && pigPhy.v.y < 0.5) {
+        pigPhy.a.y = 0;
+        pigPhy.f.y = 0;
+        pigPhy.d.y = 0;
         game.isGrounded = true;
       }
       game.meshes[game.pig].position.y = groundPos;

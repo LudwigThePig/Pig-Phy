@@ -115,7 +115,12 @@ export const isNarrowCollision = (entityA, entityB) => {
   return false;
 };
 
-export const handleCollision = (entityA, entityB) => {
+/**
+ * @param {THREE.Mesh} A One entity in a collision event
+ * @param {THREE.Mesh} B The other entity in a collision event
+ * @returns {void} function mutates the entities
+ */
+export const handleCollision = (A, B) => {
   /**
    * Some notes one what to do with this collision
    *
@@ -132,6 +137,13 @@ export const handleCollision = (entityA, entityB) => {
    * A.v = (A.u * (A.m - B.m) + (2 * B.m * B.u)) / (A.m + B.m)
    * B.v = (B.u * (B.m - A.m) + (2 * A.m * A.u)) / (A.m + B.m)
    */
-  entityA.position.x += 0.1;
-  entityB.position.x -= 0.1;
+
+  // Copy of velocity before collision
+  const AU = { x: A.v.x, y: A.v.y, z: A.v.z };
+  const BU = { x: B.v.x, y: B.v.y, z: B.v.z };
+  A.v.x = (AU.x * (A.mass - B.mass) + (2 * B.mass * BU.x)) / (A.mass + B.mass);
+  A.v.z = (AU.z * (A.mass - B.mass) + (2 * B.mass * BU.z)) / (A.mass + B.mass);
+
+  B.v.x = (BU.x * (B.mass - A.mass) + (2 * A.mass * AU.x)) / (A.mass + B.mass);
+  B.v.z = (BU.z * (B.mass - A.mass) + (2 * A.mass * AU.z)) / (A.mass + B.mass);
 };

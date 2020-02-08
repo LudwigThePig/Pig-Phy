@@ -182,7 +182,7 @@ const draw = () => {
     for (let j = i + 1; j < game.collidables.length; j++) {
       if (isBroadCollision(game.collidables[i], game.collidables[j])
       && isNarrowCollision(game.collidables[i], game.collidables[j])) {
-        handleCollision(game.collidables[i], game.collidables[j]);
+        handleCollision(game.physics[i], game.physics[j]);
       }
     }
   }
