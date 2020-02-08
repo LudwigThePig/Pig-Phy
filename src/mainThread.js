@@ -108,17 +108,18 @@ else {
 /* 🐷🐷🐷🐷🐷
 * PIG MODEL *
 🐷🐷🐷🐷🐷🐷 */
+let pigPointer;
 const loader = new GLTFLoader(loadingManager);
 const pigLoadCallback = gltf => { // TODO: ECS
   const pigObj = new Player(gltf.scene, 40);
   pigObj.mesh.name = 'pig';
   pigObj.mesh.type = 'pig';
   // Start of ECS Implemenation
-  const pig = game.createEntity();
-  game.pig = pig;
-  game.meshes[pig] = pigObj.mesh;
-  game.collidables[pig] = pigObj.mesh;
-  game.physics[pig] = pigObj.physics;
+  pigPointer = game.createEntity();
+  game.pig = pigPointer;
+  game.meshes[pigPointer] = pigObj.mesh;
+  game.collidables[pigPointer] = pigObj.mesh;
+  game.physics[pigPointer] = pigObj.physics;
 
   scene.add(game.meshes[game.pig]);
   game.meshes[game.pig].add(camera);
@@ -192,7 +193,7 @@ const draw = () => {
   movePlayer(game.meshes[game.pig], game.inputs);
 
   camera.lookAt(game.meshes[game.pig].position);
-  applyForces();
+  applyForces(pigPointer);
   renderer.render(scene, camera);
 };
 

@@ -7,7 +7,7 @@ class GameManager {
     this.width = width;
 
 
-    // These are the components
+    // * Entity Components
     this.meshes = [];
     this.collidables = [];
     this.physics = [];
