@@ -94,40 +94,38 @@ export const applyForces = entityPtr => {
 
 
   // * _______Y Force_______ *
-  if (!game.isGrounded) {
-    // The position of the pig when on the ground
-    // In the future this will be a helper function that
-    // gets the height of the terrain's height at the pig's
-    // x and z position. The terrain height will likely be
-    // kept in a matrix
-    const groundPos = game.meshes[game.pig].height / 4;
+  // The position of the entity when on the ground
+  // In the future this will be a helper function that
+  // gets the height of the terrain's height at the entity's
+  // x and z position. The terrain height will likely be
+  // kept in a matrix
+  const groundPos = game.meshes[game.pig].height / 4;
 
-    phy.f.y = 0;
+  phy.f.y = 0;
 
-    // apply gravity force
-    phy.f.y += (game.meshes[game.pig].mass * game.gravityForce);
-    // apply force of air resistance
-    phy.f.y += calcAirResistance(phy.v.y);
-    // Displacement of the pig
-    phy.d.y = (phy.v.y * game.dt) + (0.5 * phy.a.y * (game.dt ** 2));
-    game.meshes[game.pig].position.y += phy.d.y;
-    // calculate current acceleration so we can derive velocity
-    const newAY = phy.f.y / -game.gravityForce;
-    const avgAY = (newAY + phy.a.y) / 2;
-    phy.v.y += avgAY * game.dt;
+  // apply gravity force
+  phy.f.y += (phy.mass * game.gravityForce);
+  // apply force of air resistance
+  phy.f.y += calcAirResistance(phy.v.y);
+  // Displacement of the pig
+  phy.d.y = (phy.v.y * game.dt) + (0.5 * phy.a.y * (game.dt ** 2));
+  mesh.position.y += phy.d.y;
+  // calculate current acceleration so we can derive velocity
+  const newAY = phy.f.y / -game.gravityForce;
+  const avgAY = (newAY + phy.a.y) / 2;
+  phy.v.y += avgAY * game.dt;
 
-    phy.a.y = phy.f.y / game.meshes[game.pig].mass;
+  phy.a.y = phy.f.y / phy.mass;
 
-    // Simulate colliding with the ground
-    if (game.meshes[game.pig].position.y - groundPos <= 0) {
-      phy.v.y *= game.e;
-      if (phy.v.y > -0.5 && phy.v.y < 0.5) {
-        phy.a.y = 0;
-        phy.f.y = 0;
-        phy.d.y = 0;
-        game.isGrounded = true;
-      }
-      mesh.position.y = groundPos;
+  // Simulate colliding with the ground
+  if (mesh.position.y - groundPos <= 0) {
+    phy.v.y *= game.e;
+    if (phy.v.y > -0.5 && phy.v.y < 0.5) {
+      phy.a.y = 0;
+      phy.f.y = 0;
+      phy.d.y = 0;
+      game.isGrounded = true;
     }
+    mesh.position.y = groundPos;
   }
 };

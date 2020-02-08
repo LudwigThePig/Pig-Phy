@@ -1,3 +1,5 @@
+import { Vector3 } from 'three';
+
 export default class RigidBody {
   /**
    * @param {number} mass mass of rigid body in kg
@@ -5,27 +7,10 @@ export default class RigidBody {
   constructor(mesh, mass = 10) {
     this.physics = {
 
-      d: { // Displacement
-        x: 0,
-        y: 0,
-        z: 0,
-      },
-      f: { // Force
-        x: 0,
-        y: 0,
-        z: 0,
-      },
-      v: { // Velocity
-        x: 0,
-        y: 0,
-        z: 0,
-      },
-      // Acceleration
-      a: {
-        x: 0,
-        y: 0,
-        z: 0,
-      },
+      d: new Vector3(), // Displacement
+      f: new Vector3(), // Force
+      v: new Vector3(), // Velocity
+      a: new Vector3(), // Acceleration
       mass,
     };
   }

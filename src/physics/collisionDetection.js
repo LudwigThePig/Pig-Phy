@@ -123,26 +123,11 @@ export const isNarrowCollision = (entityA, entityB) => {
  */
 export const handleCollision = (A, B) => {
   if (!A || !B) return;
-  /**
-   * Some notes one what to do with this collision
-   *
-   * 1. Need momentum of both bodies before collision (mass * velocity)
-   * 2. Need to apply resultant velocities to each body
-   * 3. Apply air resistance and such to the other bodies
-   *
-   *
-   * Calculating new velocities (from stack exchange)
-   * v: velocity after collision
-   * u: velocity before collision
-   * m: mass (use the largest number possible for the mass of a fixed, static object)
-   *
-   * A.v = (A.u * (A.m - B.m) + (2 * B.m * B.u)) / (A.m + B.m)
-   * B.v = (B.u * (B.m - A.m) + (2 * A.m * A.u)) / (A.m + B.m)
-   */
 
   // Copy of velocity before collision
   const AU = { x: A.v.x, y: A.v.y, z: A.v.z };
   const BU = { x: B.v.x, y: B.v.y, z: B.v.z };
+
   A.v.x = (AU.x * (A.mass - B.mass) + (2 * B.mass * BU.x)) / (A.mass + B.mass);
   A.v.z = (AU.z * (A.mass - B.mass) + (2 * B.mass * BU.z)) / (A.mass + B.mass);
 
