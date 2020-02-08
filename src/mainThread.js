@@ -193,7 +193,10 @@ const draw = () => {
   movePlayer(game.meshes[game.pig], game.inputs);
 
   camera.lookAt(game.meshes[game.pig].position);
-  applyForces(pigPointer);
+  for (let ptr = 0; ptr < game.physics.length; ptr++) {
+    applyForces(ptr);
+  }
+  // applyForces(pigPointer);
   renderer.render(scene, camera);
 };
 

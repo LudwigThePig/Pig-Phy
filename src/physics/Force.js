@@ -53,11 +53,18 @@ const calcGroundFriction = force => {
 };
 
 
+/**
+ *
+ * @param {number} entityPtr The pointer of an entity
+ */
 export const applyForces = entityPtr => {
   // * _______X and Z Forces_______ *
   // Physics Component
   const phy = game.physics[entityPtr];
-  const mesh = game.meshes[entityPtr];
+  const mesh = game.collidables[entityPtr];
+
+  if (!phy || !mesh) return;
+
   // F = M * A
   phy.f.x = phy.mass * phy.a.x;
   phy.f.z = phy.mass * phy.a.z;
