@@ -6,17 +6,15 @@
 - [About](#about)
 - [Technology](#technology)
 - [Requirements and Running Locally](#requirements-and-running-locally)
-- [Features](#features)
-  - [Game Features](#game-features)
-  - [Engine Features](#engine-features)
+
 
 # About
 
-🍝🍝🍝🍝🍝🍝🍝
+This is my first stab at writing a game engine from scratch, where *from scratch* is every layer above the actual rendering to the canvas. The physics engine, collision detection, and shader library are all proprietary. The game was architected with an [ECS](https://en.wikipedia.org/wiki/Entity_component_system). 
 
-Although this is a game and running the repo locally will launch a game, the aim of this project is not to build a game. This repo is a little area to hack around and learn about the fundamentals of game engine development. The code herein is poorly written, filled with tech debt, and repetitive. There are no state machines or ECS to save you, just one eslint config and the occasional jsdoc comment.
+You can find a small implementation of this engine on [ludwigthepig.com](https://ludwigthepig.com). To see the fully featured application, build the application on your machine and play around! But, due note that this is a work in progress.
 
-This project will be sufficiently complete when it is abandoned for a new project that bears any semblance of forethought.
+My goal for this is to release a game with the engine and create a dozen or so levels -- but you will only play able to play one level per day. I will release the source code with some documentation that makes it easy for others to create there own levels and have it featured on the site.
 
 # Technology
 
@@ -41,22 +39,4 @@ cd Ludwig-s-Game
 npm install
 npm start
 ```
-# Features
 
-## Game Features
-
-You can move Ludwig around and hit some blocks.
-
-## Engine Features
-
-**Collision Detection**
-
-Currently, the engine is setup to detect collision between rigid bodies. To apply collision detection to a mesh, use the `applyRigidBody` method. It will extract the bounding verticies and push them onto the rigidBodies array, which is then checked at render time.
-
-**Player Movement**
-
-Player movement is pretty simple right now. You can move forward, backwards, and rotate.
-
-**Physics**
-
-If the pig hits a box, it goes flying up! Not much more than that at the moment
