@@ -1,4 +1,4 @@
-# Ludiwg's Game
+# Pig Phy
 
 # Table of Contents
 - [Ludiwg's Game](#ludiwgs-game)
@@ -12,9 +12,7 @@
 
 This is my first stab at writing a game engine from scratch, where *from scratch* is every layer above the actual rendering to the canvas. The physics engine, collision detection, and shader library are all proprietary. The game was architected with an [ECS](https://en.wikipedia.org/wiki/Entity_component_system). 
 
-You can find a small implementation of this engine on [ludwigthepig.com](https://ludwigthepig.com). To see the fully featured application, build the application on your machine and play around! But, due note that this is a work in progress.
-
-My goal for this is to release a game with the engine and create a dozen or so levels -- but you will only play able to play one level per day. I will release the source code with some documentation that makes it easy for others to create there own levels and have it featured on the site.
+My goal is to implement this into my website ([ludwigthepig.com](https://ludwigthepig.com)), build a game around the engine, create a dozen or so levels, and display one level per. I will release the source code with some documentation that makes it easy for others to create there own levels and have it featured on the site.
 
 # Technology
 
