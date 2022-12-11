@@ -12,7 +12,7 @@
     "cors": "^2.8.5",
     "dotenv": "^6.2.0",
     "esm": "^3.2.25",
-    "express": "^4.17.1",
+    "express": "^4.17.3",
     "gl-matrix": "^3.1.0",
     "morgan": "^1.9.1",
     "normalize.css": "^8.0.1",
